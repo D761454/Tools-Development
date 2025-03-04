@@ -20,4 +20,4 @@ Tools Ideas:
 		- noise value
 		- post creation paint style modification of height - both increase and decrease?
 		- target layer - layer to put terrain on
-		- have user place 2 points in space and terrain is generates between those 2 points 
+		- have user place 2 points in space and terrain is generated between those 2 points 
