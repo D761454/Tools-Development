@@ -15,13 +15,9 @@ Tools Ideas:
 			  e.g. objets at appropriate y level to terrain, ignore buildings y level
 
 - auto terrain generator (in engine)
-	- will include noise value, max difference value for y variance, size x, z
+	- will include noise value, max difference value for y variance
 	- requirements
 		- noise value
-		- size values
 		- post creation paint style modification of height - both increase and decrease?
 		- target layer - layer to put terrain on
-		- could maybe have user place 2 points in space and terrain is generates between those 2 points 
-			- instead of size values for x and z
-
-- 
+		- have user place 2 points in space and terrain is generates between those 2 points 
