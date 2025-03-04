@@ -14,10 +14,12 @@ Tools Ideas:
 			- paint objects ontop of that layer 
 			  e.g. objets at appropriate y level to terrain, ignore buildings y level
 
-- auto terrain genrator (in engine)
+- auto terrain generator (in engine)
 	- will include noise value, max difference value for y variance, size x, z
 	- requirements
 		- noise value
 		- size values
 		- post creation paint style modification of height - both increase and decrease?
 		- target layer - layer to put terrain on
+
+- 
