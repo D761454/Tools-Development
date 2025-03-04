@@ -1,0 +1,23 @@
+Tools Ideas:
+- brush tool for stochastic asset placemement (in engine)
+	- will include an object density value (e.g. foliage density) 
+	  and may include a % weighting per object e.g. less likely to paint a tree than a bush
+	- requirements 
+		- interaction with terrain
+		- allowing user to select a group of object to paint with
+		- erase functionality - removes object in zone that are part of the paint group
+		- objects made are individual, allowing post paint tweaking of position
+		- % desnity
+		- % object weighting
+		- target layer - paint objects to that layer
+		- layer / tag selection to paint on
+			- paint objects ontop of that layer 
+			  e.g. objets at appropriate y level to terrain, ignore buildings y level
+
+- auto terrain genrator (in engine)
+	- will include noise value, max difference value for y variance, size x, z
+	- requirements
+		- noise value
+		- size values
+		- post creation paint style modification of height - both increase and decrease?
+		- target layer - layer to put terrain on
