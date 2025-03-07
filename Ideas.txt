@@ -60,7 +60,7 @@ Inputs:
 				- set as painted to (prevents constant repainting when dragging)
 				- gen number based on density value
 				- if draw obj
-				- get terrain at pos surface normal direction
+					- get terrain at pos surface normal direction
 					- gen number for which obj group to use
 						- gen number for what obj within the group to use
 				- place object on target layer, rotated to match surface normal direction
