@@ -1,18 +1,18 @@
 Tools Ideas:
-- brush tool for stochastic asset placemement (in engine)
+- brush tool for stochastic asset placement (in engine)
 	- will include an object density value (e.g. foliage density) 
 	  and may include a % weighting per object e.g. less likely to paint a tree than a bush
 	- requirements 
-		- interaction with terrain
+		- interaction with terrain - align created object’s up axis to the surface normal direction
 		- allowing user to select a group of object to paint with
 		- erase functionality - removes object in zone that are part of the paint group
 		- objects made are individual, allowing post paint tweaking of position
-		- % desnity
+		- % density
 		- % object weighting
 		- target layer - paint objects to that layer
 		- layer / tag selection to paint on
-			- paint objects ontop of that layer 
-			  e.g. objets at appropriate y level to terrain, ignore buildings y level
+			- paint objects on top of that layer 
+			  e.g. objects at appropriate y level to terrain, ignore buildings y level
 
 - auto terrain generator (in engine)
 	- will include noise value, max difference value for y variance
@@ -22,17 +22,36 @@ Tools Ideas:
 		- target layer - layer to put terrain on
 		- have user place 2 points in space and terrain is generated between those 2 points 
 
-- auto path for tilemaps (in engine)
-	- can include tile groups for specific tile types e.g. one side, bottom left corner, full
-	- % weight for each tile within type groups
-
-
-
-
-
-
 
 
 Ideation.
 Idea 1: Stochastic asset placement brush (Unity)
-Goal: allow the user to brush across a region, randomly placing objects from user made object groups, each with % weightings. Ignoring specific layers.
+Research: 
+https://discussions.unity.com/t/released-object-placement-tool/678804 
+https://discussions.unity.com/t/props-placement-tool/877227
+https://assetstore.unity.com/packages/tools/utilities/easy-placement-tool-273061?srsltid=AfmBOori0_gHU-NKGXOoty31uY6P151sAX2kb0D_n-juQ3laeD3qaoaE
+
+Goal: 
+allow the user to brush across a region, randomly placing objects from user made object groups, each with % weightings. Ignoring specific layers.
+This would speed up both the creation of open world game regions, such as forests, and out of bounds but visible sections of levels in games.
+
+Aspects from research in Mine:
+- object alignment to surface normal direction.
+- group objects - I will use this to group based on type e.g. tree, to use alongside % weighting
+- objects placed can be individually tweaked after as they will be placed as individual objects
+- brush based for paint / erase
+
+X
+Idea 2: Auto Terrain Generator (Unity)
+Research: 
+https://assetstore.unity.com/packages/tools/terrain/terrain-generator-140538?srsltid=AfmBOooBP0sxVyympgdVpJNzgB-aFKFj-1_BiV4P7MIfzXjNNkJ0ZjPD 
+https://www.procedural-worlds.com/products/indie/gaia/
+https://www.pinwheelstud.io/vista
+
+Goal: 
+auto generate terrain on a specified layer using a user specified noise value. will also make use of "stamps" to specify features e.g. mountains
+This would speed up terrain creation for both smooth and noisy terrain for large world sections, islands or even open worlds.
+
+Aspects from research in mine:
+- stamps to specify terrain features generated
+- sliders to modify values for noise
