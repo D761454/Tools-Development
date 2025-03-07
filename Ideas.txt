@@ -51,6 +51,7 @@ Inputs:
 - % weightings to determine which group to use and which item in group to use,
 - target layer,
 - ignore layers,
+- array of painted to positions
 
 - if painting
 	- take area within brush 
