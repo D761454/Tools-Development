@@ -25,3 +25,14 @@ Tools Ideas:
 - auto path for tilemaps (in engine)
 	- can include tile groups for specific tile types e.g. one side, bottom left corner, full
 	- % weight for each tile within type groups
+
+
+
+
+
+
+
+
+Ideation.
+Idea 1: Stochastic asset placement brush (Unity)
+Goal: allow the user to brush across a region, randomly placing objects from user made object groups, each with % weightings. Ignoring specific layers.
