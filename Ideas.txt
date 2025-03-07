@@ -64,6 +64,14 @@ Inputs:
 					- gen number for which obj group to use
 						- gen number for what obj within the group to use
 				- place object on target layer, rotated to match surface normal direction
+- if erasing
+	- take area within brush 
+		- go through each position in specified terrain layer (every terrain position at 0.5 x and y position perhaps)
+			- if painted to
+				- set as not painted to
+				- get obj at position of target layer
+				- if obj in any of the groups
+					- delete object
 
 
 X
