@@ -41,6 +41,31 @@ Aspects from research in Mine:
 - objects placed can be individually tweaked after as they will be placed as individual objects
 - brush based for paint / erase
 
+overall pseudocode:
+Inputs: 
+- Brush pos on terrain, 
+- brush size, 
+- terrain within brush bounds, 
+- terrain surface normal when obj wanted at position, 
+- obj groups to paint from, 
+- % density
+- % weightings to determine which group to use and which item in group to use,
+- target layer,
+- ignore layers,
+
+- if painting
+	- take area within brush 
+		- go through each position in specified terrain layer (every terrain position at 0.5 x and y position perhaps)
+			- if not painted to
+				- set as painted to (prevents constant repainting when dragging)
+				- gen number based on density value
+				- if draw obj
+				- get terrain at pos surface normal direction
+					- gen number for which obj group to use
+						- gen number for what obj within the group to use
+				- place object on target layer, rotated to match surface normal direction
+
+
 X
 Idea 2: Auto Terrain Generator (Unity)
 Research: 
