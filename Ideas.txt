@@ -46,7 +46,6 @@ Inputs:
 - Brush pos on terrain, 
 - brush size, 
 - terrain within brush bounds, 
-- terrain surface normal when obj wanted at position, 
 - obj groups to paint from, 
 - % density
 - % weightings to determine which group to use and which item in group to use,
