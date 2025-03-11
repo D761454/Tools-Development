@@ -11,9 +11,15 @@ public class PlayerEditor : Editor
     private int selectedIndex = 0;
     private AnimBool showExtra;
 
+    // for fade out
     string m_String;
     Color m_Color = Color.white;
     int m_Number = 0;
+
+    // for fake transform
+    bool fold = true;
+    Vector4 rotationComponents;
+    Transform selectedTransform;
 
     private void OnEnable()
     {
@@ -31,6 +37,26 @@ public class PlayerEditor : Editor
         selectedIndex = GUILayout.SelectionGrid(selectedIndex, new string[] { "Custom", "Default"}, 2);
         if (selectedIndex == 0)
         {
+            if (Selection.activeGameObject)
+            {
+                selectedTransform = Selection.activeGameObject.transform;
+
+                fold = EditorGUILayout.InspectorTitlebar(fold, selectedTransform);
+                if (fold)
+                {
+                    selectedTransform.position = EditorGUILayout.Vector3Field("Position", selectedTransform.position);
+                    EditorGUILayout.Space();
+
+                    rotationComponents = EditorGUILayout.Vector4Field("Detailed Rotation", QuaternionToVector4(selectedTransform.localRotation));
+                    EditorGUILayout.Space();
+
+                    selectedTransform.localScale = EditorGUILayout.Vector3Field("Scale", selectedTransform.localScale);
+                }
+
+                selectedTransform.localRotation = ConvertToQuaternion(rotationComponents);
+                EditorGUILayout.Space();
+            }
+
             EditorGUILayout.Slider(healthProperty, 0f, 100f);
             EditorGUILayout.Slider(speedProperty, 0f, 25f);
 
@@ -67,10 +93,17 @@ public class PlayerEditor : Editor
         {
             this.DrawDefaultInspector();
         }
-        
-
-
 
         serializedObject.ApplyModifiedProperties();
+    }
+
+    Quaternion ConvertToQuaternion(Vector4 v4)
+    {
+        return new Quaternion(v4.x, v4.y, v4.z, v4.w);
+    }
+
+    Vector4 QuaternionToVector4(Quaternion q)
+    {
+        return new Vector4(q.x, q.y, q.z, q.w);
     }
 }
