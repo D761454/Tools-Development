@@ -21,6 +21,10 @@ public class PlayerEditor : Editor
     Vector4 rotationComponents;
     Transform selectedTransform;
 
+    // pop up / selector
+    public string[] options = new string[] { "Cube", "Sphere", "Plane" };
+    public int index = 0;
+
     private void OnEnable()
     {
         healthProperty = serializedObject.FindProperty("m_health");
@@ -37,6 +41,30 @@ public class PlayerEditor : Editor
         selectedIndex = GUILayout.SelectionGrid(selectedIndex, new string[] { "Custom", "Default"}, 2);
         if (selectedIndex == 0)
         {
+            index = EditorGUILayout.Popup(index, options);
+            if (GUILayout.Button("Create"))
+            {
+                // do stuff
+                //switch (index)
+                //{
+                //    case 0:
+                //        GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                //        cube.transform.position = Vector3.zero;
+                //        break;
+                //    case 1:
+                //        GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                //        sphere.transform.position = Vector3.zero;
+                //        break;
+                //    case 2:
+                //        GameObject plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                //        plane.transform.position = Vector3.zero;
+                //        break;
+                //    default:
+                //        Debug.LogError("Unrecognized Option");
+                //        break;
+                //}
+            }
+
             if (Selection.activeGameObject)
             {
                 selectedTransform = Selection.activeGameObject.transform;
