@@ -6,6 +6,7 @@ public class PlayerEditor : Editor
 {
     private SerializedProperty healthProperty;
     private SerializedProperty speedProperty;
+    private int selectedIndex;
 
     private void OnEnable()
     {
@@ -28,6 +29,9 @@ public class PlayerEditor : Editor
         GUILayout.Button("2");
         GUILayout.Button("3");
         EditorGUILayout.EndHorizontal();
+
+        // sets index to value, button remains blue / selected
+        selectedIndex = GUILayout.SelectionGrid(selectedIndex, new string[] { "1..", "2..", "3..", "4.." }, 2);
 
         serializedObject.ApplyModifiedProperties();
     }
