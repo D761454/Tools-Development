@@ -163,14 +163,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_health: 50
-  m_canJump: 0
-  m_hasFallDamage: 0
-  m_jumpHeight: 10
-  m_jumpDelayMS: 15
-  m_coyoteTimeMS: 100
-  m_isSprinting: 0
   m_moveSpeed: 10
-  m_sprintMultiplier: 1.5
 --- !u!1 &312221639
 GameObject:
   m_ObjectHideFlags: 0

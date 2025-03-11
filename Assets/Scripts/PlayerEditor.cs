@@ -22,6 +22,13 @@ public class PlayerEditor : Editor
 
         EditorGUILayout.LabelField($"hp - {healthProperty.floatValue}, speed - {speedProperty.floatValue}");
 
+        // button row   -   can also use begin vertical
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Button("1");
+        GUILayout.Button("2");
+        GUILayout.Button("3");
+        EditorGUILayout.EndHorizontal();
+
         serializedObject.ApplyModifiedProperties();
     }
 }
