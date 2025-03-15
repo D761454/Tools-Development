@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
+using Unity.VisualScripting;
 
 public class TerrainGenerator : MonoBehaviour
 {
@@ -14,8 +15,11 @@ public class TerrainGeneratorEditor : Editor
     public override VisualElement CreateInspectorGUI()
     {
         // load UXML
-        
+        VisualElement root = new VisualElement();
 
-        return null;
+        VisualTreeAsset asset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UXML/terrainGeneratorEditor.uxml");
+        asset.CloneTree(root);
+
+        return root;
     }
 }
