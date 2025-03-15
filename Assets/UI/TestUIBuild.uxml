@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/TestUIStyleSheet.uss?fileID=7433441132597879392&amp;guid=191d7c54c63e44b78adcd18eba56c539&amp;type=3#TestUIStyleSheet" />
+    <ui:Label text="Buttons:" name="header" style="flex-grow: 0;" />
+    <ui:VisualElement name="container" style="flex-grow: 1; flex-direction: row; align-items: flex-start; justify-content: space-evenly;">
+        <ui:Button text="Button" />
+        <ui:Button text="Button" />
+        <ui:Button text="Button" />
+    </ui:VisualElement>
+</ui:UXML>
