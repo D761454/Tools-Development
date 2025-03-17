@@ -14,11 +14,6 @@ public class OBJPlacerEditorWindow : EditorWindow
         window.titleContent = new GUIContent("Placement Tool");
     }
 
-    public void OnGUI() 
-    {
-        EditorGUILayout.LabelField("Helloooo");
-    }
-
     public void CreateGUI()
     {
         VisualElement root = new VisualElement();
