@@ -2,12 +2,13 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
+using Unity.VisualScripting;
 
 public class OBJPlacerEditorWindow : EditorWindow
 {
-    [SerializeField] private int genWidth;
-    [SerializeField] private int genHeight;
-    [SerializeField] private static float brushSize = 50f;
+    [Serialize] private int genWidth;
+    [Serialize] private int genHeight;
+    [Serialize] private static float brushSize = 50f;
 
     [MenuItem("OBJ Placement/Placement Tool")]
     public static void ShowWindow()
@@ -24,8 +25,6 @@ public class OBJPlacerEditorWindow : EditorWindow
 
         VisualTreeAsset asset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UXML/OBJPlacementMainEditor.uxml");
         asset.CloneTree(root);
-
-        root.Bind();
 
         StyleSheet sheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/USS/OBJPlacementMainEditor.uss");
         root.styleSheets.Add(sheet);
