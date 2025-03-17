@@ -7,7 +7,7 @@ using UnityEditor.TerrainTools;
 [CreateAssetMenu]
 public class OBJPlacerScriptableOBJ : ScriptableObject
 {
-    public float brushSize = 10f;
+    public float brushSize = 100f;
     public bool brushEnabled = true;
 
     [SerializeField] VisualTreeAsset visualTree;
@@ -22,6 +22,8 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
         StyleSheet sheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/USS/OBJPlacementMainEditor.uss");
         root.styleSheets.Add(sheet);
         mainRoot.Add(root);
+
+        brushSize = root.Q<Slider>(name: "bSize").value;
 
         SceneView.duringSceneGui -= OnSceneGUI;
         SceneView.duringSceneGui += OnSceneGUI;
