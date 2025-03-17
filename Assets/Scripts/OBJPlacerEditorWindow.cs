@@ -6,11 +6,9 @@ using Unity.VisualScripting;
 
 public class OBJPlacerEditorWindow : EditorWindow
 {
-    [SerializeField] VisualTreeAsset visualTree;
+    private OBJPlacerScriptableOBJ serializedClass;
 
-    // use as temp to restore UI on reload
-    [SerializeField] private float brushSize = 50f;
-    [SerializeField] private bool brushEnabled = true;
+    [SerializeField] VisualTreeAsset visualTree;
 
     [MenuItem("OBJ Placement/Placement Tool")]
     public static void ShowWindow()
@@ -19,31 +17,23 @@ public class OBJPlacerEditorWindow : EditorWindow
         window.titleContent = new GUIContent("Placement Tool");
     }
 
-    public void CreateGUI()
+    void OnEnable()
     {
-        VisualElement root = new VisualElement();
+        hideFlags = HideFlags.HideAndDontSave;
 
-        visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UXML/OBJPlacementMainEditor.uxml");
-        visualTree.CloneTree(root);
+        serializedClass = (OBJPlacerScriptableOBJ)Resources.Load("OBJ Placer Scriptable OBJ.asset") as OBJPlacerScriptableOBJ;
 
-        StyleSheet sheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/USS/OBJPlacementMainEditor.uss");
-        root.styleSheets.Add(sheet);
-
-        rootVisualElement.Add(root);
-
-        SceneView.duringSceneGui -= OnSceneGUI;
-        SceneView.duringSceneGui += OnSceneGUI;
+        if (serializedClass == null)
+        {
+            serializedClass = CreateInstance<OBJPlacerScriptableOBJ>();
+            AssetDatabase.CreateAsset(serializedClass, "Assets/Scripts/OBJ Placer Scriptable OBJ.asset");
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
     }
 
-    void OnSceneGUI(SceneView sceneView)
+    public void CreateGUI()
     {
-        //https://discussions.unity.com/t/how-to-get-mouseposition-in-scene-view/519147
-
-        if (brushEnabled)
-        {
-            Handles.BeginGUI();
-            Handles.DrawWireDisc(Event.current.mousePosition, Vector3.forward, brushSize);
-            Handles.EndGUI();
-        }
+        serializedClass.OnGUI(rootVisualElement);
     }
 }
