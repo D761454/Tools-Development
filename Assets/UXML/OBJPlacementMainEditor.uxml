@@ -4,6 +4,6 @@
         <ui:Label text="Dimensions:" name="title" />
         <ui:SliderInt label="Width" value="42" high-value="100" show-input-field="true" inverted="false" fill="true" binding-path="genWidth" />
         <ui:SliderInt label="Height" value="42" high-value="100" show-input-field="true" fill="true" binding-path="genHeight" />
-        <ui:Slider label="Brush Size" value="50" high-value="100" binding-path="brushSize" show-input-field="true" fill="true" />
+        <ui:Slider label="Brush Size" value="50" high-value="100" binding-path="brushSize" show-input-field="true" fill="true" data-source-path="brushSize" data-source="project://database/Assets/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" />
     </ui:VisualElement>
 </ui:UXML>

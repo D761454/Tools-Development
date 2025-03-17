@@ -8,15 +8,14 @@ public class OBJPlacerEditorWindow : EditorWindow
 {
     [Serialize] private int genWidth;
     [Serialize] private int genHeight;
-    [Serialize] private static float brushSize = 50f;
+    [Serialize] private float brushSize = 50f;
+    private bool brushEnabled = true;
 
     [MenuItem("OBJ Placement/Placement Tool")]
     public static void ShowWindow()
     {
         OBJPlacerEditorWindow window = GetWindow<OBJPlacerEditorWindow>();
         window.titleContent = new GUIContent("Placement Tool");
-        SceneView.duringSceneGui -= OnSceneGUI;
-        SceneView.duringSceneGui += OnSceneGUI;
     }
 
     public void CreateGUI()
@@ -30,14 +29,20 @@ public class OBJPlacerEditorWindow : EditorWindow
         root.styleSheets.Add(sheet);
 
         rootVisualElement.Add(root);
+
+        SceneView.duringSceneGui -= OnSceneGUI;
+        SceneView.duringSceneGui += OnSceneGUI;
     }
 
-    static void OnSceneGUI(SceneView sceneView)
+    void OnSceneGUI(SceneView sceneView)
     {
         //https://discussions.unity.com/t/how-to-get-mouseposition-in-scene-view/519147
 
-        Handles.BeginGUI();
-        Handles.DrawWireDisc(Event.current.mousePosition, Vector3.forward, brushSize);
-        Handles.EndGUI();
+        if (brushEnabled)
+        {
+            Handles.BeginGUI();
+            Handles.DrawWireDisc(Event.current.mousePosition, Vector3.forward, brushSize);
+            Handles.EndGUI();
+        }
     }
 }
