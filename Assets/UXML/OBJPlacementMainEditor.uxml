@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/USS/OBJPlacementMainEditor.uss?fileID=7433441132597879392&amp;guid=52fca3da623538b48aed777ef516371a&amp;type=3#OBJPlacementMainEditor" />
+    <ui:VisualElement name="container" style="flex-grow: 1;">
+        <ui:Label text="Dimensions:" name="title" />
+        <ui:SliderInt label="Width" value="42" high-value="100" show-input-field="true" inverted="false" fill="true" binding-path="genWidth" />
+        <ui:SliderInt label="Height" value="42" high-value="100" show-input-field="true" fill="true" binding-path="genHeight" />
+        <ui:Slider label="Brush Size" value="50" high-value="100" binding-path="brushSize" show-input-field="true" fill="true" />
+    </ui:VisualElement>
+</ui:UXML>
