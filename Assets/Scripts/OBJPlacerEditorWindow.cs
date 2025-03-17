@@ -6,10 +6,11 @@ using Unity.VisualScripting;
 
 public class OBJPlacerEditorWindow : EditorWindow
 {
-    [Serialize] private int genWidth;
-    [Serialize] private int genHeight;
-    [Serialize] private float brushSize = 50f;
-    private bool brushEnabled = true;
+    [SerializeField] VisualTreeAsset visualTree;
+
+    // use as temp to restore UI on reload
+    [SerializeField] private float brushSize = 50f;
+    [SerializeField] private bool brushEnabled = true;
 
     [MenuItem("OBJ Placement/Placement Tool")]
     public static void ShowWindow()
@@ -22,8 +23,8 @@ public class OBJPlacerEditorWindow : EditorWindow
     {
         VisualElement root = new VisualElement();
 
-        VisualTreeAsset asset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UXML/OBJPlacementMainEditor.uxml");
-        asset.CloneTree(root);
+        visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UXML/OBJPlacementMainEditor.uxml");
+        visualTree.CloneTree(root);
 
         StyleSheet sheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/USS/OBJPlacementMainEditor.uss");
         root.styleSheets.Add(sheet);
