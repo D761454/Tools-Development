@@ -11,29 +11,37 @@ public class OBJPlacerEditorWindow : EditorWindow
     [SerializeField] VisualTreeAsset visualTree;
 
     [MenuItem("OBJ Placement/Placement Tool")]
-    public static void ShowWindow()
+    public static void Init()
     {
         OBJPlacerEditorWindow window = GetWindow<OBJPlacerEditorWindow>();
         window.titleContent = new GUIContent("Placement Tool");
     }
 
+    // on load
     void OnEnable()
     {
         hideFlags = HideFlags.HideAndDontSave;
 
-        serializedClass = (OBJPlacerScriptableOBJ)Resources.Load("OBJ Placer Scriptable OBJ.asset") as OBJPlacerScriptableOBJ;
+        //serializedClass = (OBJPlacerScriptableOBJ)Resources.Load("OBJ Placer Scriptable OBJ.asset") as OBJPlacerScriptableOBJ;
 
         if (serializedClass == null)
         {
             serializedClass = CreateInstance<OBJPlacerScriptableOBJ>();
-            AssetDatabase.CreateAsset(serializedClass, "Assets/Scripts/OBJ Placer Scriptable OBJ.asset");
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
+            //AssetDatabase.CreateAsset(serializedClass, "Assets/Scripts/OBJ Placer Scriptable OBJ.asset");
+            //AssetDatabase.SaveAssets();
+            //AssetDatabase.Refresh();
         }
     }
 
+    // generate GUI if no editor updates
     public void CreateGUI()
     {
-        serializedClass.OnGUI(rootVisualElement);
+        serializedClass.CreateGUICustom(rootVisualElement);
+    }
+
+    // handle gui events
+    private void OnGUI()
+    {
+        serializedClass.OnGUICustom();
     }
 }

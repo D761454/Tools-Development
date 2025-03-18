@@ -3,8 +3,9 @@ using Unity.Properties;
 using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.TerrainTools;
+using System;
 
-[CreateAssetMenu]
+[Serializable]
 public class OBJPlacerScriptableOBJ : ScriptableObject
 {
     public float brushSize = 100f;
@@ -12,7 +13,12 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
 
     [SerializeField] VisualTreeAsset visualTree;
 
-    public void OnGUI(VisualElement mainRoot)
+    private void OnEnable()
+    {
+        hideFlags = HideFlags.HideAndDontSave;
+    }
+
+    public void CreateGUICustom(VisualElement mainRoot)
     {
         VisualElement root = new VisualElement();
 
@@ -31,13 +37,21 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
 
     void OnSceneGUI(SceneView sceneView)
     {
-        //https://discussions.unity.com/t/how-to-get-mouseposition-in-scene-view/519147
-
         if (brushEnabled)
         {
+            Vector3 mousePosition = Event.current.mousePosition;
+            //mousePosition.y = sceneView.camera.pixelHeight - mousePosition.y;
+            //mousePosition = sceneView.camera.ScreenToWorldPoint(mousePosition);
+            //mousePosition.y = -mousePosition.y;
+
             Handles.BeginGUI();
-            Handles.DrawWireDisc(Event.current.mousePosition, Vector3.forward, brushSize);
+            Handles.DrawWireDisc(mousePosition, Vector3.forward, brushSize);
             Handles.EndGUI();
         }
+    }
+
+    public void OnGUICustom()
+    {
+
     }
 }
