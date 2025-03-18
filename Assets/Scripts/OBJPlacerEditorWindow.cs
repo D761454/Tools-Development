@@ -42,6 +42,12 @@ public class OBJPlacerEditorWindow : EditorWindow
     // handle gui events
     private void OnGUI()
     {
+        if (GUI.changed)
+        {
+            Undo.RecordObject(serializedClass, "Scriptable Modify");
+            EditorUtility.SetDirty(serializedClass);
+        }
+
         serializedClass.OnGUICustom();
     }
 }

@@ -7,5 +7,10 @@
                 <ui:DataBinding property="value" update-trigger="OnSourceChanged" binding-mode="ToSource" />
             </Bindings>
         </ui:Slider>
+        <ui:Toggle label="Toggle" name="bToggle" data-source="project://database/Assets/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" data-source-path="brushEnabled">
+            <Bindings>
+                <ui:DataBinding property="value" binding-mode="ToSource" />
+            </Bindings>
+        </ui:Toggle>
     </ui:VisualElement>
 </ui:UXML>
