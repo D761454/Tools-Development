@@ -13,5 +13,4 @@ MonoBehaviour:
   m_Name: OBJ Placer Scriptable OBJ
   m_EditorClassIdentifier: 
   brushSize: 100
-  brushEnabled: 1
-  visualTree: {fileID: 0}
+  brushEnabled: 0
