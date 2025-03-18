@@ -4,6 +4,7 @@ using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.TerrainTools;
 using System;
+using System.Collections.Generic;
 
 
 /// <summary>
@@ -14,16 +15,44 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
 {
     public float brushSize = 100f;
     public bool brushEnabled = false;
+    public int density = 50;
+    public List<Group> groups = new List<Group>();
 }
 
-struct groupItem
+[Serializable]
+public class GroupItem
 {
     public GameObject Object;
     public int weight;
+
+    public GroupItem()
+    {
+        Object = null;
+        weight = 0;
+    }
+
+    public GroupItem(GameObject obj, int w)
+    {
+        Object = obj;
+        weight = w;
+    }
 }
 
-struct group
+[Serializable]
+public class Group
 {
-    public groupItem[] items;
+    public List<GroupItem> items;
     public int weight;
+
+    public Group()
+    {
+        items = new List<GroupItem>();
+        weight = 0;
+    }
+
+    public Group(int w)
+    {
+        items = new List<GroupItem>();
+        weight = w;
+    }
 }

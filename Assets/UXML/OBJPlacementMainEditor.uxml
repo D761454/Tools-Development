@@ -15,11 +15,15 @@
     </ui:VisualElement>
     <ui:VisualElement name="container">
         <ui:Label text="Tool Attributes:" name="ttitle" class="title" />
-        <ui:SliderInt label="Density" value="42" high-value="100" name="density" fill="true" show-input-field="true" tooltip="Density of painted objects." />
+        <ui:SliderInt label="Density" value="42" high-value="100" name="density" fill="true" show-input-field="true" tooltip="Density of painted objects." data-source="project://database/Assets/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" data-source-path="density">
+            <Bindings>
+                <ui:DataBinding property="value" binding-mode="TwoWay" />
+            </Bindings>
+        </ui:SliderInt>
         <ui:Foldout text="Groups:" style="-unity-font-style: normal;">
             <ui:VisualElement name="group" style="flex-grow: 1;">
                 <ui:Label text="Group " name="groupName" class="small-title" />
-                <ui:SliderInt label="Weight" value="42" high-value="100" name="weight" show-input-field="true" fill="true" class="group-child" />
+                <ui:SliderInt label="Weight" value="42" high-value="100" name="weight" show-input-field="true" fill="true" data-source-path="groups" class="group-child" />
             </ui:VisualElement>
         </ui:Foldout>
     </ui:VisualElement>

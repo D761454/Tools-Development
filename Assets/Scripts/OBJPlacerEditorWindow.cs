@@ -4,6 +4,7 @@ using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using Unity.VisualScripting;
 using UnityEditor.TerrainTools;
+using System.Collections.Generic;
 
 public class OBJPlacerEditorWindow : EditorWindow
 {
@@ -14,6 +15,8 @@ public class OBJPlacerEditorWindow : EditorWindow
 
     public float brushSize = 100f;
     public bool brushEnabled = false;
+    public int density = 50;
+    public List<Group> groups;
 
     [MenuItem("OBJ Placement/Placement Tool")]
     public static void Init()
@@ -38,6 +41,8 @@ public class OBJPlacerEditorWindow : EditorWindow
     // generate GUI if no editor updates
     public void CreateGUI()
     {
+        groups = new List<Group>();
+
         VisualElement root = new VisualElement();
 
         visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UXML/OBJPlacementMainEditor.uxml");
@@ -52,12 +57,14 @@ public class OBJPlacerEditorWindow : EditorWindow
         objField.AddToClassList("objectField");
         objField.AddToClassList("group-child");
 
-        var groups = root.Query<VisualElement>(name: "group").ToList();
+        var gs = root.Query<VisualElement>(name: "group").ToList();
 
-        for (int i = 0; i < groups.Count; i++)
+        for (int i = 0; i < gs.Count; i++)
         {
-            groups[i].Add(objField);
-            groups[i].Q<Label>().text = $"Group {i}:";
+            gs[i].Add(objField);
+            gs[i].Q<ObjectField>().bindingPath = $"groups[{i}].items[0]";
+            gs[i].Q<Label>().text = $"Group {i}:";
+            groups.Add(new Group());
         }
 
         rootVisualElement.Add(root);
