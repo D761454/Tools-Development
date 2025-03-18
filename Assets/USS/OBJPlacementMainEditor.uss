@@ -1,4 +1,4 @@
-#title {
+.title {
     font-size: 16px;
     -unity-font-style: bold;
     margin-top: 0;
@@ -12,6 +12,13 @@
     margin-right: 5px;
     margin-bottom: 5px;
     margin-left: 5px;
+    flex-shrink: 1;
+    align-self: auto;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: flex-start;
+    flex-direction: column;
+    flex-grow: 0;
 }
 
 .unity-base-slider--horizontal {
