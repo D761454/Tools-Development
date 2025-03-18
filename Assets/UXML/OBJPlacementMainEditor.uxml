@@ -23,7 +23,7 @@
         <ui:Foldout text="Groups:" style="-unity-font-style: normal;">
             <ui:VisualElement name="group" style="flex-grow: 1;">
                 <ui:Label text="Group " name="groupName" class="small-title" />
-                <ui:SliderInt label="Weight" value="42" high-value="100" name="weight" show-input-field="true" fill="true" data-source-path="groups" class="group-child" />
+                <ui:SliderInt label="Weight" value="42" high-value="100" name="weight" show-input-field="true" fill="true" class="group-child" />
             </ui:VisualElement>
         </ui:Foldout>
     </ui:VisualElement>

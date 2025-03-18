@@ -62,7 +62,6 @@ public class OBJPlacerEditorWindow : EditorWindow
         for (int i = 0; i < gs.Count; i++)
         {
             gs[i].Add(objField);
-            gs[i].Q<ObjectField>().bindingPath = $"groups[{i}].items[0]";
             gs[i].Q<Label>().text = $"Group {i}:";
             groups.Add(new Group());
         }
