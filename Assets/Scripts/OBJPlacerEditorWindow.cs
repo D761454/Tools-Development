@@ -52,9 +52,6 @@ public class OBJPlacerEditorWindow : EditorWindow
         root.styleSheets.Add(sheet);
         rootVisualElement.Add(root);
 
-        brushSize = root.Q<Slider>(name: "bSize").value;
-        brushEnabled = root.Q<Toggle>(name: "bToggle").value;
-
         SceneView.duringSceneGui -= OnSceneGUI;
         SceneView.duringSceneGui += OnSceneGUI;
     }
@@ -79,6 +76,7 @@ public class OBJPlacerEditorWindow : EditorWindow
     // handle gui events
     private void OnGUI()
     {
+        // get UI data - two way via bindings so dont need to set serialized object data
         brushSize = rootVisualElement.Q<Slider>(name: "bSize").value;
         brushEnabled = rootVisualElement.Q<Toggle>(name: "bToggle").value;
 

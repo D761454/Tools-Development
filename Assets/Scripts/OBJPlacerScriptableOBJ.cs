@@ -5,6 +5,10 @@ using UnityEditor;
 using UnityEditor.TerrainTools;
 using System;
 
+
+/// <summary>
+/// Hold Data for use on reopenening tool
+/// </summary>
 [Serializable, CreateAssetMenu(fileName = "OBJ Placer Scriptable OBJ", menuName = "Scriptable Objects/OBJ Placer Scriptable OBJ")]
 public class OBJPlacerScriptableOBJ : ScriptableObject
 {
