@@ -43,8 +43,6 @@ public class OBJPlacerEditorWindow : EditorWindow
     // generate GUI if no editor updates
     public void CreateGUI()
     {
-        //serializedClass.CreateGUICustom(rootVisualElement);
-
         VisualElement root = new VisualElement();
 
         visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UXML/OBJPlacementMainEditor.uxml");
@@ -81,14 +79,17 @@ public class OBJPlacerEditorWindow : EditorWindow
     // handle gui events
     private void OnGUI()
     {
-        serializedObject.Update();
+        brushSize = rootVisualElement.Q<Slider>(name: "bSize").value;
+        brushEnabled = rootVisualElement.Q<Toggle>(name: "bToggle").value;
 
-        if (GUI.changed)
-        {
-            Undo.RecordObject(serializedClass, "Scriptable Modify");
-            EditorUtility.SetDirty(serializedClass);
-        }
+        //serializedObject.Update();
 
-        serializedObject.ApplyModifiedProperties();
+        //if (GUI.changed)
+        //{
+        //    Undo.RecordObject(serializedClass, "Scriptable Modify");
+        //    EditorUtility.SetDirty(serializedClass);
+        //}
+
+        //serializedObject.ApplyModifiedProperties();
     }
 }
