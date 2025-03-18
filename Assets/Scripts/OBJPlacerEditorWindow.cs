@@ -27,14 +27,9 @@ public class OBJPlacerEditorWindow : EditorWindow
     {
         hideFlags = HideFlags.HideAndDontSave;
 
-        //serializedClass = (OBJPlacerScriptableOBJ)Resources.Load("OBJ Placer Scriptable OBJ.asset") as OBJPlacerScriptableOBJ;
-
         if (serializedClass == null)
         {
             serializedClass = CreateInstance<OBJPlacerScriptableOBJ>();
-            //AssetDatabase.CreateAsset(serializedClass, "Assets/Scripts/OBJ Placer Scriptable OBJ.asset");
-            //AssetDatabase.SaveAssets();
-            //AssetDatabase.Refresh();
         }
 
         serializedObject = new SerializedObject(serializedClass);
@@ -61,9 +56,6 @@ public class OBJPlacerEditorWindow : EditorWindow
         Handles.color = Color.yellow;
 
         Vector3 mousePosition = Event.current.mousePosition;
-        //mousePosition.y = sceneView.camera.pixelHeight - mousePosition.y;
-        //mousePosition = sceneView.camera.ScreenToWorldPoint(mousePosition);
-        //mousePosition.y = -mousePosition.y;
 
         Handles.BeginGUI();
         if (brushEnabled)
