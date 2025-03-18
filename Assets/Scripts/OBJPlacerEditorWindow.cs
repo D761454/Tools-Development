@@ -50,11 +50,14 @@ public class OBJPlacerEditorWindow : EditorWindow
         objField.objectType = typeof(GameObject);
         objField.label = "Object:";
         objField.AddToClassList("objectField");
-        
+        objField.AddToClassList("group-child");
+
         var groups = root.Query<VisualElement>(name: "group").ToList();
-        foreach ( var group in groups )
+
+        for (int i = 0; i < groups.Count; i++)
         {
-            group.Add(objField);
+            groups[i].Add(objField);
+            groups[i].Q<Label>().text = $"Group {i}:";
         }
 
         rootVisualElement.Add(root);

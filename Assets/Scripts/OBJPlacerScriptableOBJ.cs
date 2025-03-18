@@ -16,8 +16,14 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
     public bool brushEnabled = false;
 }
 
-struct group
+struct groupItem
 {
     public GameObject Object;
+    public int weight;
+}
 
+struct group
+{
+    public groupItem[] items;
+    public int weight;
 }

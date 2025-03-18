@@ -16,9 +16,10 @@
     <ui:VisualElement name="container">
         <ui:Label text="Tool Attributes:" name="ttitle" class="title" />
         <ui:SliderInt label="Density" value="42" high-value="100" name="density" fill="true" show-input-field="true" tooltip="Density of painted objects." />
-        <ui:Foldout text="Groups:">
+        <ui:Foldout text="Groups:" style="-unity-font-style: normal;">
             <ui:VisualElement name="group" style="flex-grow: 1;">
-                <ui:SliderInt label="Weight" value="42" high-value="100" name="weight" show-input-field="true" fill="true" />
+                <ui:Label text="Group " name="groupName" class="small-title" />
+                <ui:SliderInt label="Weight" value="42" high-value="100" name="weight" show-input-field="true" fill="true" class="group-child" />
             </ui:VisualElement>
         </ui:Foldout>
     </ui:VisualElement>

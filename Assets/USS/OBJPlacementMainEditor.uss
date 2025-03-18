@@ -36,4 +36,16 @@
 
 .unity-foldout {
     margin-bottom: 5px;
+    -unity-font-style: normal;
+}
+
+.small-title {
+    margin-right: 5px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    margin-top: 5px;
+}
+
+.group-child {
+    margin-left: 25px;
 }
