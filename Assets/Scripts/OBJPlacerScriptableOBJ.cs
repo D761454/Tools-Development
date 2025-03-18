@@ -15,3 +15,9 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
     public float brushSize = 100f;
     public bool brushEnabled = false;
 }
+
+struct group
+{
+    public GameObject Object;
+
+}
