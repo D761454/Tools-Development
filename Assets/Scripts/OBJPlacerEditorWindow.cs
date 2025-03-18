@@ -7,7 +7,7 @@ using UnityEditor.TerrainTools;
 
 public class OBJPlacerEditorWindow : EditorWindow
 {
-    private OBJPlacerScriptableOBJ serializedClass;
+    private static OBJPlacerScriptableOBJ serializedClass;
     private SerializedObject serializedObject;
 
     [SerializeField] VisualTreeAsset visualTree;
@@ -22,17 +22,17 @@ public class OBJPlacerEditorWindow : EditorWindow
         window.titleContent = new GUIContent("Placement Tool");
     }
 
-    // on load
-    void OnEnable()
+    [InitializeOnLoadMethod]
+    private static void OnLoad()
     {
-        hideFlags = HideFlags.HideAndDontSave;
+        serializedClass = AssetDatabase.LoadAssetAtPath<OBJPlacerScriptableOBJ>("Assets/Scripts/OBJ Placer Scriptable OBJ.asset");
 
-        if (serializedClass == null)
+        if (!serializedClass)
         {
             serializedClass = CreateInstance<OBJPlacerScriptableOBJ>();
+            AssetDatabase.CreateAsset(serializedClass, "Assets/Scripts/OBJ Placer Scriptable OBJ.asset");
+            AssetDatabase.Refresh();
         }
-
-        serializedObject = new SerializedObject(serializedClass);
     }
 
     // generate GUI if no editor updates
@@ -68,18 +68,13 @@ public class OBJPlacerEditorWindow : EditorWindow
     // handle gui events
     private void OnGUI()
     {
+        serializedObject = new SerializedObject(serializedClass);
+        serializedObject.Update();
+
         // get UI data - two way via bindings so dont need to set serialized object data
         brushSize = rootVisualElement.Q<Slider>(name: "bSize").value;
         brushEnabled = rootVisualElement.Q<Toggle>(name: "bToggle").value;
 
-        //serializedObject.Update();
-
-        //if (GUI.changed)
-        //{
-        //    Undo.RecordObject(serializedClass, "Scriptable Modify");
-        //    EditorUtility.SetDirty(serializedClass);
-        //}
-
-        //serializedObject.ApplyModifiedProperties();
+        serializedObject.ApplyModifiedProperties();
     }
 }
