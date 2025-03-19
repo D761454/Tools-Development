@@ -12,11 +12,12 @@ public class OBJPlacerEditorWindow : EditorWindow
     private SerializedObject serializedObject;
 
     [SerializeField] VisualTreeAsset visualTree;
+    [SerializeField] VisualTreeAsset groupTree;
 
     public float brushSize = 100f;
     public bool brushEnabled = false;
     public int density = 50;
-    public List<Group> groups;
+    public List<GroupStruct> groups;
 
     [MenuItem("OBJ Placement/Placement Tool")]
     public static void Init()
@@ -41,8 +42,6 @@ public class OBJPlacerEditorWindow : EditorWindow
     // generate GUI if no editor updates
     public void CreateGUI()
     {
-        groups = new List<Group>();
-
         VisualElement root = new VisualElement();
 
         visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UXML/OBJPlacementMainEditor.uxml");
@@ -50,6 +49,11 @@ public class OBJPlacerEditorWindow : EditorWindow
 
         StyleSheet sheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/USS/OBJPlacementMainEditor.uss");
         root.styleSheets.Add(sheet);
+
+        groupTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UXML/GroupUI.uxml");
+
+        var groups = root.Q<ListView>();
+        groups.makeItem = groupTree.CloneTree;
 
         rootVisualElement.Add(root);
 

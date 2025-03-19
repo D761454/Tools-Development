@@ -16,23 +16,23 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
     public float brushSize = 50f;
     public bool brushEnabled = false;
     public int density = 50;
-    public List<Group> groups = new List<Group>();
+    public List<GroupStruct> groups = new List<GroupStruct>();
 }
 
 [Serializable]
-public struct GroupItem
+public struct GroupItemStruct
 {
-    public GameObject Object;
+    public UnityEngine.Object gObject;
     public int weight;
 }
 
 [Serializable]
-public struct Group
+public struct GroupStruct
 {
-    public List<GroupItem> items;
+    public List<GroupItemStruct> items;
     public int weight;
 
-    public Group(List<GroupItem> items)
+    public GroupStruct(List<GroupItemStruct> items)
     {
         this.items = items;
         weight = 0;
