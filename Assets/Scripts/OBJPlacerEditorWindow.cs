@@ -51,21 +51,6 @@ public class OBJPlacerEditorWindow : EditorWindow
         StyleSheet sheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/USS/OBJPlacementMainEditor.uss");
         root.styleSheets.Add(sheet);
 
-        var objField = new ObjectField();
-        objField.objectType = typeof(GameObject);
-        objField.label = "Object:";
-        objField.AddToClassList("objectField");
-        objField.AddToClassList("group-child");
-
-        //var gs = root.Query<VisualElement>(name: "group").ToList();
-
-        //for (int i = 0; i < gs.Count; i++)
-        //{
-        //    gs[i].Add(objField);
-        //    gs[i].Q<Label>().text = $"Group {i}:";
-        //    groups.Add(new Group());
-        //}
-
         rootVisualElement.Add(root);
 
         SceneView.duringSceneGui -= OnSceneGUI;
