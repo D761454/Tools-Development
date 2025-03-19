@@ -17,6 +17,8 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
     public bool brushEnabled = false;
     public int density = 50;
     public List<GroupStruct> groups = new List<GroupStruct>();
+
+    public GameObject tempObj;
 }
 
 [Serializable]

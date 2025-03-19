@@ -1,4 +1,4 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <Style src="project://database/Assets/USS/OBJPlacementMainEditor.uss?fileID=7433441132597879392&amp;guid=52fca3da623538b48aed777ef516371a&amp;type=3#OBJPlacementMainEditor" />
     <ui:VisualElement name="container">
         <ui:Label text="Brush Attributes:" name="btitle" class="title" />
@@ -25,5 +25,10 @@
                 <ui:DataBinding property="viewDataKey" data-source-path="groups" data-source="project://database/Assets/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-mode="ToTarget" />
             </Bindings>
         </ui:ListView>
+        <uie:ObjectField label="TempObjToPaint" data-source="project://database/Assets/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" data-source-path="tempObj" type="UnityEngine.GameObject, UnityEngine.CoreModule">
+            <Bindings>
+                <ui:DataBinding property="value" binding-mode="TwoWay" />
+            </Bindings>
+        </uie:ObjectField>
     </ui:VisualElement>
 </ui:UXML>

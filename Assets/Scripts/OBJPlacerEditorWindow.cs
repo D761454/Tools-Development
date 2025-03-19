@@ -18,6 +18,7 @@ public class OBJPlacerEditorWindow : EditorWindow
     public bool brushEnabled = false;
     public int density = 50;
     public List<GroupStruct> groups;
+    public GameObject tempObj;
 
     [MenuItem("OBJ Placement/Placement Tool")]
     public static void Init()
@@ -84,6 +85,7 @@ public class OBJPlacerEditorWindow : EditorWindow
         // get UI data - two way via bindings so dont need to set serialized object data
         brushSize = rootVisualElement.Q<Slider>(name: "bSize").value;
         brushEnabled = rootVisualElement.Q<Toggle>(name: "bToggle").value;
+        tempObj = (GameObject)rootVisualElement.Q<ObjectField>().value;
 
         serializedObject.ApplyModifiedProperties();
     }
