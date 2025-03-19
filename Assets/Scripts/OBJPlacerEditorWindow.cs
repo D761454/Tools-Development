@@ -57,14 +57,14 @@ public class OBJPlacerEditorWindow : EditorWindow
         objField.AddToClassList("objectField");
         objField.AddToClassList("group-child");
 
-        var gs = root.Query<VisualElement>(name: "group").ToList();
+        //var gs = root.Query<VisualElement>(name: "group").ToList();
 
-        for (int i = 0; i < gs.Count; i++)
-        {
-            gs[i].Add(objField);
-            gs[i].Q<Label>().text = $"Group {i}:";
-            groups.Add(new Group());
-        }
+        //for (int i = 0; i < gs.Count; i++)
+        //{
+        //    gs[i].Add(objField);
+        //    gs[i].Q<Label>().text = $"Group {i}:";
+        //    groups.Add(new Group());
+        //}
 
         rootVisualElement.Add(root);
 

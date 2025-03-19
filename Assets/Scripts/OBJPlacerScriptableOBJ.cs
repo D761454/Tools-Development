@@ -13,46 +13,28 @@ using System.Collections.Generic;
 [Serializable, CreateAssetMenu(fileName = "OBJ Placer Scriptable OBJ", menuName = "Scriptable Objects/OBJ Placer Scriptable OBJ")]
 public class OBJPlacerScriptableOBJ : ScriptableObject
 {
-    public float brushSize = 100f;
+    public float brushSize = 50f;
     public bool brushEnabled = false;
     public int density = 50;
     public List<Group> groups = new List<Group>();
 }
 
 [Serializable]
-public class GroupItem
+public struct GroupItem
 {
     public GameObject Object;
     public int weight;
-
-    public GroupItem()
-    {
-        Object = null;
-        weight = 0;
-    }
-
-    public GroupItem(GameObject obj, int w)
-    {
-        Object = obj;
-        weight = w;
-    }
 }
 
 [Serializable]
-public class Group
+public struct Group
 {
     public List<GroupItem> items;
     public int weight;
 
-    public Group()
+    public Group(List<GroupItem> items)
     {
-        items = new List<GroupItem>();
+        this.items = items;
         weight = 0;
-    }
-
-    public Group(int w)
-    {
-        items = new List<GroupItem>();
-        weight = w;
     }
 }

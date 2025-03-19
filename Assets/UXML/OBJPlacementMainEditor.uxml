@@ -26,5 +26,10 @@
                 <ui:SliderInt label="Weight" value="42" high-value="100" name="weight" show-input-field="true" fill="true" class="group-child" />
             </ui:VisualElement>
         </ui:Foldout>
+        <ui:ListView data-source="project://database/Assets/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" data-source-path="groups" show-foldout-header="true" show-border="true" show-add-remove-footer="true" header-title="Groups:" virtualization-method="DynamicHeight">
+            <Bindings>
+                <ui:DataBinding property="viewDataKey" binding-mode="TwoWay" />
+            </Bindings>
+        </ui:ListView>
     </ui:VisualElement>
 </ui:UXML>
