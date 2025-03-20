@@ -4,8 +4,9 @@ using UnityEditor;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using Unity.VisualScripting;
-using UnityEditor.TerrainTools;
 using System.Collections.Generic;
+using Unity.Mathematics;
+using System;
 
 public class OBJPlacerEditorWindow : EditorWindow
 {
@@ -92,9 +93,13 @@ public class OBJPlacerEditorWindow : EditorWindow
                 Handles.DrawWireDisc(mousePosition, Vector3.forward, brushSize);
                 if (tempObj != null && e.type == EventType.MouseDown && e.button == 0)
                 {
-                    var obj = PrefabUtility.InstantiatePrefab(tempObj);
-                    SceneVisibilityManager.instance.DisablePicking((GameObject)obj, false);
-                    obj.GetComponent<Transform>().position = hit.point;
+                    int rand = UnityEngine.Random.Range(0, 100);
+                    if (rand < tempWeight)
+                    {
+                        var obj = PrefabUtility.InstantiatePrefab(tempObj);
+                        SceneVisibilityManager.instance.DisablePicking((GameObject)obj, false);
+                        obj.GetComponent<Transform>().position = hit.point;
+                    }
                 }
             }
             Handles.EndGUI();
