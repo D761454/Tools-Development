@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
@@ -40,6 +41,16 @@ public class OBJPlacerEditorWindow : EditorWindow
         }
     }
 
+    private void OnEnable()
+    {
+        SceneView.duringSceneGui += OnSceneGUI;
+    }
+
+    private void OnDisable()
+    {
+        SceneView.duringSceneGui -= OnSceneGUI;
+    }
+
     // generate GUI if no editor updates
     public void CreateGUI()
     {
@@ -57,9 +68,6 @@ public class OBJPlacerEditorWindow : EditorWindow
         groups.makeItem = groupTree.CloneTree;
 
         rootVisualElement.Add(root);
-
-        SceneView.duringSceneGui -= OnSceneGUI;
-        SceneView.duringSceneGui += OnSceneGUI;
     }
 
     void OnSceneGUI(SceneView sceneView)
@@ -68,12 +76,18 @@ public class OBJPlacerEditorWindow : EditorWindow
 
         Vector3 mousePosition = Event.current.mousePosition;
 
-        Handles.BeginGUI();
-        if (brushEnabled)
+        Ray ray = HandleUtility.GUIPointToWorldRay(mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
         {
-            Handles.DrawWireDisc(mousePosition, Vector3.forward, brushSize);
+            Handles.BeginGUI();
+            if (brushEnabled)
+            {
+                Handles.DrawWireDisc(mousePosition, Vector3.forward, brushSize);
+            }
+            Handles.EndGUI();
         }
-        Handles.EndGUI();
     }
 
     // handle gui events
@@ -90,3 +104,5 @@ public class OBJPlacerEditorWindow : EditorWindow
         serializedObject.ApplyModifiedProperties();
     }
 }
+
+#endif
