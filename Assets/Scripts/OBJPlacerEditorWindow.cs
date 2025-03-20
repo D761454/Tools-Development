@@ -20,6 +20,7 @@ public class OBJPlacerEditorWindow : EditorWindow
     public int density = 50;
     public List<GroupStruct> groups;
     public GameObject tempObj;
+    public int tempWeight = 50;
 
     [MenuItem("OBJ Placement/Placement Tool")]
     public static void Init()
@@ -109,6 +110,7 @@ public class OBJPlacerEditorWindow : EditorWindow
         brushSize = rootVisualElement.Q<Slider>(name: "bSize").value;
         brushEnabled = rootVisualElement.Q<Toggle>(name: "bToggle").value;
         tempObj = (GameObject)rootVisualElement.Q<ObjectField>().value;
+        tempWeight = rootVisualElement.Q<SliderInt>(name: "tWeight").value;
 
         serializedObject.ApplyModifiedProperties();
     }

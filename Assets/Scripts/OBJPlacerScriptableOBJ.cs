@@ -19,6 +19,7 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
     public List<GroupStruct> groups = new List<GroupStruct>();
 
     public GameObject tempObj;
+    public int tempWeight = 50;
 }
 
 [Serializable]
