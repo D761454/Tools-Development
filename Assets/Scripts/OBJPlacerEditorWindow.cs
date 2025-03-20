@@ -43,11 +43,13 @@ public class OBJPlacerEditorWindow : EditorWindow
 
     private void OnEnable()
     {
+        SceneVisibilityManager.instance.DisableAllPicking();
         SceneView.duringSceneGui += OnSceneGUI;
     }
 
     private void OnDisable()
     {
+        SceneVisibilityManager.instance.EnableAllPicking();
         SceneView.duringSceneGui -= OnSceneGUI;
     }
 
@@ -84,7 +86,12 @@ public class OBJPlacerEditorWindow : EditorWindow
             Handles.BeginGUI();
             if (brushEnabled)
             {
+                
                 Handles.DrawWireDisc(mousePosition, Vector3.forward, brushSize);
+                if (Input.GetMouseButtonDown(0))
+                {
+                    Instantiate(tempObj, hit.point, Quaternion.identity);
+                }
             }
             Handles.EndGUI();
         }
