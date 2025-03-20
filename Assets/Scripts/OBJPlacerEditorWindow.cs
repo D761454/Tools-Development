@@ -91,7 +91,8 @@ public class OBJPlacerEditorWindow : EditorWindow
                 Handles.DrawWireDisc(mousePosition, Vector3.forward, brushSize);
                 if (tempObj != null && e.type == EventType.MouseDown && e.button == 0)
                 {
-                    PrefabUtility.InstantiatePrefab(tempObj);
+                    var obj = PrefabUtility.InstantiatePrefab(tempObj);
+                    obj.GetComponent<Transform>().position = hit.point;
                 }
             }
             Handles.EndGUI();
