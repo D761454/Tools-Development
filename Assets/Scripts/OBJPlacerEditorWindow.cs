@@ -93,6 +93,7 @@ public class OBJPlacerEditorWindow : EditorWindow
                 if (tempObj != null && e.type == EventType.MouseDown && e.button == 0)
                 {
                     var obj = PrefabUtility.InstantiatePrefab(tempObj);
+                    SceneVisibilityManager.instance.DisablePicking((GameObject)obj, false);
                     obj.GetComponent<Transform>().position = hit.point;
                 }
             }
