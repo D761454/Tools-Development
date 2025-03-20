@@ -74,23 +74,24 @@ public class OBJPlacerEditorWindow : EditorWindow
 
     void OnSceneGUI(SceneView sceneView)
     {
+        Event e = Event.current;
+
         Handles.color = Color.yellow;
 
-        Vector3 mousePosition = Event.current.mousePosition;
+        Vector3 mousePosition = e.mousePosition;
 
         Ray ray = HandleUtility.GUIPointToWorldRay(mousePosition);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out hit, 100))
         {
             Handles.BeginGUI();
             if (brushEnabled)
             {
-                
                 Handles.DrawWireDisc(mousePosition, Vector3.forward, brushSize);
-                if (Input.GetMouseButtonDown(0))
+                if (tempObj != null && e.type == EventType.MouseDown && e.button == 0)
                 {
-                    Instantiate(tempObj, hit.point, Quaternion.identity);
+                    PrefabUtility.InstantiatePrefab(tempObj);
                 }
             }
             Handles.EndGUI();
