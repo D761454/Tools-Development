@@ -51,14 +51,12 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
     // Called when the active tool is set to this tool instance.
     public override void OnActivated()
     {
-        SceneView.lastActiveSceneView.ShowNotification(new GUIContent("Entering OBJ Brush Tool"), .1f);
         SceneVisibilityManager.instance.DisableAllPicking();
     }
 
     // Called before the active tool is changed, or destroyed.
     public override void OnWillBeDeactivated()
     {
-        SceneView.lastActiveSceneView.ShowNotification(new GUIContent("Exiting OBJ Brush Tool"), .1f);
         SceneVisibilityManager.instance.EnableAllPicking();
     }
 
@@ -74,7 +72,17 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
         Ray ray = HandleUtility.GUIPointToWorldRay(mousePosition);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, 100))
+        // update info on gui changes
+        if (EditorWindow.HasOpenInstances<OBJPlacerEditorWindow>() && EditorWindow.GetWindow<OBJPlacerEditorWindow>().hasFocus)
+        {
+            brushSize = serializedClass.brushSize;
+            brushEnabled = serializedClass.brushEnabled;
+            density = serializedClass.density;
+            groups = serializedClass.groups;
+            tempObj = serializedClass.tempObj;
+            tempWeight = serializedClass.tempWeight;
+        }
+        else if (Physics.Raycast(ray, out hit, 100))
         {
             Handles.BeginGUI();
             if (brushEnabled)
@@ -98,17 +106,6 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                 }
             }
             Handles.EndGUI();
-        }
-
-        // update info on gui changes
-        if (EditorWindow.HasOpenInstances<OBJPlacerEditorWindow>() && EditorWindow.GetWindow<OBJPlacerEditorWindow>().hasFocus)
-        {
-            brushSize = serializedClass.brushSize;
-            brushEnabled = serializedClass.brushEnabled;
-            density = serializedClass.density;
-            groups = serializedClass.groups;
-            tempObj = serializedClass.tempObj;
-            tempWeight = serializedClass.tempWeight;
         }
     }
 
