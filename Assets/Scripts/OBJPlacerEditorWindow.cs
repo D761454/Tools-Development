@@ -5,8 +5,8 @@ using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using Unity.VisualScripting;
 using System.Collections.Generic;
-using Unity.Mathematics;
-using System;
+using UnityEditor.EditorTools;
+using UnityEditor.ShortcutManagement;
 
 public class OBJPlacerEditorWindow : EditorWindow
 {
@@ -87,10 +87,10 @@ public class OBJPlacerEditorWindow : EditorWindow
 
         if (Physics.Raycast(ray, out hit, 100))
         {
-            Handles.BeginGUI();
+            //Handles.BeginGUI();
             if (brushEnabled)
             {
-                Handles.DrawWireDisc(mousePosition, Vector3.forward, brushSize);
+                //Handles.DrawWireDisc(mousePosition, Vector3.forward, brushSize);
                 if (tempObj != null && e.type == EventType.MouseDown && e.button == 0)
                 {
                     int rand = UnityEngine.Random.Range(0, 100);
@@ -103,10 +103,12 @@ public class OBJPlacerEditorWindow : EditorWindow
 
                         obj.GetComponent<Transform>().position = spawnPos;
                         obj.GetComponent<Transform>().rotation = Quaternion.FromToRotation(obj.GetComponent<Transform>().up, surfaceNormal);
+
+                        // note: do pos after rotation to move obj along surface normal instead of world y
                     }
                 }
             }
-            Handles.EndGUI();
+            //Handles.EndGUI();
         }
     }
 
