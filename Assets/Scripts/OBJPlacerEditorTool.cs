@@ -82,7 +82,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                 Handles.DrawWireDisc(mousePosition, Vector3.forward, brushSize);
                 if (tempObj != null && e.type == EventType.MouseDown && e.button == 0)
                 {
-                    int rand = UnityEngine.Random.Range(0, 100);
+                    int rand = Random.Range(0, 100);
                     if (rand < tempWeight)
                     {
                         var obj = PrefabUtility.InstantiatePrefab(tempObj);
@@ -101,11 +101,8 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
         }
 
         // update info on gui changes
-        if (EditorWindow.HasOpenInstances<OBJPlacerEditorWindow>())
+        if (EditorWindow.HasOpenInstances<OBJPlacerEditorWindow>() && EditorWindow.GetWindow<OBJPlacerEditorWindow>().hasFocus)
         {
-            var toolWindow = EditorWindow.GetWindow<OBJPlacerEditorWindow>();
-
-            // change to serialised obj
             brushSize = serializedClass.brushSize;
             brushEnabled = serializedClass.brushEnabled;
             density = serializedClass.density;
