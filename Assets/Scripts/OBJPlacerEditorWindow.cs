@@ -99,7 +99,10 @@ public class OBJPlacerEditorWindow : EditorWindow
                         var obj = PrefabUtility.InstantiatePrefab(tempObj);
                         SceneVisibilityManager.instance.DisablePicking((GameObject)obj, false);
                         Vector3 spawnPos = hit.point; spawnPos.y += obj.GetComponent<Renderer>().bounds.size.y / 2;
+                        Vector3 surfaceNormal = hit.normal.normalized;
+
                         obj.GetComponent<Transform>().position = spawnPos;
+                        obj.GetComponent<Transform>().rotation = Quaternion.FromToRotation(obj.GetComponent<Transform>().up, surfaceNormal);
                     }
                 }
             }
