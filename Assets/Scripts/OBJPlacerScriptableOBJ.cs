@@ -20,6 +20,15 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
 
     public GameObject tempObj;
     public int tempWeight = 50;
+
+    public Dictionary<string, object> data = new Dictionary<string, object>()
+    {
+        { "brushSizeFloat", 50f },
+        { "brushEnabledBool", false },
+        { "densityInt", 50 },
+        { "tempObj", null },
+        { "tempWeight", 50 }
+    };
 }
 
 [Serializable]

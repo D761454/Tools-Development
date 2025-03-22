@@ -12,10 +12,6 @@ using UnityEditor.ShortcutManagement;
 public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 {
     private static OBJPlacerScriptableOBJ serializedClass;
-    private SerializedObject serializedObject;
-
-    [SerializeField] VisualTreeAsset visualTree;
-    [SerializeField] VisualTreeAsset groupTree;
 
     public float brushSize = 100f;
     public bool brushEnabled = false;
@@ -23,6 +19,15 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
     public List<GroupStruct> groups;
     public GameObject tempObj;
     public int tempWeight = 50;
+
+    public Dictionary<string, object> toolData = new Dictionary<string, object>()
+    {
+        { "brushSizeFloat", 50f },
+        { "brushEnabledBool", false },
+        { "densityInt", 50 },
+        { "tempObj", null },
+        { "tempWeight", 50 }
+    };
 
     void OnEnable()
     {
@@ -34,13 +39,18 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
             AssetDatabase.CreateAsset(serializedClass, "Assets/Scripts/OBJ Placer Scriptable OBJ.asset");
             AssetDatabase.Refresh();
         }
+        toolData["brushSizeFloat"] = serializedClass.data["brushSizeFloat"];
+        toolData["brushEnabledBool"] = serializedClass.data["brushEnabledBool"];
+        toolData["densityInt"] = serializedClass.data["densityInt"];
+        toolData["tempObj"] = serializedClass.data["tempObj"];
+        toolData["tempWeight"] = serializedClass.data["tempWeight"];
 
-        brushSize = serializedClass.brushSize;
-        brushEnabled = serializedClass.brushEnabled;
-        density = serializedClass.density;
-        groups = serializedClass.groups;
-        tempObj = serializedClass.tempObj;
-        tempWeight = serializedClass.tempWeight;
+        //brushSize = serializedClass.brushSize;
+        //brushEnabled = serializedClass.brushEnabled;
+        //density = serializedClass.density;
+        //groups = serializedClass.groups;
+        //tempObj = serializedClass.tempObj;
+        //tempWeight = serializedClass.tempWeight;
     }
 
     void OnDisable()
@@ -73,27 +83,26 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
         RaycastHit hit;
 
         // update info on gui changes
-        if (EditorWindow.HasOpenInstances<OBJPlacerEditorWindow>() && EditorWindow.GetWindow<OBJPlacerEditorWindow>().hasFocus)
+        if (EditorWindow.HasOpenInstances<OBJPlacerEditorWindow>() && toolData != serializedClass.data)
         {
-            brushSize = serializedClass.brushSize;
-            brushEnabled = serializedClass.brushEnabled;
-            density = serializedClass.density;
-            groups = serializedClass.groups;
-            tempObj = serializedClass.tempObj;
-            tempWeight = serializedClass.tempWeight;
+            toolData["brushSizeFloat"] = serializedClass.data["brushSizeFloat"];
+            toolData["brushEnabledBool"] = serializedClass.data["brushEnabledBool"];
+            toolData["densityInt"] = serializedClass.data["densityInt"];
+            toolData["tempObj"] = serializedClass.data["tempObj"];
+            toolData["tempWeight"] = serializedClass.data["tempWeight"];
         }
         else if (Physics.Raycast(ray, out hit, 100))
         {
             Handles.BeginGUI();
-            if (brushEnabled)
+            if ((bool)toolData["brushEnabledBool"])
             {
-                Handles.DrawWireDisc(mousePosition, Vector3.forward, brushSize);
-                if (tempObj != null && e.type == EventType.MouseDown && e.button == 0)
+                Handles.DrawWireDisc(mousePosition, Vector3.forward, (float)toolData["brushSizeFloat"]);
+                if ((GameObject)toolData["tempObj"] != null && e.type == EventType.MouseDown && e.button == 0)
                 {
                     int rand = Random.Range(0, 100);
-                    if (rand < tempWeight)
+                    if (rand < (int)toolData["tempWeight"])
                     {
-                        var obj = PrefabUtility.InstantiatePrefab(tempObj);
+                        var obj = PrefabUtility.InstantiatePrefab((GameObject)toolData["tempObj"]);
                         SceneVisibilityManager.instance.DisablePicking((GameObject)obj, false);
                         Vector3 spawnPos = hit.point; spawnPos.y += obj.GetComponent<Renderer>().bounds.size.y / 2;
                         Vector3 surfaceNormal = hit.normal.normalized;
