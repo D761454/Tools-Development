@@ -13,22 +13,9 @@ using System.Collections.Generic;
 [Serializable, CreateAssetMenu(fileName = "OBJ Placer Scriptable OBJ", menuName = "Scriptable Objects/OBJ Placer Scriptable OBJ")]
 public class OBJPlacerScriptableOBJ : ScriptableObject
 {
-    public float brushSize = 50f;
-    public bool brushEnabled = false;
-    public int density = 50;
     public List<GroupStruct> groups = new List<GroupStruct>();
 
-    public GameObject tempObj;
-    public int tempWeight = 50;
-
-    public Dictionary<string, object> data = new Dictionary<string, object>()
-    {
-        { "brushSizeFloat", 50f },
-        { "brushEnabledBool", false },
-        { "densityInt", 50 },
-        { "tempObj", null },
-        { "tempWeight", 50 }
-    };
+    public ToolData serializableData = new ToolData(50f, false, 50, 50);
 }
 
 [Serializable]
@@ -48,5 +35,24 @@ public struct GroupStruct
     {
         this.items = items;
         weight = 0;
+    }
+}
+
+[Serializable]
+public struct ToolData
+{
+    public float brushSize;
+    public bool brushEnabled;
+    public int density;
+    public GameObject tempObj;
+    public int tempWeight;
+
+    public ToolData(float size, bool enabled, int density, int weight)
+    {
+        brushSize = size;
+        brushEnabled = enabled;
+        this.density = density;
+        tempObj = null;
+        tempWeight = weight;
     }
 }
