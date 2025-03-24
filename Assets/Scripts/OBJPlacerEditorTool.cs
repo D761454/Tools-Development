@@ -12,6 +12,7 @@ using UnityEditor.ShortcutManagement;
 public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 {
     private static OBJPlacerScriptableOBJ serializedClass;
+    Vector3 mouseWorldPos;
 
     void OnEnable()
     {
@@ -23,6 +24,8 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
             AssetDatabase.CreateAsset(serializedClass, "Assets/Scripts/OBJ Placer Scriptable OBJ.asset");
             AssetDatabase.Refresh();
         }
+
+        //SceneView.duringSceneGui += OnScene;
     }
 
     void OnDisable()
@@ -57,11 +60,11 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
         if (Physics.Raycast(ray, out hit, 100))
         {
-            Handles.BeginGUI();
+            mouseWorldPos = hit.point;
             if (serializedClass.serializableData.brushEnabled)
             {
                 Vector3 surfaceNormal = hit.normal.normalized;
-                Handles.DrawWireDisc(mousePosition, hit.normal, serializedClass.serializableData.brushSize);
+                Handles.DrawWireDisc(hit.point, hit.normal, serializedClass.serializableData.brushSize/2);
                 if (serializedClass.serializableData.tempObj != null && e.type == EventType.MouseDown && e.button == 0)
                 {
                     int rand = Random.Range(0, 100);
@@ -77,7 +80,6 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                     }
                 }
             }
-            Handles.EndGUI();
         }
     }
 
