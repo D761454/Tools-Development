@@ -63,7 +63,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                 if (serializedClass.serializableData.tempObj != null && e.type == EventType.MouseDown && e.button == 0)
                 {
                     int rand = Random.Range(0, 100);
-                    if (rand < serializedClass.serializableData.tempWeight)
+                    if (rand < serializedClass.serializableData.density)
                     {
                         var obj = PrefabUtility.InstantiatePrefab(serializedClass.serializableData.tempObj);
                         SceneVisibilityManager.instance.DisablePicking((GameObject)obj, false);
