@@ -67,13 +67,12 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                     {
                         var obj = PrefabUtility.InstantiatePrefab(serializedClass.serializableData.tempObj);
                         SceneVisibilityManager.instance.DisablePicking((GameObject)obj, false);
-                        Vector3 spawnPos = hit.point; spawnPos.y += obj.GetComponent<Renderer>().bounds.size.y / 2;
+                        
                         Vector3 surfaceNormal = hit.normal.normalized;
-
-                        obj.GetComponent<Transform>().position = spawnPos;
                         obj.GetComponent<Transform>().rotation = Quaternion.FromToRotation(obj.GetComponent<Transform>().up, surfaceNormal);
 
-                        // note: do pos after rotation to move obj along surface normal instead of world y
+                        Vector3 spawnPos = hit.point; spawnPos += surfaceNormal * (obj.GetComponent<Renderer>().bounds.size.y / 2);
+                        obj.GetComponent<Transform>().position = spawnPos;
                     }
                 }
             }
