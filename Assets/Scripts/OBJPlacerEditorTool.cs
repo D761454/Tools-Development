@@ -48,6 +48,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
         Event e = Event.current;
 
         Handles.color = Color.yellow;
+        Gizmos.color = Color.yellow;
 
         Vector3 mousePosition = e.mousePosition;
 
@@ -59,7 +60,8 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
             Handles.BeginGUI();
             if (serializedClass.serializableData.brushEnabled)
             {
-                Handles.DrawWireDisc(mousePosition, Vector3.forward, serializedClass.serializableData.brushSize);
+                Vector3 surfaceNormal = hit.normal.normalized;
+                Handles.DrawWireDisc(mousePosition, hit.normal, serializedClass.serializableData.brushSize);
                 if (serializedClass.serializableData.tempObj != null && e.type == EventType.MouseDown && e.button == 0)
                 {
                     int rand = Random.Range(0, 100);
@@ -68,7 +70,6 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                         var obj = PrefabUtility.InstantiatePrefab(serializedClass.serializableData.tempObj);
                         SceneVisibilityManager.instance.DisablePicking((GameObject)obj, false);
                         
-                        Vector3 surfaceNormal = hit.normal.normalized;
                         obj.GetComponent<Transform>().rotation = Quaternion.FromToRotation(obj.GetComponent<Transform>().up, surfaceNormal);
 
                         Vector3 spawnPos = hit.point; spawnPos += surfaceNormal * (obj.GetComponent<Renderer>().bounds.size.y / 2);
@@ -82,7 +83,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
     public void OnDrawHandles()
     {
-        
+
     }
 }
 
