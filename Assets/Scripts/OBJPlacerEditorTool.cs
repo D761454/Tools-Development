@@ -9,8 +9,8 @@ using UnityEditor.ShortcutManagement;
 public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 {
     private static OBJPlacerScriptableOBJ serializedClass;
-    Vector3 mouseWorldPos;
-    
+
+    public Transform parentGroup;
 
     /// <summary>
     /// Get/Create Serializable Obj for data storage
@@ -43,6 +43,13 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
     /// </summary>
     public override void OnActivated()
     {
+        if (parentGroup == null)
+        {
+            GameObject temp = new GameObject("ToolSpawned");
+            SceneVisibilityManager.instance.DisablePicking(temp, false);
+            parentGroup = temp.transform;
+        }
+
         SceneVisibilityManager.instance.DisableAllPicking();
     }
 
@@ -72,7 +79,6 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
         if (Physics.Raycast(ray, out hit, 100))
         {
-            mouseWorldPos = hit.point;
             if (serializedClass.serializableData.brushEnabled)
             {
                 Vector3 surfaceNormal = hit.normal.normalized;
@@ -120,6 +126,8 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
                         var obj = PrefabUtility.InstantiatePrefab(serializedClass.serializableData.tempObj);
                         SceneVisibilityManager.instance.DisablePicking((GameObject)obj, false);
+
+                        obj.GetComponent<Transform>().SetParent(parentGroup, true);
 
                         obj.GetComponent<Transform>().rotation = Quaternion.FromToRotation(obj.GetComponent<Transform>().up, surfaceNormal);
 
