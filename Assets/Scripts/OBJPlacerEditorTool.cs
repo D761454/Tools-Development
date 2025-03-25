@@ -82,13 +82,12 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                     // Note - allow overlapping Objs for forests etc - can also edit objs post placement - stretch task - add toggle to enable/disable overlap
                     float area = Mathf.PI * (serializedClass.serializableData.brushSize * serializedClass.serializableData.brushSize);
 
-                    float avgObjRadius = 1f;
+                    float avgObjRadius = serializedClass.serializableData.tempObj.gameObject.GetComponent<Renderer>().bounds.extents.magnitude;
 
-                    float objMax = area / ((avgObjRadius * avgObjRadius));
+                    float objMax = area / ((avgObjRadius * avgObjRadius) * Mathf.Sqrt(12));
                     //https://www.quora.com/How-can-I-work-out-how-many-small-circles-I-can-fit-into-a-big-circle-See-additional-information
 
-                    int trueDensity = (int)((serializedClass.serializableData.brushSize * serializedClass.serializableData.density) / 10);
-                    Debug.Log(trueDensity);
+                    Debug.Log(objMax);
 
                     int rand = Random.Range(0, 100);
                     if (rand < serializedClass.serializableData.density)
