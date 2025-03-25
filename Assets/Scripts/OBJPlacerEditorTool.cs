@@ -91,34 +91,32 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                     int objToSpawn = (int)(objMax * (serializedClass.serializableData.density / 100f));
 
                     Debug.Log(objToSpawn);
-
-                    Vector3 randomPos = Random.insideUnitCircle * (serializedClass.serializableData.brushSize / 2);
-
-                    if (surfaceNormal != Vector3.up)
-                    {
-                        Vector2 right = Vector3.Cross(surfaceNormal, Vector3.up).normalized;
-                        float angle = Vector2.SignedAngle(right, randomPos);
-                        Quaternion rot = Quaternion.AngleAxis(angle, surfaceNormal);
-                        Vector3 newPos = rot * right;
-                        newPos *= randomPos.magnitude;
-                        randomPos = newPos;
-                    }
-                    else
-                    {
-                        randomPos.z = randomPos.y;
-                        randomPos.y = 0;
-                    }
                     
-
-                    int rand = Random.Range(0, 100);
-                    if (rand < serializedClass.serializableData.density)
+                    for (int i = 0; i < objToSpawn; i++)
                     {
+                        Vector3 randomPos = Random.insideUnitCircle * (serializedClass.serializableData.brushSize / 2);
+
+                        if (surfaceNormal != Vector3.up)
+                        {
+                            Vector2 right = Vector3.Cross(surfaceNormal, Vector3.up).normalized;
+                            float angle = Vector2.SignedAngle(right, randomPos);
+                            Quaternion rot = Quaternion.AngleAxis(angle, surfaceNormal);
+                            Vector3 newPos = rot * right;
+                            newPos *= randomPos.magnitude;
+                            randomPos = newPos;
+                        }
+                        else
+                        {
+                            randomPos.z = randomPos.y;
+                            randomPos.y = 0;
+                        }
+
                         var obj = PrefabUtility.InstantiatePrefab(serializedClass.serializableData.tempObj);
                         SceneVisibilityManager.instance.DisablePicking((GameObject)obj, false);
-                        
+
                         obj.GetComponent<Transform>().rotation = Quaternion.FromToRotation(obj.GetComponent<Transform>().up, surfaceNormal);
 
-                        Vector3 spawnPos = hit.point + randomPos; 
+                        Vector3 spawnPos = hit.point + randomPos;
                         spawnPos += surfaceNormal * (obj.GetComponent<Renderer>().bounds.size.y / 2);
 
                         obj.GetComponent<Transform>().position = spawnPos;
