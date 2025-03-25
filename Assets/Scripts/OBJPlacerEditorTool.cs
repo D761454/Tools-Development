@@ -85,9 +85,10 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                     float avgObjRadius = serializedClass.serializableData.tempObj.gameObject.GetComponent<Renderer>().bounds.extents.magnitude;
 
                     float objMax = area / ((avgObjRadius * avgObjRadius) * Mathf.Sqrt(12));
-                    //https://www.quora.com/How-can-I-work-out-how-many-small-circles-I-can-fit-into-a-big-circle-See-additional-information
 
                     Debug.Log(objMax);
+
+                    int objToSpawn = (int)(objMax * (serializedClass.serializableData.density / 100));
 
                     int rand = Random.Range(0, 100);
                     if (rand < serializedClass.serializableData.density)
