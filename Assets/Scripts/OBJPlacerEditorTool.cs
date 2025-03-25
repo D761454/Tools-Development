@@ -71,6 +71,17 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                 Handles.DrawWireDisc(hit.point, hit.normal, serializedClass.serializableData.brushSize/2);
                 if (serializedClass.serializableData.tempObj != null && e.type == EventType.MouseDown && e.button == 0)
                 {
+                    // Note - allow overlapping Objs for forests etc - can also edit objs post placement - stretch task - add toggle to enable/disable overlap
+                    float area = Mathf.PI * (serializedClass.serializableData.brushSize * serializedClass.serializableData.brushSize);
+
+                    float avgObjRadius = 1f;
+
+                    float objMax = area / ((avgObjRadius * avgObjRadius));
+
+
+                    int trueDensity = (int)((serializedClass.serializableData.brushSize * serializedClass.serializableData.density) / 10);
+                    Debug.Log(trueDensity);
+
                     int rand = Random.Range(0, 100);
                     if (rand < serializedClass.serializableData.density)
                     {
