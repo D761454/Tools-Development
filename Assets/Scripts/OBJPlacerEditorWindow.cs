@@ -14,7 +14,7 @@ public class OBJPlacerEditorWindow : EditorWindow
     /// <summary>
     /// Access via menu and create window
     /// </summary>
-    [MenuItem("OBJ Placement/Placement Tool _b")]
+    [MenuItem("OBJ Placement/Placement Tool Editor _b")]
     public static void Init()
     {
         OBJPlacerEditorWindow window = GetWindow<OBJPlacerEditorWindow>();

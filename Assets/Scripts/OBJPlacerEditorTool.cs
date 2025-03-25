@@ -3,12 +3,14 @@ using UnityEngine;
 using UnityEditor;
 using Unity.VisualScripting;
 using UnityEditor.EditorTools;
+using UnityEditor.ShortcutManagement;
 
 [EditorTool("OBJ Brush")]
 public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 {
     private static OBJPlacerScriptableOBJ serializedClass;
     Vector3 mouseWorldPos;
+    
 
     /// <summary>
     /// Get/Create Serializable Obj for data storage
@@ -23,6 +25,12 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
             AssetDatabase.CreateAsset(serializedClass, "Assets/Scripts/OBJ Placer Scriptable OBJ.asset");
             AssetDatabase.Refresh();
         }
+    }
+
+    [Shortcut("OBJ Placement/OBJBrushTool", null, KeyCode.U, ShortcutModifiers.None)]
+    public static void CustomEnable()
+    {
+        ToolManager.SetActiveTool<OBJPlacerEditorTool>();
     }
 
     void OnDisable()
@@ -77,7 +85,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                     float avgObjRadius = 1f;
 
                     float objMax = area / ((avgObjRadius * avgObjRadius));
-
+                    //https://www.quora.com/How-can-I-work-out-how-many-small-circles-I-can-fit-into-a-big-circle-See-additional-information
 
                     int trueDensity = (int)((serializedClass.serializableData.brushSize * serializedClass.serializableData.density) / 10);
                     Debug.Log(trueDensity);
