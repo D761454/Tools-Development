@@ -88,7 +88,9 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
                     Debug.Log(objMax);
 
-                    int objToSpawn = (int)(objMax * (serializedClass.serializableData.density / 100));
+                    int objToSpawn = (int)(objMax * (serializedClass.serializableData.density / 100f));
+
+                    Debug.Log(objToSpawn);
 
                     int rand = Random.Range(0, 100);
                     if (rand < serializedClass.serializableData.density)
