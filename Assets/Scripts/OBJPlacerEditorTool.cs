@@ -86,18 +86,25 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
                     float objMax = area / ((avgObjRadius * avgObjRadius) * Mathf.Sqrt(12));
 
-                    Debug.Log(objMax);
-
                     int objToSpawn = (int)(objMax * (serializedClass.serializableData.density / 100f));
-
-                    Debug.Log(objToSpawn);
                     
                     for (int i = 0; i < objToSpawn; i++)
                     {
-                        Vector3 randomPos = Random.insideUnitCircle * (serializedClass.serializableData.brushSize / 2);
+                        //Vector3 randomPos = Random.insideUnitSphere * (serializedClass.serializableData.brushSize / 2);
+
+                        // uniform distribution
+                        float randRadius = Mathf.Sqrt(Random.value) * serializedClass.serializableData.brushSize / 2;
+                        float randomRotation = Random.Range(0f, 360f);
+
+                        float rad = randomRotation * Mathf.Deg2Rad;
+                        Vector3 randomPos = new Vector3(Mathf.Cos(rad) - Mathf.Sin(rad), 0, Mathf.Sin(rad) + Mathf.Cos(rad));
+                        randomPos.Normalize();
+                        randomPos *= randRadius;
 
                         if (surfaceNormal != Vector3.up)
                         {
+                            randomPos.y = randomPos.z;
+                            randomPos.z = 0;
                             Vector2 right = Vector3.Cross(surfaceNormal, Vector3.up).normalized;
                             float angle = Vector2.SignedAngle(right, randomPos);
                             Quaternion rot = Quaternion.AngleAxis(angle, surfaceNormal);
@@ -107,8 +114,8 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                         }
                         else
                         {
-                            randomPos.z = randomPos.y;
-                            randomPos.y = 0;
+                            //randomPos.z = randomPos.y;
+                            //randomPos.y = 0;
                         }
 
                         var obj = PrefabUtility.InstantiatePrefab(serializedClass.serializableData.tempObj);
