@@ -1,12 +1,8 @@
 #if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
-using UnityEngine.UIElements;
-using UnityEditor.UIElements;
 using Unity.VisualScripting;
-using System.Collections.Generic;
 using UnityEditor.EditorTools;
-using UnityEditor.ShortcutManagement;
 
 [EditorTool("OBJ Brush")]
 public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
@@ -14,6 +10,9 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
     private static OBJPlacerScriptableOBJ serializedClass;
     Vector3 mouseWorldPos;
 
+    /// <summary>
+    /// Get/Create Serializable Obj for data storage
+    /// </summary>
     void OnEnable()
     {
         serializedClass = AssetDatabase.LoadAssetAtPath<OBJPlacerScriptableOBJ>("Assets/Scripts/OBJ Placer Scriptable OBJ.asset");
@@ -24,8 +23,6 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
             AssetDatabase.CreateAsset(serializedClass, "Assets/Scripts/OBJ Placer Scriptable OBJ.asset");
             AssetDatabase.Refresh();
         }
-
-        //SceneView.duringSceneGui += OnScene;
     }
 
     void OnDisable()
@@ -33,19 +30,26 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
         
     }
 
-    // Called when the active tool is set to this tool instance.
+    /// <summary>
+    /// Disable Obj grabbing while painting
+    /// </summary>
     public override void OnActivated()
     {
         SceneVisibilityManager.instance.DisableAllPicking();
     }
 
-    // Called before the active tool is changed, or destroyed.
+    /// <summary>
+    /// Enable Obj grabbing
+    /// </summary>
     public override void OnWillBeDeactivated()
     {
         SceneVisibilityManager.instance.EnableAllPicking();
     }
 
-    // Equivalent to Editor.OnSceneGUI.
+    /// <summary>
+    /// Equivalent to Editor.OnSceneGUI. Handle events for spawning Objs
+    /// </summary>
+    /// <param name="window"></param>
     public override void OnToolGUI(EditorWindow window)
     {
         Event e = Event.current;

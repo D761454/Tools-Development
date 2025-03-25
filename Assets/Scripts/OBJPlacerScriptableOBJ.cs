@@ -1,8 +1,4 @@
 using UnityEngine;
-using Unity.Properties;
-using UnityEngine.UIElements;
-using UnityEditor;
-using UnityEditor.TerrainTools;
 using System;
 using System.Collections.Generic;
 
@@ -15,7 +11,7 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
 {
     public List<GroupStruct> groups = new List<GroupStruct>();
 
-    public ToolData serializableData = new ToolData(50f, false, 50, 50);
+    public ToolData serializableData = new ToolData(50f, true, 50, 50);
 }
 
 [Serializable]

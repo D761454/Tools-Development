@@ -2,11 +2,6 @@
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
-using UnityEditor.UIElements;
-using Unity.VisualScripting;
-using System.Collections.Generic;
-using UnityEditor.EditorTools;
-using UnityEditor.ShortcutManagement;
 
 public class OBJPlacerEditorWindow : EditorWindow
 {
@@ -16,6 +11,9 @@ public class OBJPlacerEditorWindow : EditorWindow
     [SerializeField] VisualTreeAsset visualTree;
     [SerializeField] VisualTreeAsset groupTree;
 
+    /// <summary>
+    /// Access via menu and create window
+    /// </summary>
     [MenuItem("OBJ Placement/Placement Tool")]
     public static void Init()
     {
@@ -23,6 +21,9 @@ public class OBJPlacerEditorWindow : EditorWindow
         window.titleContent = new GUIContent("Placement Tool");
     }
 
+    /// <summary>
+    /// Get/Create Serializable Obj for data storage
+    /// </summary>
     [InitializeOnLoadMethod]
     private static void OnLoad()
     {
@@ -36,7 +37,9 @@ public class OBJPlacerEditorWindow : EditorWindow
         }
     }
 
-    // generate GUI if no editor updates
+    /// <summary>
+    /// generate GUI if no editor updates
+    /// </summary>
     public void CreateGUI()
     {
         VisualElement root = new VisualElement();
@@ -55,7 +58,9 @@ public class OBJPlacerEditorWindow : EditorWindow
         rootVisualElement.Add(root);
     }
 
-    // handle gui events
+    /// <summary>
+    /// handle gui events, Update Serializable Obj
+    /// </summary>
     private void OnGUI()
     {
         serializedObject = new SerializedObject(serializedClass);
