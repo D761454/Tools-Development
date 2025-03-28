@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
+using UnityEditor.UIElements;
 
 public class OBJPlacerEditorWindow : EditorWindow
 {
@@ -10,6 +11,7 @@ public class OBJPlacerEditorWindow : EditorWindow
 
     [SerializeField] VisualTreeAsset visualTree;
     [SerializeField] VisualTreeAsset groupTree;
+    [SerializeField] VisualTreeAsset groupItemTree;
 
     /// <summary>
     /// Access via menu and create window
@@ -51,6 +53,7 @@ public class OBJPlacerEditorWindow : EditorWindow
         root.styleSheets.Add(sheet);
 
         groupTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UXML/GroupUI.uxml");
+        groupItemTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UXML/GroupItemUI.uxml");
 
         var groups = root.Q<ListView>();
         groups.itemsSource = serializedClass.groups;
@@ -59,17 +62,19 @@ public class OBJPlacerEditorWindow : EditorWindow
         groups.bindItem = (VisualElement element, int index) =>
             MakeListItem(element, index);
 
+        groups.Rebuild();
+
         rootVisualElement.Add(root);
     }
 
     VisualElement MakeListItem(VisualElement element, int index)
     {
         SliderInt slider = element as SliderInt;
-        slider.value = serializedClass.groups[index].weight;
+        //slider.value = serializedClass.groups[index].weight;
         slider.fill = true;
         slider.label = $"Group {index + 1} Weight:";
         slider.showInputField = true;
-
+            //https://docs.unity3d.com/6000.0/Documentation/Manual/UIE-bind-to-list.html
         return slider;
     }
 
