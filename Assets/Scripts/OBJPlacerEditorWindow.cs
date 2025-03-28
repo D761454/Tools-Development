@@ -53,7 +53,11 @@ public class OBJPlacerEditorWindow : EditorWindow
         groupTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UXML/GroupUI.uxml");
 
         var groups = root.Q<ListView>();
-        groups.makeItem = groupTree.CloneTree;
+        groups.itemsSource = serializedClass.groups;
+        groups.makeItem = () => new SliderInt();
+
+        groups.bindItem = (VisualElement element, int index) =>
+            (element as SliderInt).value = serializedClass.groups[index].weight;
 
         rootVisualElement.Add(root);
     }

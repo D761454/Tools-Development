@@ -96,8 +96,6 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                     
                     for (int i = 0; i < objToSpawn; i++)
                     {
-                        //Vector3 randomPos = Random.insideUnitSphere * (serializedClass.serializableData.brushSize / 2);
-
                         // uniform distribution
                         float randRadius = Mathf.Sqrt(Random.value) * serializedClass.serializableData.brushSize / 2;
                         float randomRotation = Random.Range(0f, 360f);
@@ -117,11 +115,6 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                             Vector3 newPos = rot * right;
                             newPos *= randomPos.magnitude;
                             randomPos = newPos;
-                        }
-                        else
-                        {
-                            //randomPos.z = randomPos.y;
-                            //randomPos.y = 0;
                         }
 
                         var obj = PrefabUtility.InstantiatePrefab(serializedClass.serializableData.tempObj);
