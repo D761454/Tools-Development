@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groups: []
   serializableData:
-    brushSize: 50
+    brushSize: 10
     brushEnabled: 1
     density: 50
-    tempObj: {fileID: 0}
+    tempObj: {fileID: 3415384118034924596, guid: 62da35f2d656fa24eaf480661bb70d5b, type: 3}
     tempWeight: 50

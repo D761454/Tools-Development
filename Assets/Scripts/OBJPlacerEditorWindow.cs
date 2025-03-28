@@ -70,10 +70,13 @@ public class OBJPlacerEditorWindow : EditorWindow
     VisualElement MakeListItem(VisualElement element, int index)
     {
         SliderInt slider = element as SliderInt;
+        slider.dataSource = serializedClass;
+
         //slider.value = serializedClass.groups[index].weight;
         slider.fill = true;
         slider.label = $"Group {index + 1} Weight:";
         slider.showInputField = true;
+        slider.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"groups[{index}].weight") });
             //https://docs.unity3d.com/6000.0/Documentation/Manual/UIE-bind-to-list.html
         return slider;
     }
