@@ -57,9 +57,20 @@ public class OBJPlacerEditorWindow : EditorWindow
         groups.makeItem = () => new SliderInt();
 
         groups.bindItem = (VisualElement element, int index) =>
-            (element as SliderInt).value = serializedClass.groups[index].weight;
+            MakeListItem(element, index);
 
         rootVisualElement.Add(root);
+    }
+
+    VisualElement MakeListItem(VisualElement element, int index)
+    {
+        SliderInt slider = element as SliderInt;
+        slider.value = serializedClass.groups[index].weight;
+        slider.fill = true;
+        slider.label = $"Group {index + 1} Weight:";
+        slider.showInputField = true;
+
+        return slider;
     }
 
     /// <summary>
