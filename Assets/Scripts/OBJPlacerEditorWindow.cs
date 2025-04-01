@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
+using System;
+using Unity.Android.Gradle;
 
 public class OBJPlacerEditorWindow : EditorWindow
 {
@@ -55,30 +57,31 @@ public class OBJPlacerEditorWindow : EditorWindow
         groupTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UXML/GroupUI.uxml");
         groupItemTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UXML/GroupItemUI.uxml");
 
-        var groups = root.Q<ListView>();
+        Func<VisualElement> makeItem = () => groupTree.Instantiate();
+
+        Action<VisualElement, int> bindItem = (element, index) =>
+        {
+            ListView listView = element.Q<ListView>();
+            listView.allowAdd = true;
+            listView.allowRemove = true;
+            listView.headerTitle = $"Group {index + 1} Items:";
+
+            SliderInt slider = element.Q<SliderInt>();
+            slider.dataSource = serializedClass;
+
+            slider.fill = true;
+            slider.label = $"Group {index + 1} Weight:";
+            slider.showInputField = true;
+            slider.highValue = 100;
+            slider.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"groups[{index}].weight") });
+        };
+
+        var groups = root.Q<ListView>("GroupsList");
+        groups.makeItem = makeItem;
+        groups.bindItem = bindItem;
         groups.itemsSource = serializedClass.groups;
-        groups.makeItem = () => new SliderInt();
-
-        groups.bindItem = (VisualElement element, int index) =>
-            MakeListItem(element, index);
-
-        groups.Rebuild();
 
         rootVisualElement.Add(root);
-    }
-
-    VisualElement MakeListItem(VisualElement element, int index)
-    {
-        SliderInt slider = element as SliderInt;
-        slider.dataSource = serializedClass;
-
-        slider.fill = true;
-        slider.label = $"Group {index + 1} Weight:";
-        slider.showInputField = true;
-        slider.highValue = 100;
-        slider.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"groups[{index}].weight") });
-            //https://docs.unity3d.com/6000.0/Documentation/Manual/UIE-bind-to-list.html
-        return slider;
     }
 
     /// <summary>

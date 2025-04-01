@@ -79,56 +79,53 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
         if (Physics.Raycast(ray, out hit, 100))
         {
-            if (serializedClass.serializableData.brushEnabled)
+            Vector3 surfaceNormal = hit.normal.normalized;
+            Handles.DrawWireDisc(hit.point, hit.normal, serializedClass.brushSize/2);
+            if (serializedClass.tempObj != null && e.type == EventType.MouseDown && e.button == 0)
             {
-                Vector3 surfaceNormal = hit.normal.normalized;
-                Handles.DrawWireDisc(hit.point, hit.normal, serializedClass.serializableData.brushSize/2);
-                if (serializedClass.serializableData.tempObj != null && e.type == EventType.MouseDown && e.button == 0)
-                {
-                    // Note - allow overlapping Objs for forests etc - can also edit objs post placement - stretch task - add toggle to enable/disable overlap
-                    float area = Mathf.PI * (serializedClass.serializableData.brushSize * serializedClass.serializableData.brushSize);
+                // Note - allow overlapping Objs for forests etc - can also edit objs post placement - stretch task - add toggle to enable/disable overlap
+                float area = Mathf.PI * (serializedClass.brushSize * serializedClass.brushSize);
 
-                    float avgObjRadius = serializedClass.serializableData.tempObj.gameObject.GetComponent<Renderer>().bounds.extents.magnitude;
+                float avgObjRadius = serializedClass.tempObj.gameObject.GetComponent<Renderer>().bounds.extents.magnitude;
 
-                    float objMax = area / ((avgObjRadius * avgObjRadius) * Mathf.Sqrt(12));
+                float objMax = area / ((avgObjRadius * avgObjRadius) * Mathf.Sqrt(12));
 
-                    int objToSpawn = (int)(objMax * (serializedClass.serializableData.density / 100f));
+                int objToSpawn = (int)(objMax * (serializedClass.density / 100f));
                     
-                    for (int i = 0; i < objToSpawn; i++)
+                for (int i = 0; i < objToSpawn; i++)
+                {
+                    // uniform distribution
+                    float randRadius = Mathf.Sqrt(Random.value) * serializedClass.brushSize / 2;
+                    float randomRotation = Random.Range(0f, 360f);
+
+                    float rad = randomRotation * Mathf.Deg2Rad;
+                    Vector3 randomPos = new Vector3(Mathf.Cos(rad) - Mathf.Sin(rad), 0, Mathf.Sin(rad) + Mathf.Cos(rad));
+                    randomPos.Normalize();
+                    randomPos *= randRadius;
+
+                    if (surfaceNormal != Vector3.up)
                     {
-                        // uniform distribution
-                        float randRadius = Mathf.Sqrt(Random.value) * serializedClass.serializableData.brushSize / 2;
-                        float randomRotation = Random.Range(0f, 360f);
-
-                        float rad = randomRotation * Mathf.Deg2Rad;
-                        Vector3 randomPos = new Vector3(Mathf.Cos(rad) - Mathf.Sin(rad), 0, Mathf.Sin(rad) + Mathf.Cos(rad));
-                        randomPos.Normalize();
-                        randomPos *= randRadius;
-
-                        if (surfaceNormal != Vector3.up)
-                        {
-                            randomPos.y = randomPos.z;
-                            randomPos.z = 0;
-                            Vector2 right = Vector3.Cross(surfaceNormal, Vector3.up).normalized;
-                            float angle = Vector2.SignedAngle(right, randomPos);
-                            Quaternion rot = Quaternion.AngleAxis(angle, surfaceNormal);
-                            Vector3 newPos = rot * right;
-                            newPos *= randomPos.magnitude;
-                            randomPos = newPos;
-                        }
-
-                        var obj = PrefabUtility.InstantiatePrefab(serializedClass.serializableData.tempObj);
-                        SceneVisibilityManager.instance.DisablePicking((GameObject)obj, false);
-
-                        obj.GetComponent<Transform>().SetParent(parentGroup, true);
-
-                        obj.GetComponent<Transform>().rotation = Quaternion.FromToRotation(obj.GetComponent<Transform>().up, surfaceNormal);
-
-                        Vector3 spawnPos = hit.point + randomPos;
-                        spawnPos += surfaceNormal * (obj.GetComponent<Renderer>().bounds.size.y / 2);
-
-                        obj.GetComponent<Transform>().position = spawnPos;
+                        randomPos.y = randomPos.z;
+                        randomPos.z = 0;
+                        Vector2 right = Vector3.Cross(surfaceNormal, Vector3.up).normalized;
+                        float angle = Vector2.SignedAngle(right, randomPos);
+                        Quaternion rot = Quaternion.AngleAxis(angle, surfaceNormal);
+                        Vector3 newPos = rot * right;
+                        newPos *= randomPos.magnitude;
+                        randomPos = newPos;
                     }
+
+                    var obj = PrefabUtility.InstantiatePrefab(serializedClass.tempObj);
+                    SceneVisibilityManager.instance.DisablePicking((GameObject)obj, false);
+
+                    obj.GetComponent<Transform>().SetParent(parentGroup, true);
+
+                    obj.GetComponent<Transform>().rotation = Quaternion.FromToRotation(obj.GetComponent<Transform>().up, surfaceNormal);
+
+                    Vector3 spawnPos = hit.point + randomPos;
+                    spawnPos += surfaceNormal * (obj.GetComponent<Renderer>().bounds.size.y / 2);
+
+                    obj.GetComponent<Transform>().position = spawnPos;
                 }
             }
         }

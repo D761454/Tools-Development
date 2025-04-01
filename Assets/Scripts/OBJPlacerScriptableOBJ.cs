@@ -11,7 +11,10 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
 {
     public List<GroupStruct> groups = new List<GroupStruct>();
 
-    public ToolData serializableData = new ToolData(50f, true, 50, 50);
+    public float brushSize = 50f;
+    public int density = 50;
+    public GameObject tempObj = null;
+    public int tempWeight = 50;
 }
 
 [Serializable]
@@ -31,24 +34,5 @@ public struct GroupStruct
     {
         this.items = items;
         weight = 0;
-    }
-}
-
-[Serializable]
-public struct ToolData
-{
-    public float brushSize;
-    public bool brushEnabled;
-    public int density;
-    public GameObject tempObj;
-    public int tempWeight;
-
-    public ToolData(float size, bool enabled, int density, int weight)
-    {
-        brushSize = size;
-        brushEnabled = enabled;
-        this.density = density;
-        tempObj = null;
-        tempWeight = weight;
     }
 }
