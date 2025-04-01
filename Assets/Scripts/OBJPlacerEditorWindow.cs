@@ -57,28 +57,58 @@ public class OBJPlacerEditorWindow : EditorWindow
         groupTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UXML/GroupUI.uxml");
         groupItemTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UXML/GroupItemUI.uxml");
 
-        Func<VisualElement> makeItem = () => groupTree.Instantiate();
+        Func<VisualElement> makeGroup = () => groupTree.Instantiate();
+        Func<VisualElement> makeItem = () => groupItemTree.Instantiate();
 
         Action<VisualElement, int> bindItem = (element, index) =>
         {
-            ListView listView = element.Q<ListView>();
-            listView.allowAdd = true;
-            listView.allowRemove = true;
-            listView.headerTitle = $"Group {index + 1} Items:";
+            ObjectField objectField = element.Q<ObjectField>();
+            objectField.dataSource = serializedClass;
+
+            objectField.label = $"Object {index+1}:";
+            objectField.objectType = typeof(GameObject);
+            objectField.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"items[{index}].gObject") });
 
             SliderInt slider = element.Q<SliderInt>();
             slider.dataSource = serializedClass;
 
             slider.fill = true;
-            slider.label = $"Group {index + 1} Weight:";
+            slider.label = "Weight:";
+            slider.showInputField = true;
+            slider.highValue = 100;
+            slider.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"items[{index}].weight") });
+        };
+
+        Action<VisualElement, int> bindGroup = (element, index) =>
+        {
+            ListView listView = element.Q<ListView>();
+            listView.showBorder = true;
+            listView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
+            listView.showAddRemoveFooter = true;
+            listView.allowAdd = true;
+            listView.allowRemove = true;
+            listView.reorderMode = ListViewReorderMode.Animated;
+            listView.showBoundCollectionSize = true;
+            listView.headerTitle = $"Group {index + 1} Items:";
+            listView.name = $"Group {index + 1} List";
+
+            listView.makeItem = makeItem;
+            listView.bindItem = bindItem;
+            listView.itemsSource = serializedClass.groups[index].items;
+
+            SliderInt slider = element.Q<SliderInt>();
+            slider.dataSource = serializedClass;
+
+            slider.fill = true;
+            slider.label = "Weight:";
             slider.showInputField = true;
             slider.highValue = 100;
             slider.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"groups[{index}].weight") });
         };
 
         var groups = root.Q<ListView>("GroupsList");
-        groups.makeItem = makeItem;
-        groups.bindItem = bindItem;
+        groups.makeItem = makeGroup;
+        groups.bindItem = bindGroup;
         groups.itemsSource = serializedClass.groups;
 
         rootVisualElement.Add(root);

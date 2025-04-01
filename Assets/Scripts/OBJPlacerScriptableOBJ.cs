@@ -29,10 +29,4 @@ public struct GroupStruct
 {
     public List<GroupItemStruct> items;
     public int weight;
-
-    public GroupStruct(List<GroupItemStruct> items)
-    {
-        this.items = items;
-        weight = 0;
-    }
 }
