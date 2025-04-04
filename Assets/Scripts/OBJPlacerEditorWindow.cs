@@ -61,29 +61,24 @@ public class OBJPlacerEditorWindow : EditorWindow
         Func<VisualElement> makeGroup = () => groupTree.Instantiate();
         Func<VisualElement> makeItem = () => groupItemTree.Instantiate();
 
-        void BindItem(VisualElement element, int index, int group)
+        Action<VisualElement, int> bindItem = (element, index) =>
         {
-            // needed due to no struct intiialisation
-            GroupItemStruct groupItem = serializedClass.groups[group].items[index];
-            groupItem.gObject = null;
-            serializedClass.groups[group].items[index] = groupItem;
-
             ObjectField objectField = element.Q<ObjectField>();
-            objectField.dataSource = serializedClass;
+            objectField.dataSource = objectField.parent.dataSource;
 
             objectField.label = $"Object {index+1}:";
             objectField.objectType = typeof(GameObject);
-            objectField.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"groups[{group}].items[{index}].gObject") });
+            objectField.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"items[{index}].gObject") });
             objectField.Bind(serializedObject);
 
             SliderInt slider = element.Q<SliderInt>();
-            slider.dataSource = serializedClass;
+            slider.dataSource = slider.parent.dataSource;
 
             slider.fill = true;
             slider.label = "Weight:";
             slider.showInputField = true;
             slider.highValue = 100;
-            slider.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"groups[{group}].items[{index}].weight") });
+            slider.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"items[{index}].weight") });
             slider.Bind(serializedObject);
         };
 
@@ -114,11 +109,10 @@ public class OBJPlacerEditorWindow : EditorWindow
             listView.headerTitle = "Items:";
             listView.name = $"Group {index + 1} List";
 
-            int group = index;
-
             listView.makeItem = makeItem;
-            listView.bindItem = (element, index) => { BindItem(element, index, group); };
+            listView.bindItem = bindItem;
             listView.itemsSource = serializedClass.groups[index].items;
+            listView.dataSource = serializedClass.groups[index];
             listView.Bind(serializedObject);
 
             SliderInt slider = element.Q<SliderInt>();
