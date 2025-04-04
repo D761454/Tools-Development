@@ -63,6 +63,11 @@ public class OBJPlacerEditorWindow : EditorWindow
 
         void BindItem(VisualElement element, int index, int group)
         {
+            // needed due to no struct intiialisation
+            GroupItemStruct groupItem = serializedClass.groups[group].items[index];
+            groupItem.gObject = null;
+            serializedClass.groups[group].items[index] = groupItem;
+
             ObjectField objectField = element.Q<ObjectField>();
             objectField.dataSource = serializedClass;
 
@@ -84,6 +89,7 @@ public class OBJPlacerEditorWindow : EditorWindow
 
         Action<VisualElement, int> bindGroup = (element, index) =>
         {
+            // needed due to no struct intiialisation
             GroupStruct groupStruct = serializedClass.groups[index];
             groupStruct.items = new List<GroupItemStruct>();
             serializedClass.groups[index] = groupStruct;

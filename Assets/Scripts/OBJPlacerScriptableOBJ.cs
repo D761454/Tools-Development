@@ -20,7 +20,7 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
 [Serializable]
 public struct GroupItemStruct
 {
-    public UnityEngine.Object gObject;
+    public GameObject gObject;
     public int weight;
 }
 
