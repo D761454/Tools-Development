@@ -13,9 +13,7 @@ MonoBehaviour:
   m_Name: OBJ Placer Scriptable OBJ
   m_EditorClassIdentifier: 
   groups: []
-  serializableData:
-    brushSize: 50
-    brushEnabled: 1
-    density: 50
-    tempObj: {fileID: 0}
-    tempWeight: 50
+  brushSize: 50
+  density: 50
+  tempObj: {fileID: 0}
+  tempWeight: 50

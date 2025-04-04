@@ -61,14 +61,15 @@ public class OBJPlacerEditorWindow : EditorWindow
         Func<VisualElement> makeGroup = () => groupTree.Instantiate();
         Func<VisualElement> makeItem = () => groupItemTree.Instantiate();
 
-        Action<VisualElement, int> bindItem = (element, index) =>
+        void BindItem(VisualElement element, int index, int group)
         {
             ObjectField objectField = element.Q<ObjectField>();
             objectField.dataSource = serializedClass;
 
             objectField.label = $"Object {index+1}:";
             objectField.objectType = typeof(GameObject);
-            objectField.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"items[{index}].gObject") });
+            objectField.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"groups[{group}].items[{index}].gObject") });
+            objectField.Bind(serializedObject);
 
             SliderInt slider = element.Q<SliderInt>();
             slider.dataSource = serializedClass;
@@ -77,11 +78,16 @@ public class OBJPlacerEditorWindow : EditorWindow
             slider.label = "Weight:";
             slider.showInputField = true;
             slider.highValue = 100;
-            slider.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"items[{index}].weight") });
+            slider.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"groups[{group}].items[{index}].weight") });
+            slider.Bind(serializedObject);
         };
 
         Action<VisualElement, int> bindGroup = (element, index) =>
         {
+            GroupStruct groupStruct = serializedClass.groups[index];
+            groupStruct.items = new List<GroupItemStruct>();
+            serializedClass.groups[index] = groupStruct;
+
             Foldout foldout = element.Q<Foldout>();
             foldout.dataSource = serializedClass;
             foldout.SetBinding("text", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"groups[{index}].name") });
@@ -89,6 +95,7 @@ public class OBJPlacerEditorWindow : EditorWindow
             TextField textField = element.Q<TextField>();
             textField.dataSource = serializedClass;
             textField.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"groups[{index}].name") });
+            textField.Bind(serializedObject);
 
             ListView listView = element.Q<ListView>();
             listView.showBorder = true;
@@ -101,13 +108,12 @@ public class OBJPlacerEditorWindow : EditorWindow
             listView.headerTitle = "Items:";
             listView.name = $"Group {index + 1} List";
 
-            GroupStruct groupStruct = serializedClass.groups[index];
-            groupStruct.items = new List<GroupItemStruct>();
-            serializedClass.groups[index] = groupStruct;
+            int group = index;
 
             listView.makeItem = makeItem;
-            listView.bindItem = bindItem;
+            listView.bindItem = (element, index) => { BindItem(element, index, group); };
             listView.itemsSource = serializedClass.groups[index].items;
+            listView.Bind(serializedObject);
 
             SliderInt slider = element.Q<SliderInt>();
             slider.dataSource = serializedClass;
@@ -117,6 +123,7 @@ public class OBJPlacerEditorWindow : EditorWindow
             slider.showInputField = true;
             slider.highValue = 100;
             slider.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"groups[{index}].weight") });
+            slider.Bind(serializedObject);
         };
 
         var groups = root.Q<ListView>("GroupsList");
