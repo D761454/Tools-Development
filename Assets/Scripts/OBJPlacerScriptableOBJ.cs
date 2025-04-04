@@ -27,6 +27,7 @@ public struct GroupItemStruct
 [Serializable]
 public struct GroupStruct
 {
+    public string name;
     public List<GroupItemStruct> items;
     public int weight;
 }

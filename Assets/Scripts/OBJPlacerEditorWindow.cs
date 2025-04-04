@@ -82,7 +82,12 @@ public class OBJPlacerEditorWindow : EditorWindow
         Action<VisualElement, int> bindGroup = (element, index) =>
         {
             Foldout foldout = element.Q<Foldout>();
-            foldout.text = $"Group {index + 1}";
+            foldout.dataSource = serializedClass;
+            foldout.SetBinding("text", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"groups[{index}].name") });
+
+            TextField textField = element.Q<TextField>();
+            textField.dataSource = serializedClass;
+            textField.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"groups[{index}].name") });
 
             ListView listView = element.Q<ListView>();
             listView.showBorder = true;
