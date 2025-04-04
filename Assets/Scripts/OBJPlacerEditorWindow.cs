@@ -81,6 +81,9 @@ public class OBJPlacerEditorWindow : EditorWindow
 
         Action<VisualElement, int> bindGroup = (element, index) =>
         {
+            Foldout foldout = element.Q<Foldout>();
+            foldout.text = $"Group {index + 1}";
+
             ListView listView = element.Q<ListView>();
             listView.showBorder = true;
             listView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
@@ -89,7 +92,7 @@ public class OBJPlacerEditorWindow : EditorWindow
             listView.allowRemove = true;
             listView.reorderMode = ListViewReorderMode.Animated;
             listView.showBoundCollectionSize = true;
-            listView.headerTitle = $"Group {index + 1} Items:";
+            listView.headerTitle = "Items:";
             listView.name = $"Group {index + 1} List";
 
             listView.makeItem = makeItem;

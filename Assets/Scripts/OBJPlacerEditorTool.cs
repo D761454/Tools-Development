@@ -27,6 +27,9 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
         }
     }
 
+    /// <summary>
+    /// shortcut U to enable tool
+    /// </summary>
     [Shortcut("OBJ Placement/OBJBrushTool", null, KeyCode.U, ShortcutModifiers.None)]
     public static void CustomEnable()
     {
