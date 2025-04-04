@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using System;
 using Unity.Android.Gradle;
+using System.Collections.Generic;
 
 public class OBJPlacerEditorWindow : EditorWindow
 {
@@ -99,6 +100,10 @@ public class OBJPlacerEditorWindow : EditorWindow
             listView.showBoundCollectionSize = true;
             listView.headerTitle = "Items:";
             listView.name = $"Group {index + 1} List";
+
+            GroupStruct groupStruct = serializedClass.groups[index];
+            groupStruct.items = new List<GroupItemStruct>();
+            serializedClass.groups[index] = groupStruct;
 
             listView.makeItem = makeItem;
             listView.bindItem = bindItem;
