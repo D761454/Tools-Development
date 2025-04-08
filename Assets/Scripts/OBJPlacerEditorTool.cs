@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEditor.EditorTools;
 using UnityEditor.ShortcutManagement;
 using System.ComponentModel;
+using System.Collections.Generic;
 
 [EditorTool("Brush Tool")]
 [Icon("Assets/Scripts/tool-Icon.png")]
@@ -12,13 +13,15 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 {
     private static OBJPlacerScriptableOBJ serializedClass;
 
-    public Transform parentGroup;
+    List<GameObject> groupParents;
 
     /// <summary>
     /// Get/Create Serializable Obj for data storage
     /// </summary>
     void OnEnable()
     {
+        groupParents = new List<GameObject>();
+
         serializedClass = AssetDatabase.LoadAssetAtPath<OBJPlacerScriptableOBJ>("Assets/Scripts/OBJ Placer Scriptable OBJ.asset");
 
         if (!serializedClass)
@@ -48,11 +51,13 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
     /// </summary>
     public override void OnActivated()
     {
-        if (parentGroup == null)
+        for (int i = 0; i < serializedClass.groups.Count; i++)
         {
-            GameObject temp = new GameObject("ToolSpawned");
-            SceneVisibilityManager.instance.DisablePicking(temp, false);
-            parentGroup = temp.transform;
+            if (groupParents.Count <= i)
+            {
+                GameObject temp = new GameObject(serializedClass.groups[i].name);
+                groupParents.Add(temp);
+            }
         }
 
         SceneVisibilityManager.instance.DisableAllPicking();
@@ -86,12 +91,14 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
         {
             Vector3 surfaceNormal = hit.normal.normalized;
             Handles.DrawWireDisc(hit.point, hit.normal, serializedClass.brushSize/2);
-            if (serializedClass.tempObj != null && e.type == EventType.MouseDown && e.button == 0)
+
+            if (serializedClass.groups != null && serializedClass.groups[0].items != null && serializedClass.groups[0].items[0].gObject != null 
+                && e.type == EventType.MouseDown && e.button == 0)
             {
                 // Note - allow overlapping Objs for forests etc - can also edit objs post placement - stretch task - add toggle to enable/disable overlap
                 float area = Mathf.PI * (serializedClass.brushSize * serializedClass.brushSize);
 
-                float avgObjRadius = serializedClass.tempObj.gameObject.GetComponent<Renderer>().bounds.extents.magnitude;
+                float avgObjRadius = serializedClass.groups[0].items[0].gObject.GetComponent<Renderer>().bounds.extents.magnitude;
 
                 float objMax = area / ((avgObjRadius * avgObjRadius) * Mathf.Sqrt(12));
 
@@ -120,10 +127,12 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                         randomPos = newPos;
                     }
 
-                    var obj = PrefabUtility.InstantiatePrefab(serializedClass.tempObj);
+                    int index = Random.Range(0, serializedClass.groups.Count);
+
+                    var obj = PrefabUtility.InstantiatePrefab(serializedClass.groups[index].items[0].gObject);
                     SceneVisibilityManager.instance.DisablePicking((GameObject)obj, false);
 
-                    obj.GetComponent<Transform>().SetParent(parentGroup, true);
+                    obj.GetComponent<Transform>().SetParent(groupParents[index].transform, true);
 
                     obj.GetComponent<Transform>().rotation = Quaternion.FromToRotation(obj.GetComponent<Transform>().up, surfaceNormal);
 
@@ -131,6 +140,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                     spawnPos += surfaceNormal * (obj.GetComponent<Renderer>().bounds.size.y / 2);
 
                     obj.GetComponent<Transform>().position = spawnPos;
+                    //Debug.LogException(new System.Exception("Group Item is missing an assigned Object!"));
                 }
             }
         }

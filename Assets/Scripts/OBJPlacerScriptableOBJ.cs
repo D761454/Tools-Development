@@ -13,8 +13,6 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
 
     public float brushSize = 50f;
     public int density = 50;
-    public GameObject tempObj = null;
-    public int tempWeight = 50;
 }
 
 [Serializable]
