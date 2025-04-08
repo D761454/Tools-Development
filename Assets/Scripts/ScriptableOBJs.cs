@@ -34,7 +34,7 @@ public struct GroupStruct
 [Serializable, CreateAssetMenu(fileName = "ListViewAttributes")]
 public class ListViewAttributes : ScriptableObject
 {
-    bool showBorder = true, showAddRemoveFooter = true, allowAdd = true, allowRemove = true, showBoundCollectionSize = true;
-    CollectionVirtualizationMethod virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
-    ListViewReorderMode reorderMode = ListViewReorderMode.Animated;
+    public bool showBorder = true, showAddRemoveFooter = true, allowAdd = true, allowRemove = true, showBoundCollectionSize = true;
+    public CollectionVirtualizationMethod virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
+    public ListViewReorderMode reorderMode = ListViewReorderMode.Animated;
 }

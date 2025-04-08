@@ -6,13 +6,14 @@ using UnityEditor.UIElements;
 using System;
 using Unity.Android.Gradle;
 using System.Collections.Generic;
+using static UnityEditor.UIElements.CurveField;
 
 public class OBJPlacerEditorWindow : EditorWindow
 {
     private static OBJPlacerScriptableOBJ serializedClass;
     private SerializedObject serializedObject;
 
-    ListViewAttributes listViewAttributes;
+    private static ListViewAttributes listViewAttributes;
 
     [SerializeField] VisualTreeAsset visualTree;
     [SerializeField] VisualTreeAsset groupTree;
@@ -42,6 +43,15 @@ public class OBJPlacerEditorWindow : EditorWindow
             AssetDatabase.CreateAsset(serializedClass, "Assets/Scripts/OBJ Placer Scriptable OBJ.asset");
             AssetDatabase.Refresh();
         }
+
+        listViewAttributes = AssetDatabase.LoadAssetAtPath<ListViewAttributes>("Assets/Scripts/ListViewAttributes.asset");
+
+        if (!listViewAttributes)
+        {
+            listViewAttributes = CreateInstance<ListViewAttributes>();
+            AssetDatabase.CreateAsset(listViewAttributes, "Assets/Scripts/ListViewAttributes.asset");
+            AssetDatabase.Refresh();
+        }
     }
 
     /// <summary>
@@ -49,17 +59,6 @@ public class OBJPlacerEditorWindow : EditorWindow
     /// </summary>
     public void CreateGUI()
     {
-        m_ListView = new ListView()
-        {
-            showBorder = true,
-            virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight,
-            showAddRemoveFooter = true,
-            allowAdd = true,
-            allowRemove = true,
-            reorderMode = ListViewReorderMode.Animated,
-            showBoundCollectionSize = true
-        };
-
         VisualElement root = new VisualElement();
 
         visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UXML/OBJPlacementMainEditor.uxml");
@@ -112,6 +111,14 @@ public class OBJPlacerEditorWindow : EditorWindow
             textField.Bind(serializedObject);
 
             ListView listView = element.Q<ListView>();
+
+            listView.showBorder = listViewAttributes.showBorder;
+            listView.virtualizationMethod = listViewAttributes.virtualizationMethod;
+            listView.showAddRemoveFooter = listViewAttributes.showAddRemoveFooter;
+            listView.allowAdd = listViewAttributes.allowAdd;
+            listView.allowRemove = listViewAttributes.allowRemove;
+            listView.reorderMode = listViewAttributes.reorderMode;
+            listView.showBoundCollectionSize = listViewAttributes.showBoundCollectionSize;
 
             listView.headerTitle = "Items:";
             listView.name = $"Group {index + 1} List";
