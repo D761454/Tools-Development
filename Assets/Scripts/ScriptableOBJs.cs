@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using UnityEngine.UIElements;
 
 
 /// <summary>
@@ -28,4 +29,12 @@ public struct GroupStruct
     public string name;
     public List<GroupItemStruct> items;
     public int weight;
+}
+
+[Serializable, CreateAssetMenu(fileName = "ListViewAttributes")]
+public class ListViewAttributes : ScriptableObject
+{
+    bool showBorder = true, showAddRemoveFooter = true, allowAdd = true, allowRemove = true, showBoundCollectionSize = true;
+    CollectionVirtualizationMethod virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
+    ListViewReorderMode reorderMode = ListViewReorderMode.Animated;
 }
