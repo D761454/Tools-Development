@@ -6,6 +6,7 @@ using UnityEditor.EditorTools;
 using UnityEditor.ShortcutManagement;
 
 [EditorTool("OBJ Brush")]
+[Icon("Assets/Scripts/tool-Icon.png")]
 public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 {
     private static OBJPlacerScriptableOBJ serializedClass;
