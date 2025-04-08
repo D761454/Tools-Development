@@ -30,11 +30,3 @@ public struct GroupStruct
     public List<GroupItemStruct> items;
     public int weight;
 }
-
-[Serializable, CreateAssetMenu(fileName = "ListViewAttributes")]
-public class ListViewAttributes : ScriptableObject
-{
-    public bool showBorder = true, showAddRemoveFooter = true, allowAdd = true, allowRemove = true, showBoundCollectionSize = true;
-    public CollectionVirtualizationMethod virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
-    public ListViewReorderMode reorderMode = ListViewReorderMode.Animated;
-}

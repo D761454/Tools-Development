@@ -8,12 +8,24 @@ using Unity.Android.Gradle;
 using System.Collections.Generic;
 using static UnityEditor.UIElements.CurveField;
 
+struct ListViewAttributes
+{
+    public bool showBorder = true;
+    public bool showAddRemoveFooter = true;
+    public bool allowAdd = true;
+    public bool allowRemove = true;
+    public bool showBoundCollectionSize = true;
+    public CollectionVirtualizationMethod virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
+    public ListViewReorderMode reorderMode = ListViewReorderMode.Animated;
+    public selectionType selectionType = SelectionType.None;
+}
+
 public class OBJPlacerEditorWindow : EditorWindow
 {
     private static OBJPlacerScriptableOBJ serializedClass;
     private SerializedObject serializedObject;
 
-    private static ListViewAttributes listViewAttributes;
+    private ListViewAttributes listViewAttributes = new ListViewAttributes();
 
     [SerializeField] VisualTreeAsset visualTree;
     [SerializeField] VisualTreeAsset groupTree;
@@ -41,15 +53,6 @@ public class OBJPlacerEditorWindow : EditorWindow
         {
             serializedClass = CreateInstance<OBJPlacerScriptableOBJ>();
             AssetDatabase.CreateAsset(serializedClass, "Assets/Scripts/OBJ Placer Scriptable OBJ.asset");
-            AssetDatabase.Refresh();
-        }
-
-        listViewAttributes = AssetDatabase.LoadAssetAtPath<ListViewAttributes>("Assets/Scripts/ListViewAttributes.asset");
-
-        if (!listViewAttributes)
-        {
-            listViewAttributes = CreateInstance<ListViewAttributes>();
-            AssetDatabase.CreateAsset(listViewAttributes, "Assets/Scripts/ListViewAttributes.asset");
             AssetDatabase.Refresh();
         }
     }
@@ -112,6 +115,8 @@ public class OBJPlacerEditorWindow : EditorWindow
 
             ListView listView = element.Q<ListView>();
 
+            // edit in engine so i dont need to set within bind obj
+            //https://discussions.unity.com/t/runtime-list-view-overflows-visible-area/783169/4
             listView.showBorder = listViewAttributes.showBorder;
             listView.virtualizationMethod = listViewAttributes.virtualizationMethod;
             listView.showAddRemoveFooter = listViewAttributes.showAddRemoveFooter;
@@ -119,6 +124,7 @@ public class OBJPlacerEditorWindow : EditorWindow
             listView.allowRemove = listViewAttributes.allowRemove;
             listView.reorderMode = listViewAttributes.reorderMode;
             listView.showBoundCollectionSize = listViewAttributes.showBoundCollectionSize;
+            listView.selectionType = listViewAttributes.selectionType;
 
             listView.headerTitle = "Items:";
             listView.name = $"Group {index + 1} List";
@@ -127,7 +133,6 @@ public class OBJPlacerEditorWindow : EditorWindow
             listView.bindItem = bindItem;
             listView.itemsSource = serializedClass.groups[index].items;
             listView.dataSource = serializedClass.groups[index];
-            listView.selectionType = SelectionType.None;
             listView.Bind(serializedObject);
 
             SliderInt slider = element.Q<SliderInt>();
