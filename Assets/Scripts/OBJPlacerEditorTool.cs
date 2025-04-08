@@ -4,8 +4,9 @@ using UnityEditor;
 using Unity.VisualScripting;
 using UnityEditor.EditorTools;
 using UnityEditor.ShortcutManagement;
+using System.ComponentModel;
 
-[EditorTool("OBJ Brush")]
+[EditorTool("Brush Tool")]
 [Icon("Assets/Scripts/tool-Icon.png")]
 public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 {
