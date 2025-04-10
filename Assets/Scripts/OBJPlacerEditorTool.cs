@@ -72,6 +72,42 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
     }
 
     /// <summary>
+    /// calculate total objects that can fit within the brush area * density
+    /// </summary>
+    /// <returns></returns>
+    int ObjectsToSpawn()
+    {
+        // Note - allow overlapping Objs for forests etc - can also edit objs post placement - stretch task - add toggle to enable/disable overlap
+        float area = Mathf.PI * (serializedClass.brushSize * serializedClass.brushSize);
+
+        float avgObjRadius = serializedClass.groups[0].items[0].gObject.GetComponent<Renderer>().bounds.extents.magnitude;
+
+        float objMax = area / ((avgObjRadius * avgObjRadius) * Mathf.Sqrt(12));
+
+        int objToSpawn = (int)(objMax * (serializedClass.density / 100f));
+
+        return objToSpawn;
+    }
+
+    /// <summary>
+    /// use both a random radius and random rotation for the right vector to generate a random spawn position from placement origin
+    /// </summary>
+    /// <returns></returns>
+    Vector3 GenerateRandomSpawnPosition()
+    {
+        // uniform distribution
+        float randRadius = Mathf.Sqrt(Random.value) * serializedClass.brushSize / 2;
+        float randomRotation = Random.Range(0f, 360f);
+
+        float rad = randomRotation * Mathf.Deg2Rad;
+        Vector3 randomPos = new Vector3(Mathf.Cos(rad) - Mathf.Sin(rad), 0, Mathf.Sin(rad) + Mathf.Cos(rad));
+        randomPos.Normalize();
+        randomPos *= randRadius;
+
+        return randomPos;
+    }
+
+    /// <summary>
     /// Equivalent to Editor.OnSceneGUI. Handle events for spawning Objs
     /// </summary>
     /// <param name="window"></param>
@@ -95,36 +131,22 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
             if (serializedClass.groups != null && serializedClass.groups[0].items != null && serializedClass.groups[0].items[0].gObject != null 
                 && e.type == EventType.MouseDown && e.button == 0)
             {
-                // Note - allow overlapping Objs for forests etc - can also edit objs post placement - stretch task - add toggle to enable/disable overlap
-                float area = Mathf.PI * (serializedClass.brushSize * serializedClass.brushSize);
-
-                float avgObjRadius = serializedClass.groups[0].items[0].gObject.GetComponent<Renderer>().bounds.extents.magnitude;
-
-                float objMax = area / ((avgObjRadius * avgObjRadius) * Mathf.Sqrt(12));
-
-                int objToSpawn = (int)(objMax * (serializedClass.density / 100f));
+                int total = ObjectsToSpawn();
                     
-                for (int i = 0; i < objToSpawn; i++)
+                for (int i = 0; i < total; i++)
                 {
-                    // uniform distribution
-                    float randRadius = Mathf.Sqrt(Random.value) * serializedClass.brushSize / 2;
-                    float randomRotation = Random.Range(0f, 360f);
-
-                    float rad = randomRotation * Mathf.Deg2Rad;
-                    Vector3 randomPos = new Vector3(Mathf.Cos(rad) - Mathf.Sin(rad), 0, Mathf.Sin(rad) + Mathf.Cos(rad));
-                    randomPos.Normalize();
-                    randomPos *= randRadius;
+                    Vector3 pos = GenerateRandomSpawnPosition();
 
                     if (surfaceNormal != Vector3.up)
                     {
-                        randomPos.y = randomPos.z;
-                        randomPos.z = 0;
+                        pos.y = pos.z;
+                        pos.z = 0;
                         Vector2 right = Vector3.Cross(surfaceNormal, Vector3.up).normalized;
-                        float angle = Vector2.SignedAngle(right, randomPos);
+                        float angle = Vector2.SignedAngle(right, pos);
                         Quaternion rot = Quaternion.AngleAxis(angle, surfaceNormal);
                         Vector3 newPos = rot * right;
-                        newPos *= randomPos.magnitude;
-                        randomPos = newPos;
+                        newPos *= pos.magnitude;
+                        pos = newPos;
                     }
 
                     int index = Random.Range(0, serializedClass.groups.Count);
@@ -136,7 +158,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
                     obj.GetComponent<Transform>().rotation = Quaternion.FromToRotation(obj.GetComponent<Transform>().up, surfaceNormal);
 
-                    Vector3 spawnPos = hit.point + randomPos;
+                    Vector3 spawnPos = hit.point + pos;
                     spawnPos += surfaceNormal * (obj.GetComponent<Renderer>().bounds.size.y / 2);
 
                     obj.GetComponent<Transform>().position = spawnPos;
