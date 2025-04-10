@@ -8,24 +8,10 @@ using Unity.Android.Gradle;
 using System.Collections.Generic;
 using static UnityEditor.UIElements.CurveField;
 
-struct ListViewAttributes
-{
-    public bool showBorder = true;
-    public bool showAddRemoveFooter = true;
-    public bool allowAdd = true;
-    public bool allowRemove = true;
-    public bool showBoundCollectionSize = true;
-    public CollectionVirtualizationMethod virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
-    public ListViewReorderMode reorderMode = ListViewReorderMode.Animated;
-    public selectionType selectionType = SelectionType.None;
-}
-
 public class OBJPlacerEditorWindow : EditorWindow
 {
     private static OBJPlacerScriptableOBJ serializedClass;
     private SerializedObject serializedObject;
-
-    private ListViewAttributes listViewAttributes = new ListViewAttributes();
 
     [SerializeField] VisualTreeAsset visualTree;
     [SerializeField] VisualTreeAsset groupTree;
@@ -82,17 +68,12 @@ public class OBJPlacerEditorWindow : EditorWindow
             objectField.dataSource = objectField.parent.dataSource;
 
             objectField.label = $"Object {index+1}:";
-            objectField.objectType = typeof(GameObject);
             objectField.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"items[{index}].gObject"), bindingMode = BindingMode.TwoWay });
             objectField.Bind(serializedObject);
 
             SliderInt slider = element.Q<SliderInt>();
             slider.dataSource = slider.parent.dataSource;
 
-            slider.fill = true;
-            slider.label = "Weight:";
-            slider.showInputField = true;
-            slider.highValue = 100;
             slider.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"items[{index}].weight"), bindingMode = BindingMode.TwoWay });
             slider.Bind(serializedObject);
         };
@@ -115,16 +96,7 @@ public class OBJPlacerEditorWindow : EditorWindow
 
             ListView listView = element.Q<ListView>();
 
-            // edit in engine so i dont need to set within bind obj
             //https://discussions.unity.com/t/runtime-list-view-overflows-visible-area/783169/4
-            listView.showBorder = listViewAttributes.showBorder;
-            listView.virtualizationMethod = listViewAttributes.virtualizationMethod;
-            listView.showAddRemoveFooter = listViewAttributes.showAddRemoveFooter;
-            listView.allowAdd = listViewAttributes.allowAdd;
-            listView.allowRemove = listViewAttributes.allowRemove;
-            listView.reorderMode = listViewAttributes.reorderMode;
-            listView.showBoundCollectionSize = listViewAttributes.showBoundCollectionSize;
-            listView.selectionType = listViewAttributes.selectionType;
 
             listView.headerTitle = "Items:";
             listView.name = $"Group {index + 1} List";
@@ -138,10 +110,6 @@ public class OBJPlacerEditorWindow : EditorWindow
             SliderInt slider = element.Q<SliderInt>();
             slider.dataSource = serializedClass;
 
-            slider.fill = true;
-            slider.label = "Weight:";
-            slider.showInputField = true;
-            slider.highValue = 100;
             slider.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"groups[{index}].weight"), bindingMode = BindingMode.TwoWay });
             slider.Bind(serializedObject);
         };
