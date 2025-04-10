@@ -83,6 +83,7 @@ public class OBJPlacerEditorWindow : EditorWindow
             // needed due to no struct intiialisation
             GroupStruct groupStruct = serializedClass.groups[index];
             groupStruct.items = new List<GroupItemStruct>();
+            groupStruct.name = $"Group {index}";
             serializedClass.groups[index] = groupStruct;
 
             Foldout foldout = element.Q<Foldout>();
