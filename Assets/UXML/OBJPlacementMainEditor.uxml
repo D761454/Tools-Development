@@ -20,14 +20,5 @@
                 <ui:DataBinding property="viewDataKey" data-source-path="groups" data-source="project://database/Assets/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-mode="ToTarget" />
             </Bindings>
         </ui:ListView>
-        <ui:TreeView show-border="true" virtualization-method="DynamicHeight" data-source="project://database/Assets/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" data-source-path="groups" fixed-item-height="66" selection-type="None" auto-expand="true" item-template="project://database/Assets/UXML/GroupUI.uxml?fileID=9197481963319205126&amp;guid=03ff4b92f225ad942ad0dcfe5ea59221&amp;type=3#GroupUI" picking-mode="Ignore" name="GroupsTree">
-            <Bindings>
-                <ui:DataBinding property="viewDataKey" data-source-path="groups" data-source="project://database/Assets/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-mode="ToTarget" />
-            </Bindings>
-        </ui:TreeView>
-        <ui:VisualElement name="TreeButtons" style="flex-grow: 1; flex-direction: row; align-items: stretch; justify-content: center; align-self: flex-end; flex-shrink: 1; flex-wrap: nowrap;">
-            <ui:Button text="+&#10;" name="AddButton" triple-click-selects-line="false" double-click-selects-word="false" focusable="false" />
-            <ui:Button text="-" name="RemoveButton" focusable="false" triple-click-selects-line="false" double-click-selects-word="false" />
-        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
