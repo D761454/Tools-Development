@@ -62,3 +62,16 @@
     margin-bottom: 5px;
     margin-left: 5px;
 }
+
+.unity-tree-view {
+    margin-right: 5px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+}
+
+.unity-button {
+    align-items: auto;
+    align-self: auto;
+    justify-content: flex-start;
+    flex-grow: 0;
+}

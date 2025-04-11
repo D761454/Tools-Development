@@ -118,7 +118,6 @@ public class OBJPlacerEditorWindow : EditorWindow
         var groups = root.Q<ListView>("GroupsList");
         groups.makeItem = makeGroup;
         groups.bindItem = bindGroup;
-        groups.selectionType = SelectionType.None;
         groups.itemsSource = serializedClass.groups;
 
         rootVisualElement.Add(root);

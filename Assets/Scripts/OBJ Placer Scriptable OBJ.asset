@@ -15,5 +15,3 @@ MonoBehaviour:
   groups: []
   brushSize: 50
   density: 50
-  tempObj: {fileID: 0}
-  tempWeight: 50
