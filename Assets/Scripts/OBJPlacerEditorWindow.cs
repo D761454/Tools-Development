@@ -7,6 +7,7 @@ using System;
 using Unity.Android.Gradle;
 using System.Collections.Generic;
 using static UnityEditor.UIElements.CurveField;
+using Unity.VisualScripting;
 
 public class OBJPlacerEditorWindow : EditorWindow
 {
@@ -115,10 +116,26 @@ public class OBJPlacerEditorWindow : EditorWindow
             slider.Bind(serializedObject);
         };
 
+        void AddEvent() 
+        {
+            Debug.Log("add");
+        }
+
+        void RemoveEvent() 
+        {
+            Debug.Log("remove");
+        }
+
         var groups = root.Q<ListView>("GroupsList");
         groups.makeItem = makeGroup;
         groups.bindItem = bindGroup;
         groups.itemsSource = serializedClass.groups;
+
+        Button addButton = root.Q<Button>("AddButton");
+        addButton.clicked += AddEvent;
+
+        Button removeButton = root.Q<Button>("RemoveButton");
+        removeButton.clicked += RemoveEvent;
 
         rootVisualElement.Add(root);
     }
