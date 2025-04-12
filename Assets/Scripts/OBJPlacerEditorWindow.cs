@@ -164,7 +164,7 @@ public class OBJPlacerEditorWindow : EditorWindow
         groups.bindItem = bindGroup;
         groups.itemsSource = serializedClass.groups;
 
-        root.Q<Button>().clicked += RegenWeights;
+        root.Q<Button>("regenButton").clicked += RegenWeights;
 
         rootVisualElement.Add(root);
     }
