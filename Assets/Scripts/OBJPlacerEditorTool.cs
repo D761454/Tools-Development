@@ -108,6 +108,32 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
     }
 
     /// <summary>
+    /// check for missing refences in the list of groups
+    /// </summary>
+    /// <returns></returns>
+    bool CheckForMissingReferences(){
+        bool output = false;
+
+        // check for missing references
+        for (int i = 0; i < serializedClass.groups.Count; i++)
+        {
+            if (serializedClass.groups[i].items != null)
+            {
+                for (int j = 0; j < serializedClass.groups[i].items.Count; j++)
+                {
+                    if (serializedClass.groups[i].items[j].gObject == null)
+                    {
+                        Debug.LogException(new System.Exception($"Group Item(s) is missing an assigned Object! {serializedClass.groups[i].name}, Object: {j+1}"));
+                        output = true;
+                    }
+                }
+            }
+        }
+
+        return output;
+    }
+
+    /// <summary>
     /// Equivalent to Editor.OnSceneGUI. Handle events for spawning Objs
     /// </summary>
     /// <param name="window"></param>
@@ -128,8 +154,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
             Vector3 surfaceNormal = hit.normal.normalized;
             Handles.DrawWireDisc(hit.point, hit.normal, serializedClass.brushSize/2);
 
-            if (serializedClass.groups != null && serializedClass.groups[0].items != null && serializedClass.groups[0].items[0].gObject != null 
-                && e.type == EventType.MouseDown && e.button == 0)
+            if (e.type == EventType.MouseDown && e.button == 0 && !CheckForMissingReferences())
             {
                 int total = ObjectsToSpawn();
                     
@@ -162,7 +187,6 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                     spawnPos += surfaceNormal * (obj.GetComponent<Renderer>().bounds.size.y / 2);
 
                     obj.GetComponent<Transform>().position = spawnPos;
-                    //Debug.LogException(new System.Exception("Group Item is missing an assigned Object!"));
                 }
             }
         }
