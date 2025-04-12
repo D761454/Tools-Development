@@ -47,7 +47,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
     }
 
     /// <summary>
-    /// Disable Obj grabbing while painting
+    /// Disable Obj grabbing while painting + update / make group parents
     /// </summary>
     public override void OnActivated()
     {
@@ -135,6 +135,10 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
         }
 
         return output;
+    }
+
+    GameObject GetOBJToSpawn(){
+        
     }
 
     /// <summary>
