@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <Style src="project://database/Assets/USS/OBJPlacementMainEditor.uss?fileID=7433441132597879392&amp;guid=52fca3da623538b48aed777ef516371a&amp;type=3#OBJPlacementMainEditor" />
     <ui:VisualElement name="container" style="flex-grow: 1;">
-        <ui:Foldout text="Foldout" value="true" toggle-on-label-click="true" enabled="true">
+        <ui:Foldout text="Foldout" value="false" toggle-on-label-click="true" enabled="true">
             <ui:TextField label="Group Name" placeholder-text="Group Name" hide-placeholder-on-focus="false" data-source="project://database/Assets/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" class="textField" style="-unity-text-align: upper-left;" />
             <ui:SliderInt label="Weight:" value="42" high-value="100" data-source="project://database/Assets/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" fill="true" show-input-field="true">
                 <Bindings>
