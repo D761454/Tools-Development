@@ -49,13 +49,23 @@ public class OBJPlacerEditorWindow : EditorWindow
     void RegenWeights()
     {
         int total = 0;
-        int[] gWeights = new int[serializedClass.groups.Count];
+        int[] gTotal = new int[serializedClass.groups.Count];
         for (int i= 0; i < serializedClass.groups.Count; i++)
         {
             total += serializedClass.groups[i].weight;
-            var g = serializedClass.groups[i];
-            g.weight = 0;
-            serializedClass.groups[i] = g;
+            for (int j = 0; j < serializedClass.groups[i].items.Count; j++)
+            {
+                gTotal[i] += serializedClass.groups[i].items[j].weight;
+            }
+        }
+
+        for (int i = 0; i < serializedClass.groups.Count; i++)
+        {
+            serializedClass.groups[i].weight = Mathf.RoundToInt((serializedClass.groups[i].weight / (float)total) * 100);
+            for (int j = 0; j < serializedClass.groups[i].items.Count; j++)
+            {
+                serializedClass.groups[i].items[j].weight = Mathf.RoundToInt((serializedClass.groups[i].items[j].weight / (float)gTotal[i]) * 100);
+            }
         }
     }
 
