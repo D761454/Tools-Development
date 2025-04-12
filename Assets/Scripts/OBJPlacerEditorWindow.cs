@@ -59,8 +59,20 @@ public class OBJPlacerEditorWindow : EditorWindow
         groupTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UXML/GroupUI.uxml");
         groupItemTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UXML/GroupItemUI.uxml");
 
-        Func<VisualElement> makeGroup = () => groupTree.Instantiate();
+        Func<VisualElement> makeGroup = () => MakeGroup();
         Func<VisualElement> makeItem = () => groupItemTree.Instantiate();
+
+        VisualElement MakeGroup(){
+            var temp = root.Q<ListView>().Query<Foldout>().ToList();
+
+            // close all foldouts on making a new group
+            for (int i = 1; i < temp.Count; i++)
+            {
+                temp[i].value = false;
+            }
+            
+            return groupTree.Instantiate();
+        }
 
         Action<VisualElement, int> bindItem = (element, index) =>
         {
