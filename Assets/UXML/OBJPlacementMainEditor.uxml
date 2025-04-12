@@ -21,7 +21,7 @@
             </Bindings>
         </ui:ListView>
         <ui:VisualElement name="Buttons" style="flex-grow: 1;">
-            <ui:Button text="Regenerate Weightings" tooltip="Recalculate Weightings so each group and item list(s) weights adds up to 100 respectvely." triple-click-selects-line="false" double-click-selects-word="false" name="regenButton" />
+            <ui:Button text="Regenerate Weightings" tooltip="Recalculate Weightings so each group and item list(s) weights adds up to 100 respectvely." triple-click-selects-line="false" double-click-selects-word="false" name="regenButton" focusable="false" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
