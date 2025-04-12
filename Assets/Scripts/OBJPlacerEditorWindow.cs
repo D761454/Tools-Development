@@ -53,7 +53,9 @@ public class OBJPlacerEditorWindow : EditorWindow
         for (int i= 0; i < serializedClass.groups.Count; i++)
         {
             total += serializedClass.groups[i].weight;
-            serializedClass.groups[i].weight = 0;
+            var g = serializedClass.groups[i];
+            g.weight = 0;
+            serializedClass.groups[i] = g;
         }
     }
 
@@ -146,7 +148,7 @@ public class OBJPlacerEditorWindow : EditorWindow
         groups.bindItem = bindGroup;
         groups.itemsSource = serializedClass.groups;
 
-        root.Q<Button>().RegisterCallback<ClickEvent>(e => RegenWeights());
+        root.Q<Button>().clicked += RegenWeights;
 
         rootVisualElement.Add(root);
     }
