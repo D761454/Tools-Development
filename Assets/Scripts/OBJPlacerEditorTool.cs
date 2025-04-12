@@ -58,6 +58,10 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                 GameObject temp = new GameObject(serializedClass.groups[i].name);
                 groupParents.Add(temp);
             }
+            else
+            {
+                groupParents[i].name = serializedClass.groups[i].name;
+            }
         }
 
         SceneVisibilityManager.instance.DisableAllPicking();
