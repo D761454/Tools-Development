@@ -61,11 +61,19 @@ public class OBJPlacerEditorWindow : EditorWindow
 
         for (int i = 0; i < serializedClass.groups.Count; i++)
         {
-            serializedClass.groups[i].weight = Mathf.RoundToInt((serializedClass.groups[i].weight / (float)total) * 100);
-            for (int j = 0; j < serializedClass.groups[i].items.Count; j++)
-            {
-                serializedClass.groups[i].items[j].weight = Mathf.RoundToInt((serializedClass.groups[i].items[j].weight / (float)gTotal[i]) * 100);
-            }
+            rootVisualElement.Q<ListView>("GroupsList").Query<Foldout>().ToList()[i].Q<SliderInt>().value = Mathf.RoundToInt((serializedClass.groups[i].weight / (float)total) * 100);
+
+            // var group = serializedClass.groups[i];
+            // group.weight = Mathf.RoundToInt((serializedClass.groups[i].weight / (float)total) * 100);
+            
+            // for (int j = 0; j < serializedClass.groups[i].items.Count; j++)
+            // {
+            //     var item = group.items[j];
+            //     item.weight = Mathf.RoundToInt((serializedClass.groups[i].items[j].weight / (float)gTotal[i]) * 100);
+            //     group.items[j] = item;
+            // }
+
+            //serializedClass.groups[i] = group;
         }
     }
 
