@@ -138,7 +138,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
     }
 
     GameObject GetOBJToSpawn(){
-        
+        return null;
     }
 
     /// <summary>

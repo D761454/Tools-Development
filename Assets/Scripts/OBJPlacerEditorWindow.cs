@@ -44,6 +44,20 @@ public class OBJPlacerEditorWindow : EditorWindow
     }
 
     /// <summary>
+    /// scale all weights, keeping the same ratio and making them add up to 100
+    /// </summary>
+    void RegenWeights()
+    {
+        int total = 0;
+        int[] gWeights = new int[serializedClass.groups.Count];
+        for (int i= 0; i < serializedClass.groups.Count; i++)
+        {
+            total += serializedClass.groups[i].weight;
+            serializedClass.groups[i].weight = 0;
+        }
+    }
+
+    /// <summary>
     /// generate GUI if no editor updates
     /// </summary>
     public void CreateGUI()
@@ -131,6 +145,8 @@ public class OBJPlacerEditorWindow : EditorWindow
         groups.makeItem = makeGroup;
         groups.bindItem = bindGroup;
         groups.itemsSource = serializedClass.groups;
+
+        root.Q<Button>().RegisterCallback<ClickEvent>(e => RegenWeights());
 
         rootVisualElement.Add(root);
     }
