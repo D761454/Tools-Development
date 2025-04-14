@@ -140,9 +140,39 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
         return output;
     }
 
-    GameObject GetOBJToSpawn()
+    (GameObject, int) GetOBJToSpawn()
     {
-        return null;
+        int rand = Random.Range(0, 100);
+        int temp = 0;
+
+        for (int i = 0; i < serializedClass.groups.Count; i++)
+        {
+            if (i > 0)
+            {
+                temp += serializedClass.groups[i-1].weight;
+            }
+
+            if (rand > temp && rand <= temp + serializedClass.groups[i].weight)
+            {
+                int rand2 = Random.Range(0, 100);
+                int temp2 = 0;
+
+                for (int j = 0; j < serializedClass.groups[i].items.Count; j++)
+                {
+                    if (j > 0)
+                    {
+                        temp2 += serializedClass.groups[i].items[j-1].weight;
+                    }
+
+                    if (rand2 > temp2 && rand2 <= temp2 + serializedClass.groups[i].items[j].weight)
+                    {
+                        return (serializedClass.groups[i].items[j].gObject, i);
+                    }
+                }
+            }
+        }
+
+        return (null, 0);
     }
 
     /// <summary>
@@ -186,12 +216,12 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                         pos = newPos;
                     }
 
-                    int index = Random.Range(0, serializedClass.groups.Count);
+                    (GameObject, int) spawnData = GetOBJToSpawn();
 
-                    var obj = PrefabUtility.InstantiatePrefab(serializedClass.groups[index].items[0].gObject);
+                    var obj = PrefabUtility.InstantiatePrefab(spawnData.Item1);
                     SceneVisibilityManager.instance.DisablePicking((GameObject)obj, false);
 
-                    obj.GetComponent<Transform>().SetParent(groupParents[index].transform, true);
+                    obj.GetComponent<Transform>().SetParent(groupParents[spawnData.Item2].transform, true);
 
                     obj.GetComponent<Transform>().rotation = Quaternion.FromToRotation(obj.GetComponent<Transform>().up, surfaceNormal);
 
