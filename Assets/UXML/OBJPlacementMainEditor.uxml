@@ -15,13 +15,15 @@
     </ui:VisualElement>
     <ui:VisualElement name="container">
         <ui:Label text="Tool Attributes:" name="ttitle" class="title" />
-        <ui:ListView show-foldout-header="true" show-border="true" show-add-remove-footer="true" header-title="Groups:" virtualization-method="FixedHeight" data-source="project://database/Assets/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" data-source-path="groups" reorderable="false" reorder-mode="Simple" name="GroupsList" show-bound-collection-size="true" selection-type="None" fixed-item-height="99" horizontal-scrolling="false">
-            <Bindings>
-                <ui:DataBinding property="viewDataKey" data-source-path="groups" data-source="project://database/Assets/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-mode="ToTarget" />
-            </Bindings>
-        </ui:ListView>
-        <ui:VisualElement name="Buttons" style="flex-grow: 1;">
-            <ui:Button text="Regenerate Weightings" tooltip="Recalculate Weightings so each group and item list(s) weights adds up to 100 respectvely." triple-click-selects-line="false" double-click-selects-word="false" name="regenButton" focusable="false" />
-        </ui:VisualElement>
+        <ui:ScrollView>
+            <ui:ListView show-foldout-header="true" show-border="true" show-add-remove-footer="true" header-title="Groups:" virtualization-method="DynamicHeight" data-source="project://database/Assets/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" data-source-path="groups" reorderable="false" reorder-mode="Simple" name="GroupsList" show-bound-collection-size="true" selection-type="None" fixed-item-height="99" horizontal-scrolling="false">
+                <Bindings>
+                    <ui:DataBinding property="viewDataKey" data-source-path="groups" data-source="project://database/Assets/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-mode="ToTarget" />
+                </Bindings>
+            </ui:ListView>
+            <ui:VisualElement name="Buttons" style="flex-grow: 1;">
+                <ui:Button text="Regenerate Weightings" tooltip="Recalculate Weightings so each group and item list(s) weights adds up to 100 respectvely." triple-click-selects-line="false" double-click-selects-word="false" name="regenButton" focusable="false" />
+            </ui:VisualElement>
+        </ui:ScrollView>
     </ui:VisualElement>
 </ui:UXML>
