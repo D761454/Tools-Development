@@ -62,7 +62,8 @@ public class OBJPlacerEditorWindow : EditorWindow
         Func<VisualElement> makeGroup = () => MakeGroup();
         Func<VisualElement> makeItem = () => groupItemTree.Instantiate();
 
-        VisualElement MakeGroup(){
+        VisualElement MakeGroup()
+        {
             var temp = root.Q<ListView>().Query<Foldout>().ToList();
 
             // close all foldouts on making a new group
@@ -108,8 +109,6 @@ public class OBJPlacerEditorWindow : EditorWindow
             textField.Bind(serializedObject);
 
             ListView listView = element.Q<ListView>();
-
-            //https://discussions.unity.com/t/runtime-list-view-overflows-visible-area/783169/4
 
             listView.headerTitle = "Items:";
             listView.name = $"Group {index + 1} List";

@@ -117,7 +117,8 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
     /// check for missing refences in the list of groups
     /// </summary>
     /// <returns></returns>
-    bool CheckForMissingReferences(){
+    bool CheckForMissingReferences()
+    {
         bool output = false;
 
         // check for missing references
@@ -139,7 +140,8 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
         return output;
     }
 
-    GameObject GetOBJToSpawn(){
+    GameObject GetOBJToSpawn()
+    {
         return null;
     }
 
