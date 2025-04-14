@@ -64,6 +64,8 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
             }
         }
 
+        serializedClass.RegenWeights();
+
         SceneVisibilityManager.instance.DisableAllPicking();
     }
 

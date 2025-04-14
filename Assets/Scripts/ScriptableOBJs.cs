@@ -14,6 +14,38 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
 
     public float brushSize = 50f;
     public int density = 50;
+
+    /// <summary>
+    /// scale all weights, keeping the same ratio and making them add up to 100
+    /// </summary>
+    public void RegenWeights()
+    {
+        int total = 0;
+        int[] gTotal = new int[groups.Count];
+        for (int i= 0; i < groups.Count; i++)
+        {
+            total += groups[i].weight;
+            for (int j = 0; j < groups[i].items.Count; j++)
+            {
+                gTotal[i] += groups[i].items[j].weight;
+            }
+        }
+
+        for (int i = 0; i < groups.Count; i++)
+        {
+            var group = groups[i];
+            group.weight = Mathf.RoundToInt((groups[i].weight / (float)total) * 100);
+            
+            for (int j = 0; j < groups[i].items.Count; j++)
+            {
+                var item = group.items[j];
+                item.weight = Mathf.RoundToInt((groups[i].items[j].weight / (float)gTotal[i]) * 100);
+                group.items[j] = item;
+            }
+
+            groups[i] = group;
+        }
+    }
 }
 
 [Serializable]

@@ -44,38 +44,6 @@ public class OBJPlacerEditorWindow : EditorWindow
     }
 
     /// <summary>
-    /// scale all weights, keeping the same ratio and making them add up to 100
-    /// </summary>
-    void RegenWeights()
-    {
-        int total = 0;
-        int[] gTotal = new int[serializedClass.groups.Count];
-        for (int i= 0; i < serializedClass.groups.Count; i++)
-        {
-            total += serializedClass.groups[i].weight;
-            for (int j = 0; j < serializedClass.groups[i].items.Count; j++)
-            {
-                gTotal[i] += serializedClass.groups[i].items[j].weight;
-            }
-        }
-
-        for (int i = 0; i < serializedClass.groups.Count; i++)
-        {
-            var group = serializedClass.groups[i];
-            group.weight = Mathf.RoundToInt((serializedClass.groups[i].weight / (float)total) * 100);
-            
-            for (int j = 0; j < serializedClass.groups[i].items.Count; j++)
-            {
-                var item = group.items[j];
-                item.weight = Mathf.RoundToInt((serializedClass.groups[i].items[j].weight / (float)gTotal[i]) * 100);
-                group.items[j] = item;
-            }
-
-            serializedClass.groups[i] = group;
-        }
-    }
-
-    /// <summary>
     /// generate GUI if no editor updates
     /// </summary>
     public void CreateGUI()
@@ -164,7 +132,7 @@ public class OBJPlacerEditorWindow : EditorWindow
         groups.bindItem = bindGroup;
         groups.itemsSource = serializedClass.groups;
 
-        root.Q<Button>("regenButton").clicked += RegenWeights;
+        root.Q<Button>("regenButton").clicked += serializedClass.RegenWeights;
 
         rootVisualElement.Add(root);
     }
