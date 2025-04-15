@@ -96,7 +96,16 @@ public class OBJPlacerEditorWindow : EditorWindow
             // needed due to no struct intiialisation
             GroupStruct groupStruct = serializedClass.groups[index];
             groupStruct.items = new List<GroupItemStruct>();
-            groupStruct.name = $"Group {index}";
+
+            if (serializedClass.groups[index].name == null || serializedClass.groups[index].name == "")
+            {
+                groupStruct.name = $"Group {index + 1}";
+            }
+            else
+            {
+                groupStruct.name = serializedClass.groups[index].name;
+            }
+            
             serializedClass.groups[index] = groupStruct;
 
             Foldout foldout = element.Q<Foldout>();
@@ -107,6 +116,11 @@ public class OBJPlacerEditorWindow : EditorWindow
             textField.dataSource = serializedClass;
             textField.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"groups[{index}].name"), bindingMode = BindingMode.TwoWay });
             textField.Bind(serializedObject);
+
+            foldout.RegisterValueChangedCallback(evt =>
+            {
+                serializedClass.GenerateSceneOBJGroups();
+            });
 
             ListView listView = element.Q<ListView>();
 
