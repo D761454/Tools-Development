@@ -70,6 +70,8 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
             }
         }
 
+        // fix to remove group 0
+
         if (groupParents.Count > groups.Count)
         {
             for (int i = groups.Count; i < groupParents.Count; i++)
