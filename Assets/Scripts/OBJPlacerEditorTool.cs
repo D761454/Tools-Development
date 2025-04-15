@@ -84,13 +84,27 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
     int ObjectsToSpawn()
     {
         // Note - allow overlapping Objs for forests etc - can also edit objs post placement - stretch task - add toggle to enable/disable overlap
-        float area = Mathf.PI * (serializedClass.brushSize * serializedClass.brushSize);
+        float area = Mathf.PI * ((serializedClass.brushSize/2) * (serializedClass.brushSize/2));
 
-        float avgObjRadius = serializedClass.groups[0].items[0].gObject.GetComponent<Renderer>().bounds.extents.magnitude;
+        float avgObjRadius = 0;
+        int count = 0;
+
+        for (int i = 0; i < serializedClass.groups.Count; i++)
+        {
+            for (int j = 0; j < serializedClass.groups[i].items.Count; j++)
+            {
+                avgObjRadius += serializedClass.groups[i].items[j].gObject.GetComponent<Renderer>().bounds.extents.magnitude;
+                count ++;
+            }
+        }
+
+        avgObjRadius /= count;
 
         float objMax = area / ((avgObjRadius * avgObjRadius) * Mathf.Sqrt(12));
 
         int objToSpawn = (int)(objMax * (serializedClass.density / 100f));
+
+        Debug.Log(objToSpawn);
 
         return objToSpawn;
     }
@@ -120,6 +134,11 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
     bool CheckForMissingReferences()
     {
         bool output = false;
+
+        if (serializedClass.groups == null || serializedClass.groups.Count == 0)
+        {
+            return true;
+        }
 
         // check for missing references
         for (int i = 0; i < serializedClass.groups.Count; i++)
