@@ -69,6 +69,14 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
                 groupParents[i].name = groups[i].name;
             }
         }
+
+        for (int i = 0; i < groupParents.Count; i ++)
+        {
+            if (i > groups.Count-1 && groupParents[i] != null)
+            {
+                DestroyImmediate(groupParents[i]);
+            }
+        }
     }
 }
 
