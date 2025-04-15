@@ -58,6 +58,11 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                 GameObject temp = new GameObject(serializedClass.groups[i].name);
                 groupParents.Add(temp);
             }
+            else if (groupParents[i] == null)
+            {
+                GameObject temp = new GameObject(serializedClass.groups[i].name);
+                groupParents[i] = temp;
+            }
             else
             {
                 groupParents[i].name = serializedClass.groups[i].name;
