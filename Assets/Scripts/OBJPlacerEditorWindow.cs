@@ -124,7 +124,7 @@ public class OBJPlacerEditorWindow : EditorWindow
             textField.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"groups[{index}].name"), bindingMode = BindingMode.TwoWay });
             textField.Bind(serializedObject);
 
-            foldout.RegisterValueChangedCallback(evt =>
+            textField.RegisterValueChangedCallback(evt =>
             {
                 serializedClass.GenerateSceneOBJGroups();
             });
