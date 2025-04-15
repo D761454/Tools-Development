@@ -124,9 +124,12 @@ public class OBJPlacerEditorWindow : EditorWindow
 
             slider.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"groups[{index}].weight"), bindingMode = BindingMode.TwoWay });
             slider.Bind(serializedObject);
+
+            serializedClass.GenerateSceneOBJGroups();
         };
 
         var groups = root.Q<ListView>("GroupsList");
+
         groups.makeItem = makeGroup;
         groups.bindItem = bindGroup;
         groups.itemsSource = serializedClass.groups;

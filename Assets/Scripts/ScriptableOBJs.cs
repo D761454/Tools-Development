@@ -10,6 +10,7 @@ using UnityEngine.UIElements;
 [Serializable, CreateAssetMenu(fileName = "OBJ Placer Scriptable OBJ", menuName = "Scriptable Objects/OBJ Placer Scriptable OBJ")]
 public class OBJPlacerScriptableOBJ : ScriptableObject
 {
+    public List<GameObject> groupParents = new List<GameObject>();
     public List<GroupStruct> groups = new List<GroupStruct>();
 
     public float brushSize = 50f;
@@ -44,6 +45,29 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
             }
 
             groups[i] = group;
+        }
+    }
+
+    /// <summary>
+    /// generate objects in the scene to act as groups for instantiated prefabs to parent to
+    /// </summary>
+    public void GenerateSceneOBJGroups(){
+        for (int i = 0; i < groups.Count; i++)
+        {
+            if (groupParents.Count <= i)
+            {
+                GameObject temp = new GameObject(groups[i].name);
+                groupParents.Add(temp);
+            }
+            else if (groupParents[i] == null)
+            {
+                GameObject temp = new GameObject(groups[i].name);
+                groupParents[i] = temp;
+            }
+            else
+            {
+                groupParents[i].name = groups[i].name;
+            }
         }
     }
 }

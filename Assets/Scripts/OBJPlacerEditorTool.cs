@@ -13,15 +13,11 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 {
     private static OBJPlacerScriptableOBJ serializedClass;
 
-    List<GameObject> groupParents;
-
     /// <summary>
     /// Get/Create Serializable Obj for data storage
     /// </summary>
     void OnEnable()
     {
-        groupParents = new List<GameObject>();
-
         serializedClass = AssetDatabase.LoadAssetAtPath<OBJPlacerScriptableOBJ>("Assets/Scripts/OBJ Placer Scriptable OBJ.asset");
 
         if (!serializedClass)
@@ -51,23 +47,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
     /// </summary>
     public override void OnActivated()
     {
-        for (int i = 0; i < serializedClass.groups.Count; i++)
-        {
-            if (groupParents.Count <= i)
-            {
-                GameObject temp = new GameObject(serializedClass.groups[i].name);
-                groupParents.Add(temp);
-            }
-            else if (groupParents[i] == null)
-            {
-                GameObject temp = new GameObject(serializedClass.groups[i].name);
-                groupParents[i] = temp;
-            }
-            else
-            {
-                groupParents[i].name = serializedClass.groups[i].name;
-            }
-        }
+        serializedClass.GenerateSceneOBJGroups();
 
         serializedClass.RegenWeights();
 
@@ -249,7 +229,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                     var obj = PrefabUtility.InstantiatePrefab(spawnData.Item1);
                     SceneVisibilityManager.instance.DisablePicking((GameObject)obj, false);
 
-                    obj.GetComponent<Transform>().SetParent(groupParents[spawnData.Item2].transform, true);
+                    obj.GetComponent<Transform>().SetParent(serializedClass.groupParents[spawnData.Item2].transform, true);
 
                     obj.GetComponent<Transform>().rotation = Quaternion.FromToRotation(obj.GetComponent<Transform>().up, surfaceNormal);
 
