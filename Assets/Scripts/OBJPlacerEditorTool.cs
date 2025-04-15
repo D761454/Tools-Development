@@ -137,21 +137,25 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
         if (serializedClass.groups == null || serializedClass.groups.Count == 0)
         {
+            Debug.LogException(new System.Exception($"Tool Group(s) missing / empty!"));
             return true;
         }
 
         // check for missing references
         for (int i = 0; i < serializedClass.groups.Count; i++)
         {
-            if (serializedClass.groups[i].items != null)
+            if (serializedClass.groups[i].items == null || serializedClass.groups[i].items.Count == 0)
             {
-                for (int j = 0; j < serializedClass.groups[i].items.Count; j++)
+                Debug.LogException(new System.Exception($"Group Item(s) is missing / empty! {serializedClass.groups[i].name}"));
+                output = true;
+            }
+
+            for (int j = 0; j < serializedClass.groups[i].items.Count; j++)
+            {
+                if (serializedClass.groups[i].items[j].gObject == null)
                 {
-                    if (serializedClass.groups[i].items[j].gObject == null)
-                    {
-                        Debug.LogException(new System.Exception($"Group Item(s) is missing an assigned Object! {serializedClass.groups[i].name}, Object: {j+1}"));
-                        output = true;
-                    }
+                    Debug.LogException(new System.Exception($"Group Item(s) is missing an assigned Object! {serializedClass.groups[i].name}, Object: {j+1}"));
+                    output = true;
                 }
             }
         }
