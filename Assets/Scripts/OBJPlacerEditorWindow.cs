@@ -95,7 +95,14 @@ public class OBJPlacerEditorWindow : EditorWindow
         {
             // needed due to no struct intiialisation
             GroupStruct groupStruct = serializedClass.groups[index];
-            groupStruct.items = new List<GroupItemStruct>();
+
+            if (serializedClass.groups[index].items == null){
+                groupStruct.items = new List<GroupItemStruct>();
+            }
+            else
+            {
+                groupStruct.items = serializedClass.groups[index].items;
+            }
 
             if (serializedClass.groups[index].name == null || serializedClass.groups[index].name == "")
             {
