@@ -70,12 +70,13 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
             }
         }
 
-        for (int i = 0; i < groupParents.Count; i ++)
+        if (groupParents.Count > groups.Count)
         {
-            if (i > groups.Count-1 && groupParents[i] != null)
+            for (int i = groups.Count; i < groupParents.Count; i++)
             {
                 DestroyImmediate(groupParents[i]);
             }
+            groupParents.RemoveRange(groups.Count, groupParents.Count - groups.Count);
         }
     }
 }
