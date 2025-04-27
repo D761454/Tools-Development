@@ -98,7 +98,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
     /// use both a random radius and random rotation for the right vector to generate a random spawn position from placement origin
     /// </summary>
     /// <returns></returns>
-    Vector3 GenerateRandomSpawnPosition()
+    (Vector3, Vector3) GenerateRandomSpawnPosition(Vector3 hitPos, Vector3 surfaceNormal)
     {
         // uniform distribution
         float randRadius = Mathf.Sqrt(Random.value) * serializedClass.brushSize / 2;
@@ -109,7 +109,28 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
         randomPos.Normalize();
         randomPos *= randRadius;
 
-        return randomPos;
+        if (surfaceNormal != Vector3.up){
+            randomPos.y = randomPos.z;
+            randomPos.z = 0;
+            Vector2 right = Vector3.Cross(surfaceNormal, Vector3.up).normalized;
+            float angle = Vector2.SignedAngle(right, randomPos);
+            Quaternion rot = Quaternion.AngleAxis(angle, surfaceNormal);
+            Vector3 newPos = rot * right;
+            newPos *= randomPos.magnitude;
+            randomPos = newPos;
+        }
+
+        // use random pos to get new ray origin to then re calc ray along offset to get prefab specific normal
+        RaycastHit newPosHit;
+
+        Vector3 newOirigin = (hitPos + randomPos) + (surfaceNormal * 10f);
+
+        if (Physics.Raycast(newOirigin, -surfaceNormal, out newPosHit, 100f)){
+            return (newPosHit.point, newPosHit.normal.normalized);
+        }
+        else{
+            return (Vector3.zero, Vector3.down);
+        }
     }
 
     /// <summary>
@@ -210,33 +231,22 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                     
                 for (int i = 0; i < total; i++)
                 {
-                    Vector3 pos = GenerateRandomSpawnPosition();
+                    (Vector3, Vector3) pos = GenerateRandomSpawnPosition(hit.point, surfaceNormal);
 
-                    if (surfaceNormal != Vector3.up)
-                    {
-                        pos.y = pos.z;
-                        pos.z = 0;
-                        Vector2 right = Vector3.Cross(surfaceNormal, Vector3.up).normalized;
-                        float angle = Vector2.SignedAngle(right, pos);
-                        Quaternion rot = Quaternion.AngleAxis(angle, surfaceNormal);
-                        Vector3 newPos = rot * right;
-                        newPos *= pos.magnitude;
-                        pos = newPos;
+                    if (pos.Item2 != Vector3.down){
+                        (GameObject, int) spawnData = GetOBJToSpawn();
+
+                        var obj = PrefabUtility.InstantiatePrefab(spawnData.Item1);
+                        SceneVisibilityManager.instance.DisablePicking((GameObject)obj, false);
+
+                        obj.GetComponent<Transform>().SetParent(serializedClass.groupParents[spawnData.Item2].transform, true);
+
+                        obj.GetComponent<Transform>().rotation = Quaternion.FromToRotation(obj.GetComponent<Transform>().up, pos.Item2);
+
+                        pos.Item1 += pos.Item2 * (obj.GetComponent<Renderer>().bounds.size.y / 2);
+
+                        obj.GetComponent<Transform>().position = pos.Item1;
                     }
-
-                    (GameObject, int) spawnData = GetOBJToSpawn();
-
-                    var obj = PrefabUtility.InstantiatePrefab(spawnData.Item1);
-                    SceneVisibilityManager.instance.DisablePicking((GameObject)obj, false);
-
-                    obj.GetComponent<Transform>().SetParent(serializedClass.groupParents[spawnData.Item2].transform, true);
-
-                    obj.GetComponent<Transform>().rotation = Quaternion.FromToRotation(obj.GetComponent<Transform>().up, surfaceNormal);
-
-                    Vector3 spawnPos = hit.point + pos;
-                    spawnPos += surfaceNormal * (obj.GetComponent<Renderer>().bounds.size.y / 2);
-
-                    obj.GetComponent<Transform>().position = spawnPos;
                 }
             }
         }
