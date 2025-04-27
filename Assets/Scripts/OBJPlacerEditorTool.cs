@@ -233,19 +233,23 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                 {
                     (Vector3, Vector3) pos = GenerateRandomSpawnPosition(hit.point, surfaceNormal);
 
-                    if (pos.Item2 != Vector3.down){
+                    if (pos.Item2 != Vector3.down)  // if valid ray cast
+                    {
                         (GameObject, int) spawnData = GetOBJToSpawn();
 
-                        var obj = PrefabUtility.InstantiatePrefab(spawnData.Item1);
-                        SceneVisibilityManager.instance.DisablePicking((GameObject)obj, false);
+                        if (spawnData.Item1 != null)
+                        {
+                            var obj = PrefabUtility.InstantiatePrefab(spawnData.Item1);
+                            SceneVisibilityManager.instance.DisablePicking((GameObject)obj, false);
 
-                        obj.GetComponent<Transform>().SetParent(serializedClass.groupParents[spawnData.Item2].transform, true);
+                            obj.GetComponent<Transform>().SetParent(serializedClass.groupParents[spawnData.Item2].transform, true);
 
-                        obj.GetComponent<Transform>().rotation = Quaternion.FromToRotation(obj.GetComponent<Transform>().up, pos.Item2);
+                            obj.GetComponent<Transform>().rotation = Quaternion.FromToRotation(obj.GetComponent<Transform>().up, pos.Item2);
 
-                        pos.Item1 += pos.Item2 * (obj.GetComponent<Renderer>().bounds.size.y / 2);
+                            pos.Item1 += pos.Item2 * (obj.GetComponent<Renderer>().bounds.size.y / 2);
 
-                        obj.GetComponent<Transform>().position = pos.Item1;
+                            obj.GetComponent<Transform>().position = pos.Item1;
+                        }
                     }
                 }
             }
