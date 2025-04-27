@@ -239,8 +239,10 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
                         if (spawnData.Item1 != null)
                         {
-                            var obj = PrefabUtility.InstantiatePrefab(spawnData.Item1);
-                            SceneVisibilityManager.instance.DisablePicking((GameObject)obj, false);
+                            GameObject obj = PrefabUtility.InstantiatePrefab(spawnData.Item1) as GameObject;
+                            SceneVisibilityManager.instance.DisablePicking(obj, false);
+
+                            obj.layer = LayerMask.NameToLayer("Ignore Raycast");
 
                             obj.GetComponent<Transform>().SetParent(serializedClass.groupParents[spawnData.Item2].transform, true);
 
