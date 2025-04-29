@@ -5,8 +5,18 @@ using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using System;
 using System.Collections.Generic;
-using UnityEditor.IMGUI.Controls;
-using TreeView = UnityEngine.UIElements.TreeView;
+using Unity.VisualScripting;
+
+public static class IntExtensions
+{
+    public static string GroupWeight(this int i) => $"groups[{i}].weight";
+
+    public static string GroupName(this int i) => $"groups[{i}].name";
+
+    public static string ItemWeight(this int i) => $"items[{i}].weight";
+
+    public static string ItemObj(this int i) => $"items[{i}].gObject";
+}
 
 public class OBJPlacerEditorWindow : EditorWindow
 {
@@ -81,13 +91,13 @@ public class OBJPlacerEditorWindow : EditorWindow
             objectField.dataSource = objectField.parent.dataSource;
 
             objectField.label = $"Object {index+1}:";
-            objectField.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"items[{index}].gObject"), bindingMode = BindingMode.TwoWay });
+            objectField.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath(index.ItemObj()), bindingMode = BindingMode.TwoWay });
             objectField.Bind(serializedObject);
 
             SliderInt slider = element.Q<SliderInt>();
             slider.dataSource = slider.parent.dataSource;
 
-            slider.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"items[{index}].weight"), bindingMode = BindingMode.TwoWay });
+            slider.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath(index.ItemWeight()), bindingMode = BindingMode.TwoWay });
             slider.Bind(serializedObject);
         };
 
@@ -117,11 +127,11 @@ public class OBJPlacerEditorWindow : EditorWindow
 
             Foldout foldout = element.Q<Foldout>();
             foldout.dataSource = serializedClass;
-            foldout.SetBinding("text", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"groups[{index}].name"), bindingMode = BindingMode.TwoWay });
+            foldout.SetBinding("text", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath(index.GroupName()), bindingMode = BindingMode.TwoWay });
 
             TextField textField = element.Q<TextField>();
             textField.dataSource = serializedClass;
-            textField.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"groups[{index}].name"), bindingMode = BindingMode.TwoWay });
+            textField.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath(index.GroupName()), bindingMode = BindingMode.TwoWay });
             textField.Bind(serializedObject);
 
             textField.RegisterValueChangedCallback(evt =>
@@ -140,10 +150,10 @@ public class OBJPlacerEditorWindow : EditorWindow
             listView.dataSource = serializedClass.groups[index];
             listView.Bind(serializedObject);
 
-            SliderInt slider = element.Q<SliderInt>();
+            Slider slider = element.Q<Slider>();
             slider.dataSource = serializedClass;
 
-            slider.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"groups[{index}].weight"), bindingMode = BindingMode.TwoWay });
+            slider.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath(index.GroupWeight()), bindingMode = BindingMode.TwoWay });
             slider.Bind(serializedObject);
 
             serializedClass.GenerateSceneOBJGroups();

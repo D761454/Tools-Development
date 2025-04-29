@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a992d7bdf8ee9204f86e33fd3ecf6cdc, type: 3}
   m_Name: OBJ Placer Scriptable OBJ
   m_EditorClassIdentifier: 
-  groupParents:
-  - {fileID: 0}
+  groupParents: []
   groups: []
-  brushSize: 17
+  brushSize: 50
   density: 50
