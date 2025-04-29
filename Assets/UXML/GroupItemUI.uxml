@@ -6,10 +6,6 @@
                 <ui:DataBinding property="value" data-source-path="gObject" binding-mode="TwoWay" />
             </Bindings>
         </uie:ObjectField>
-        <ui:SliderInt label="Weight:" value="42" high-value="100" fill="true" show-input-field="true" data-source="project://database/Assets/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" tooltip="Chance this item is selected from the group.">
-            <Bindings>
-                <ui:DataBinding property="value" data-source-path="weight" binding-mode="TwoWay" />
-            </Bindings>
-        </ui:SliderInt>
+        <ui:Slider label="Weight:" value="42" high-value="100" data-source="project://database/Assets/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" tooltip="Chance this item is selected from the group." fill="true" show-input-field="true" />
     </ui:VisualElement>
 </ui:UXML>

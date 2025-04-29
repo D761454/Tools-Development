@@ -94,7 +94,7 @@ public class OBJPlacerEditorWindow : EditorWindow
             objectField.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath(index.ItemObj()), bindingMode = BindingMode.TwoWay });
             objectField.Bind(serializedObject);
 
-            SliderInt slider = element.Q<SliderInt>();
+            Slider slider = element.Q<Slider>();
             slider.dataSource = slider.parent.dataSource;
 
             slider.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath(index.ItemWeight()), bindingMode = BindingMode.TwoWay });

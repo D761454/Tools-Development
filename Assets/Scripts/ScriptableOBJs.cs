@@ -1,7 +1,6 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
-using UnityEngine.UIElements;
 
 
 /// <summary>
@@ -21,8 +20,8 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
     /// </summary>
     public void RegenWeights()
     {
-        int total = 0;
-        int[] gTotal = new int[groups.Count];
+        float total = 0;
+        float[] gTotal = new float[groups.Count];
         for (int i= 0; i < groups.Count; i++)
         {
             total += groups[i].weight;
@@ -35,12 +34,12 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
         for (int i = 0; i < groups.Count; i++)
         {
             var group = groups[i];
-            group.weight = Mathf.RoundToInt((groups[i].weight / (float)total) * 100);
+            group.weight = ((groups[i].weight / (float)total) * 100);
             
             for (int j = 0; j < groups[i].items.Count; j++)
             {
                 var item = group.items[j];
-                item.weight = Mathf.RoundToInt((groups[i].items[j].weight / (float)gTotal[i]) * 100);
+                item.weight = ((groups[i].items[j].weight / (float)gTotal[i]) * 100);
                 group.items[j] = item;
             }
 
@@ -87,7 +86,7 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
 public struct GroupItemStruct
 {
     public GameObject gObject;
-    public int weight;
+    public float weight;
 }
 
 [Serializable]
@@ -95,5 +94,5 @@ public struct GroupStruct
 {
     public string name;
     public List<GroupItemStruct> items;
-    public int weight;
+    public float weight;
 }

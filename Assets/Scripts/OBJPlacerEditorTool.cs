@@ -171,8 +171,8 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
     (GameObject, int) GetOBJToSpawn()
     {
-        int rand = Random.Range(0, 100);
-        int temp = 0;
+        float rand = Random.Range(0f, 100f);
+        float temp = 0;
 
         for (int i = 0; i < serializedClass.groups.Count; i++)
         {
@@ -183,8 +183,8 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
             if (rand > temp && rand <= temp + serializedClass.groups[i].weight)
             {
-                int rand2 = Random.Range(0, 100);
-                int temp2 = 0;
+                float rand2 = Random.Range(0f, 100f);
+                float temp2 = 0;
 
                 for (int j = 0; j < serializedClass.groups[i].items.Count; j++)
                 {
