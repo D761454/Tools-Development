@@ -31,15 +31,35 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
             }
         }
 
+        float totalGroup = 0, totalItem = 0;
+
         for (int i = 0; i < groups.Count; i++)
         {
             var group = groups[i];
-            group.weight = ((groups[i].weight / (float)total) * 100);
+            if ( i == groups.Count-1)
+            {
+                group.weight = 100f - totalGroup;
+            }
+            else
+            {
+                group.weight = ((groups[i].weight / (float)total) * 100);
+                totalGroup += group.weight;
+            }
             
             for (int j = 0; j < groups[i].items.Count; j++)
             {
                 var item = group.items[j];
-                item.weight = ((groups[i].items[j].weight / (float)gTotal[i]) * 100);
+
+                if (j == groups[i].items.Count-1)
+                {
+                    item.weight = 100f - totalItem;
+                }
+                else
+                {
+                    item.weight = ((groups[i].items[j].weight / (float)gTotal[i]) * 100);
+                    totalItem += item.weight;
+                }
+
                 group.items[j] = item;
             }
 
@@ -50,7 +70,8 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
     /// <summary>
     /// generate objects in the scene to act as groups for instantiated prefabs to parent to
     /// </summary>
-    public void GenerateSceneOBJGroups(){
+    public void GenerateSceneOBJGroups()
+    {
         for (int i = 0; i < groups.Count; i++)
         {
             if (groupParents.Count <= i)
