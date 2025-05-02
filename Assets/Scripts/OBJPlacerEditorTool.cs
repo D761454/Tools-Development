@@ -51,6 +51,11 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
         serializedClass.RegenWeights();
 
+        if (!EditorWindow.HasOpenInstances<OBJPlacerEditorWindow>())
+        {
+            OBJPlacerEditorWindow.Init();
+        }
+
         SceneVisibilityManager.instance.DisableAllPicking();
     }
 
@@ -222,7 +227,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
         if (Physics.Raycast(ray, out hit, 100))
         {
-            Vector3 surfaceNormal = hit.normal.normalized;
+            Vector3 surfaceNormal = Vector3.up;
             Handles.DrawWireDisc(hit.point, hit.normal, serializedClass.brushSize/2);
 
             if (e.type == EventType.MouseDown && e.button == 0 && !CheckForMissingReferences())
