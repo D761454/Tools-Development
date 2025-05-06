@@ -9,9 +9,11 @@ using System.Collections.Generic;
 
 [EditorTool("Brush Tool")]
 [Icon("Assets/Scripts/tool-Icon.png")]
-public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
+public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles, IGizmoDrawer
 {
     private static OBJPlacerScriptableOBJ serializedClass;
+
+    RaycastHit raycastHit;
 
     /// <summary>
     /// Get/Create Serializable Obj for data storage
@@ -114,17 +116,6 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
         randomPos.Normalize();
         randomPos *= randRadius;
 
-        if (surfaceNormal != Vector3.up){
-            randomPos.y = randomPos.z;
-            randomPos.z = 0;
-            Vector2 right = Vector3.Cross(surfaceNormal, Vector3.up).normalized;
-            float angle = Vector2.SignedAngle(right, randomPos);
-            Quaternion rot = Quaternion.AngleAxis(angle, surfaceNormal);
-            Vector3 newPos = rot * right;
-            newPos *= randomPos.magnitude;
-            randomPos = newPos;
-        }
-
         // use random pos to get new ray origin to then re calc ray along offset to get prefab specific normal
         RaycastHit newPosHit;
 
@@ -209,6 +200,16 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
         return (null, 0);
     }
 
+    public void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(raycastHit.point, serializedClass.brushSize / 2);
+    }
+
+    public void OnDrawGizmosSelected()
+    {
+
+    }
+
     /// <summary>
     /// Equivalent to Editor.OnSceneGUI. Handle events for spawning Objs
     /// </summary>
@@ -223,12 +224,11 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
         Vector3 mousePosition = e.mousePosition;
 
         Ray ray = HandleUtility.GUIPointToWorldRay(mousePosition);
-        RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, 100))
+        if (Physics.Raycast(ray, out raycastHit, 100))
         {
             Vector3 surfaceNormal = Vector3.up;
-            Handles.DrawWireDisc(hit.point, hit.normal, serializedClass.brushSize/2);
+            Handles.DrawWireDisc(raycastHit.point, raycastHit.normal, serializedClass.brushSize/2);
 
             if (e.type == EventType.MouseDown && e.button == 0 && !CheckForMissingReferences())
             {
@@ -236,7 +236,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                     
                 for (int i = 0; i < total; i++)
                 {
-                    (Vector3, Vector3) pos = GenerateRandomSpawnPosition(hit.point, surfaceNormal);
+                    (Vector3, Vector3) pos = GenerateRandomSpawnPosition(raycastHit.point, surfaceNormal);
 
                     if (pos.Item2 != Vector3.down)  // if valid ray cast
                     {
@@ -261,6 +261,8 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                 }
             }
         }
+
+        HandleUtility.Repaint();
     }
 
     public void OnDrawHandles()
