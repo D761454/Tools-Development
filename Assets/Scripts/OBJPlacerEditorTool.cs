@@ -202,13 +202,11 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
     void DrawHandles()
     {
-        //Handles.DrawWireDisc(raycastHit.point, raycastHit.normal, serializedClass.brushSize/2);
         Handles.zTest = UnityEngine.Rendering.CompareFunction.LessEqual;
         Handles.DrawWireDisc(raycastHit.point, raycastHit.normal, serializedClass.brushSize / 2);
         Handles.DrawWireDisc(raycastHit.point, Vector3.up, serializedClass.brushSize / 2);
         Handles.DrawWireDisc(raycastHit.point, Vector3.forward, serializedClass.brushSize / 2);
         Handles.DrawWireDisc(raycastHit.point, Vector3.right, serializedClass.brushSize / 2);
-
     }
 
     /// <summary>
