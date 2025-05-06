@@ -1,18 +1,16 @@
 #if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
-using Unity.VisualScripting;
 using UnityEditor.EditorTools;
 using UnityEditor.ShortcutManagement;
-using System.ComponentModel;
-using System.Collections.Generic;
-using UnityEngine.UIElements;
 
 [EditorTool("Brush Tool")]
 [Icon("Assets/Scripts/tool-Icon.png")]
 public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 {
     private static OBJPlacerScriptableOBJ serializedClass;
+
+    Vector3[] brushPoints = new Vector3[65]; // 90, 45, 22.5, 11.25 5.625
 
     RaycastHit raycastHit;
 
@@ -223,13 +221,35 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
         return (null, 0);
     }
 
+    void GenerateBrushOutlinePoints()
+    {
+        brushPoints = new Vector3[65];
+        float angle = 0f;
+
+        for (int i = 0; i < brushPoints.Length-1; i++)
+        {
+            float rad = angle * Mathf.Deg2Rad;
+            angle += 5.625f;
+            Vector3 rPos = new Vector3(Mathf.Cos(rad) - Mathf.Sin(rad), 0, Mathf.Sin(rad) + Mathf.Cos(rad));
+            rPos.Normalize();
+            rPos *= serializedClass.brushSize / 2;
+
+            RaycastHit newPos;
+            Vector3 newOirigin = (raycastHit.point + rPos) + (Vector3.up * 10f);
+
+            if (Physics.Raycast(newOirigin, -Vector3.up, out newPos, 100f)){
+                brushPoints[i] = newPos.point;
+            }
+            else{
+                brushPoints[i] = raycastHit.point + rPos;
+            }
+        }
+        brushPoints[brushPoints.Length-1] = brushPoints[0];
+    }
+
     void DrawHandles()
     {
-        Handles.zTest = UnityEngine.Rendering.CompareFunction.LessEqual;
-        Handles.DrawWireDisc(raycastHit.point, raycastHit.normal, serializedClass.brushSize / 2);
-        Handles.DrawWireDisc(raycastHit.point, Vector3.up, serializedClass.brushSize / 2);
-        Handles.DrawWireDisc(raycastHit.point, Vector3.forward, serializedClass.brushSize / 2);
-        Handles.DrawWireDisc(raycastHit.point, Vector3.right, serializedClass.brushSize / 2);
+        Handles.DrawAAPolyLine(2f, brushPoints);
     }
 
     /// <summary>
@@ -249,6 +269,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
         if (Physics.Raycast(ray, out raycastHit, 100))
         {
+            GenerateBrushOutlinePoints();
             DrawHandles();
 
             if (e.type == EventType.MouseDown && e.button == 0 && !CheckForMissingReferences())
