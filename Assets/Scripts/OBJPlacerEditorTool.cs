@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 [EditorTool("Brush Tool")]
 [Icon("Assets/Scripts/tool-Icon.png")]
-public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles, IGizmoDrawer
+public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 {
     private static OBJPlacerScriptableOBJ serializedClass;
 
@@ -200,13 +200,14 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles, IGizmoDrawe
         return (null, 0);
     }
 
-    public void OnDrawGizmos()
+    void DrawHandles()
     {
-        Gizmos.DrawWireSphere(raycastHit.point, serializedClass.brushSize / 2);
-    }
-
-    public void OnDrawGizmosSelected()
-    {
+        //Handles.DrawWireDisc(raycastHit.point, raycastHit.normal, serializedClass.brushSize/2);
+        Handles.zTest = UnityEngine.Rendering.CompareFunction.LessEqual;
+        Handles.DrawWireDisc(raycastHit.point, raycastHit.normal, serializedClass.brushSize / 2);
+        Handles.DrawWireDisc(raycastHit.point, Vector3.up, serializedClass.brushSize / 2);
+        Handles.DrawWireDisc(raycastHit.point, Vector3.forward, serializedClass.brushSize / 2);
+        Handles.DrawWireDisc(raycastHit.point, Vector3.right, serializedClass.brushSize / 2);
 
     }
 
@@ -228,7 +229,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles, IGizmoDrawe
         if (Physics.Raycast(ray, out raycastHit, 100))
         {
             Vector3 surfaceNormal = Vector3.up;
-            Handles.DrawWireDisc(raycastHit.point, raycastHit.normal, serializedClass.brushSize/2);
+            DrawHandles();
 
             if (e.type == EventType.MouseDown && e.button == 0 && !CheckForMissingReferences())
             {
