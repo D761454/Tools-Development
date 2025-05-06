@@ -6,6 +6,7 @@ using UnityEditor.EditorTools;
 using UnityEditor.ShortcutManagement;
 using System.ComponentModel;
 using System.Collections.Generic;
+using UnityEngine.UIElements;
 
 [EditorTool("Brush Tool")]
 [Icon("Assets/Scripts/tool-Icon.png")]
@@ -107,8 +108,30 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
     /// <returns></returns>
     (Vector3, Vector3) GenerateRandomSpawnPosition(Vector3 hitPos, Vector3 surfaceNormal)
     {
+        float randRadius = 0f;
+
         // uniform distribution
-        float randRadius = Mathf.Sqrt(Random.value) * serializedClass.brushSize / 2;
+        if (serializedClass.brushType[0] == true)
+        {
+            randRadius = Mathf.Sqrt(Random.value) * serializedClass.brushSize / 2;
+        }
+        else
+        {
+            float temp = Random.Range(0f, 100f);
+            if (temp <= 60f)
+            {
+                randRadius = Mathf.Sqrt(Random.value) * ((serializedClass.brushSize / 2) * 0.33f);
+            }
+            else if (temp <= 80f)
+            {
+                randRadius = Mathf.Sqrt(Random.value) * ((serializedClass.brushSize / 2) * 0.66f);
+            }
+            else
+            {
+                randRadius = Mathf.Sqrt(Random.value) * serializedClass.brushSize / 2;
+            }
+        }
+        
         float randomRotation = Random.Range(0f, 360f);
 
         float rad = randomRotation * Mathf.Deg2Rad;
@@ -250,7 +273,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                             obj.GetComponent<Transform>().SetParent(serializedClass.groupParents[spawnData.Item2].transform, true);
 
                             obj.GetComponent<Transform>().rotation = Quaternion.FromToRotation(obj.GetComponent<Transform>().up, pos.Item2);
-                            obj.GetComponent<Transform>().Rotate(raycastHit.normal, Random.Range(0f, 360f), Space.World);
+                            obj.GetComponent<Transform>().Rotate(pos.Item2, Random.Range(0f, 360f), Space.World);
 
                             pos.Item1 += pos.Item2 * (obj.GetComponent<Renderer>().bounds.size.y / 2);
 
