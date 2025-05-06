@@ -228,7 +228,6 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
         if (Physics.Raycast(ray, out raycastHit, 100))
         {
-            Vector3 surfaceNormal = Vector3.up;
             DrawHandles();
 
             if (e.type == EventType.MouseDown && e.button == 0 && !CheckForMissingReferences())
@@ -237,7 +236,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                     
                 for (int i = 0; i < total; i++)
                 {
-                    (Vector3, Vector3) pos = GenerateRandomSpawnPosition(raycastHit.point, surfaceNormal);
+                    (Vector3, Vector3) pos = GenerateRandomSpawnPosition(raycastHit.point, Vector3.up);
 
                     if (pos.Item2 != Vector3.down)  // if valid ray cast
                     {
@@ -253,6 +252,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                             obj.GetComponent<Transform>().SetParent(serializedClass.groupParents[spawnData.Item2].transform, true);
 
                             obj.GetComponent<Transform>().rotation = Quaternion.FromToRotation(obj.GetComponent<Transform>().up, pos.Item2);
+                            obj.GetComponent<Transform>().Rotate(raycastHit.normal, Random.Range(0f, 360f), Space.World);
 
                             pos.Item1 += pos.Item2 * (obj.GetComponent<Renderer>().bounds.size.y / 2);
 
