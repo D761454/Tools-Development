@@ -2,6 +2,11 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
+public enum Brushes
+{
+    DEFAULT,
+    FADED
+}
 
 /// <summary>
 /// Hold Data for use on reopenening tool
@@ -14,6 +19,8 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
 
     public float brushSize = 50f;
     public int density = 50;
+
+    public Brushes brushType = Brushes.DEFAULT;
 
     /// <summary>
     /// scale all weights, keeping the same ratio and making them add up to 100
