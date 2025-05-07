@@ -134,11 +134,6 @@ public class OBJPlacerEditorWindow : EditorWindow
             textField.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath(index.GroupName()), bindingMode = BindingMode.TwoWay });
             textField.Bind(serializedObject);
 
-            textField.RegisterValueChangedCallback(evt =>
-            {
-                serializedClass.GenerateSceneOBJGroups();
-            });
-
             ListView listView = element.Q<ListView>();
 
             listView.headerTitle = "Items:";
@@ -155,8 +150,6 @@ public class OBJPlacerEditorWindow : EditorWindow
 
             slider.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath(index.GroupWeight()), bindingMode = BindingMode.TwoWay });
             slider.Bind(serializedObject);
-
-            serializedClass.GenerateSceneOBJGroups();
         };
 
         var groups = root.Q<ListView>("GroupsList");
@@ -176,6 +169,7 @@ public class OBJPlacerEditorWindow : EditorWindow
     private void OnGUI()
     {
         serializedObject = new SerializedObject(serializedClass);
+        serializedClass.GenerateSceneOBJGroups();
         serializedObject.Update();
 
         serializedObject.ApplyModifiedProperties();

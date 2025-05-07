@@ -39,6 +39,28 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
             }
         }
 
+        // // if all values = 0, set all to 100 so they can be scaled and calculated accordingly (0 causes NaN)
+        // if (total == 0)
+        // {
+        //     for (int i = 0; i < groups.Count; i++)
+        //     {
+        //         var gTemp = groups[i];
+        //         gTemp.weight = 100f;
+
+        //         if (gTotal[i] == 0)
+        //         {
+        //             for (int j = 0; j < groups[i].items.Count; j++)
+        //             {
+        //                 var iTemp = gTemp.items[j];
+        //                 iTemp.weight = 100f;
+        //                 gTemp.items[j] = iTemp;
+        //             }
+        //         }
+
+        //         groups[i] = gTemp;
+        //     }
+        // }
+
         float totalGroup = 0, totalItem = 0;
 
         for (int i = 0; i < groups.Count; i++)
@@ -50,7 +72,15 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
             }
             else
             {
-                group.weight = ((groups[i].weight / (float)total) * 100);
+                if (groups[i].weight == 0)
+                {
+                    group.weight = 0f;
+                }
+                else
+                {
+                    group.weight = ((groups[i].weight / (float)total) * 100);
+                }
+                
                 totalGroup += group.weight;
             }
             
@@ -64,7 +94,15 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
                 }
                 else
                 {
-                    item.weight = ((groups[i].items[j].weight / (float)gTotal[i]) * 100);
+                    if (group.items[j].weight == 0)
+                    {
+                        item.weight = 0f;
+                    }
+                    else
+                    {
+                        item.weight = ((groups[i].items[j].weight / (float)gTotal[i]) * 100);
+                    }
+                    
                     totalItem += item.weight;
                 }
 
@@ -82,31 +120,36 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
     {
         for (int i = 0; i < groups.Count; i++)
         {
-            if (groupParents.Count <= i)
+            if (groupParents.Count <= i) // new obj
             {
                 GameObject temp = new GameObject(groups[i].name);
                 groupParents.Add(temp);
             }
-            else if (groupParents[i] == null)
+            else if (groupParents[i] == null) // if obj for group allready present, set it, else create new obj
             {
-                GameObject temp = new GameObject(groups[i].name);
-                groupParents[i] = temp;
+                GameObject[] parents = FindObjectsByType<GameObject>(FindObjectsSortMode.None);
+                bool exists = false;
+                
+                for (int j = 0; j < parents.Length; j++)
+                {
+                    if (parents[j].name == groups[i].name)
+                    {
+                        groupParents[i] = parents[j];
+                        exists = true;
+                        break;
+                    }
+                }
+
+                if (!exists)
+                {
+                    GameObject temp = new GameObject(groups[i].name);
+                    groupParents[i] = temp;
+                }
             }
-            else
+            else // update name
             {
                 groupParents[i].name = groups[i].name;
             }
-        }
-
-        // fix to remove group 0
-
-        if (groupParents.Count > groups.Count)
-        {
-            for (int i = groups.Count; i < groupParents.Count; i++)
-            {
-                DestroyImmediate(groupParents[i]);
-            }
-            groupParents.RemoveRange(groups.Count, groupParents.Count - groups.Count);
         }
     }
 }
