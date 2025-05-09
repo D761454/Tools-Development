@@ -273,7 +273,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                 {
                     (Vector3, Vector3) pos;
 
-                    if (serializedClass.brushType[0]) // default brush
+                    if (serializedClass.brushType == Brushes.DEFAULT) // default brush
                     {
                         pos = GenerateRandomSpawnPosition(raycastHit.point, Vector3.up, 1f);
                     }

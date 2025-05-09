@@ -147,15 +147,6 @@ public class OBJPlacerEditorWindow : EditorWindow
 
         root.Q<Button>("regenButton").clicked += serializedClass.RegenWeights;
 
-        var toggle = root.Q<ToggleButtonGroup>();
-
-        toggle.Add(new Button() { text = "Default", tooltip = "Default Brush." });
-        toggle.Add(new Button() { text = "Faded", tooltip = "Faded Brush." });
-
-        /*toggle.dataSource = serializedClass;
-        toggle.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath(brushType), bindingMode = BindingMode.TwoWay });
-        toggle.Bind(serializedObject);*/
-
         rootVisualElement.Add(root);
     }
 
