@@ -12,11 +12,7 @@
                 <ui:DataBinding property="value" binding-mode="TwoWay" />
             </Bindings>
         </ui:SliderInt>
-        <ui:ToggleButtonGroup label="Brush Type: " name="BrushTypes" data-source="project://database/Assets/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" enabled="true">
-            <Bindings>
-                <ui:DataBinding property="value" data-source-path="brushType" binding-mode="TwoWay" />
-            </Bindings>
-        </ui:ToggleButtonGroup>
+        <ui:ToggleButtonGroup label="Brush Type:" name="BrushType" />
     </ui:VisualElement>
     <ui:VisualElement name="container">
         <ui:Label text="Tool Attributes:" name="ttitle" class="title" />
