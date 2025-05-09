@@ -120,9 +120,9 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
         // use random pos to get new ray origin to then re calc ray along offset to get prefab specific normal
         RaycastHit newPosHit;
 
-        Vector3 newOirigin = (hitPos + randomPos) + (surfaceNormal * 10f);
+        Vector3 newOirigin = (hitPos + randomPos) + (surfaceNormal * 100f);
 
-        if (Physics.Raycast(newOirigin, -surfaceNormal, out newPosHit, 100f)){
+        if (Physics.Raycast(newOirigin, -surfaceNormal, out newPosHit, 1000f)){
             return (newPosHit.point, newPosHit.normal.normalized);
         }
         else{
@@ -227,9 +227,9 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
             {
                 RaycastHit hit;
                 Vector3 sPos = rPos * distance;
-                Vector3 nOg = (raycastHit.point + sPos) + (Vector3.up * 10f);
+                Vector3 nOg = (raycastHit.point + sPos) + (Vector3.up * 100f);
 
-                if (Physics.Raycast(nOg, -Vector3.up, out hit, 100f))
+                if (Physics.Raycast(nOg, -Vector3.up, out hit, 1000f))
                 {
                     brushPts.Add(hit.point);
                     found = true;
@@ -260,7 +260,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
         Ray ray = HandleUtility.GUIPointToWorldRay(mousePosition);
 
-        if (Physics.Raycast(ray, out raycastHit, 100))
+        if (Physics.Raycast(ray, out raycastHit, 1000))
         {
             GenerateBrushOutlinePoints();
             DrawHandles();
@@ -292,7 +292,6 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                             pos = GenerateRandomSpawnPosition(raycastHit.point, Vector3.up, 1f);
                         }
                     }
-                    
 
                     if (pos.Item2 != Vector3.down)  // if valid ray cast
                     {
