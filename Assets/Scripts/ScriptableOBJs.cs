@@ -39,28 +39,6 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
             }
         }
 
-        // // if all values = 0, set all to 100 so they can be scaled and calculated accordingly (0 causes NaN)
-        // if (total == 0)
-        // {
-        //     for (int i = 0; i < groups.Count; i++)
-        //     {
-        //         var gTemp = groups[i];
-        //         gTemp.weight = 100f;
-
-        //         if (gTotal[i] == 0)
-        //         {
-        //             for (int j = 0; j < groups[i].items.Count; j++)
-        //             {
-        //                 var iTemp = gTemp.items[j];
-        //                 iTemp.weight = 100f;
-        //                 gTemp.items[j] = iTemp;
-        //             }
-        //         }
-
-        //         groups[i] = gTemp;
-        //     }
-        // }
-
         float totalGroup = 0, totalItem = 0;
 
         for (int i = 0; i < groups.Count; i++)

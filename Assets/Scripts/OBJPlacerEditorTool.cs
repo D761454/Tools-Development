@@ -166,6 +166,10 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
         return output;
     }
 
+    /// <summary>
+    /// returns a random object based on the weightings
+    /// </summary>
+    /// <returns></returns>
     (GameObject, int) GetOBJToSpawn()
     {
         float rand = Random.Range(0f, 100f);
@@ -201,6 +205,9 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
         return (null, 0);
     }
 
+    /// <summary>
+    /// generate the point array for the brush UI
+    /// </summary>
     void GenerateBrushOutlinePoints()
     {
         brushPts = new List<Vector3>();
