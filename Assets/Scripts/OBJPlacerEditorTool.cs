@@ -105,31 +105,10 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
     /// use both a random radius and random rotation for the right vector to generate a random spawn position from placement origin
     /// </summary>
     /// <returns></returns>
-    (Vector3, Vector3) GenerateRandomSpawnPosition(Vector3 hitPos, Vector3 surfaceNormal)
+    (Vector3, Vector3) GenerateRandomSpawnPosition(Vector3 hitPos, Vector3 surfaceNormal, float scalar)
     {
-        float randRadius = 0f;
-
         // uniform distribution
-        if (serializedClass.brushType[0] == true)
-        {
-            randRadius = Mathf.Sqrt(Random.value) * serializedClass.brushSize / 2;
-        }
-        else
-        {
-            float temp = Random.Range(0f, 100f);
-            if (temp <= 60f)
-            {
-                randRadius = Mathf.Sqrt(Random.value) * ((serializedClass.brushSize / 2) * 0.33f);
-            }
-            else if (temp <= 80f)
-            {
-                randRadius = Mathf.Sqrt(Random.value) * ((serializedClass.brushSize / 2) * 0.66f);
-            }
-            else
-            {
-                randRadius = Mathf.Sqrt(Random.value) * serializedClass.brushSize / 2;
-            }
-        }
+        float randRadius = Mathf.Sqrt(Random.value) * ((serializedClass.brushSize / 2) * scalar);
         
         float randomRotation = Random.Range(0f, 360f);
 
@@ -285,7 +264,28 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                     
                 for (int i = 0; i < total; i++)
                 {
-                    (Vector3, Vector3) pos = GenerateRandomSpawnPosition(raycastHit.point, Vector3.up);
+                    (Vector3, Vector3) pos;
+
+                    if (serializedClass.brushType[0])
+                    {
+                        pos = GenerateRandomSpawnPosition(raycastHit.point, Vector3.up, 1f);
+                    }
+                    else
+                    {
+                        if (i < total / 3)
+                        {
+                            pos = GenerateRandomSpawnPosition(raycastHit.point, Vector3.up, 0.4f);
+                        }
+                        else if ( i < ((total / 3) * 2))
+                        {
+                            pos = GenerateRandomSpawnPosition(raycastHit.point, Vector3.up, 0.7f);
+                        }
+                        else
+                        {
+                            pos = GenerateRandomSpawnPosition(raycastHit.point, Vector3.up, 1f);
+                        }
+                    }
+                    
 
                     if (pos.Item2 != Vector3.down)  // if valid ray cast
                     {

@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groupParents: []
   groups: []
-  brushSize: 20
+  brushSize: 50
   density: 50
   brushType:
-    m_Data: 1
-    m_Length: 2
+    m_Data: 0
+    m_Length: 0

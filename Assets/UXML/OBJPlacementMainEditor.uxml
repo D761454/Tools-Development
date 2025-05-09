@@ -12,7 +12,7 @@
                 <ui:DataBinding property="value" binding-mode="TwoWay" />
             </Bindings>
         </ui:SliderInt>
-        <ui:ToggleButtonGroup label="Brush Type: " name="BrushTypes" data-source="project://database/Assets/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ">
+        <ui:ToggleButtonGroup label="Brush Type: " name="BrushTypes" data-source="project://database/Assets/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" picking-mode="Ignore">
             <ui:Button text="Default" double-click-selects-word="false" triple-click-selects-line="false" />
             <ui:Button text="Faded" double-click-selects-word="false" triple-click-selects-line="false" />
             <Bindings>
