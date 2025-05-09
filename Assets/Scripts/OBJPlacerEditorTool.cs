@@ -266,11 +266,11 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                 {
                     (Vector3, Vector3) pos;
 
-                    if (serializedClass.brushType[0])
+                    if (serializedClass.brushType[0]) // default brush
                     {
                         pos = GenerateRandomSpawnPosition(raycastHit.point, Vector3.up, 1f);
                     }
-                    else
+                    else // faded brush
                     {
                         if (i < total / 3)
                         {
