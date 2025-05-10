@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
+using UnityEditor.UIElements;
 
 public enum Brushes
 {
@@ -21,7 +22,7 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
     public float brushSize = 50f;
     public int density = 50;
     public Brushes brushType = Brushes.DEFAULT;
-    public int ignoreLayers = 0;
+    public int ignoreLayers = 4;
 
     /// <summary>
     /// scale all weights, keeping the same ratio and making them add up to 100
