@@ -122,7 +122,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
         Vector3 newOirigin = (hitPos + randomPos) + (surfaceNormal * 100f);
 
-        if (Physics.Raycast(newOirigin, -surfaceNormal, out newPosHit, 1000f)){
+        if (Physics.Raycast(newOirigin, -surfaceNormal, out newPosHit, 1000f, ~serializedClass.ignoreLayers)){
             return (newPosHit.point, newPosHit.normal.normalized);
         }
         else{
@@ -229,7 +229,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                 Vector3 sPos = rPos * distance;
                 Vector3 nOg = (raycastHit.point + sPos) + (Vector3.up * 100f);
 
-                if (Physics.Raycast(nOg, -Vector3.up, out hit, 1000f))
+                if (Physics.Raycast(nOg, -Vector3.up, out hit, 1000f, ~serializedClass.ignoreLayers))
                 {
                     brushPts.Add(hit.point);
                     found = true;
@@ -260,7 +260,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
         Ray ray = HandleUtility.GUIPointToWorldRay(mousePosition);
 
-        if (Physics.Raycast(ray, out raycastHit, 1000))
+        if (Physics.Raycast(ray, out raycastHit, 1000f, ~serializedClass.ignoreLayers))
         {
             GenerateBrushOutlinePoints();
             DrawHandles();

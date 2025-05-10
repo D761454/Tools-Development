@@ -23,6 +23,8 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
 
     public Brushes brushType = Brushes.DEFAULT;
 
+    public int ignoreLayers = 0;
+
     /// <summary>
     /// scale all weights, keeping the same ratio and making them add up to 100
     /// </summary>

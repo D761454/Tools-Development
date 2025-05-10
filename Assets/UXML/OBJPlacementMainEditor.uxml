@@ -17,6 +17,11 @@
                 <ui:DataBinding property="value" data-source-path="brushType" data-source="project://database/Assets/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-mode="TwoWay" />
             </Bindings>
         </ui:EnumField>
+        <uie:LayerMaskField label="Layers to Ignore" value="0">
+            <Bindings>
+                <ui:DataBinding property="value" data-source-path="ignoreLayers" data-source="project://database/Assets/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-mode="TwoWay" />
+            </Bindings>
+        </uie:LayerMaskField>
     </ui:VisualElement>
     <ui:VisualElement name="container">
         <ui:Label text="Tool Attributes:" name="ttitle" class="title" />
