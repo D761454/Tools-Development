@@ -20,9 +20,7 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
 
     public float brushSize = 50f;
     public int density = 50;
-
     public Brushes brushType = Brushes.DEFAULT;
-
     public int ignoreLayers = 0;
 
     /// <summary>
@@ -139,6 +137,7 @@ public struct GroupItemStruct
 {
     public GameObject gObject;
     public float weight;
+    public float yOffset;
 }
 
 [Serializable]

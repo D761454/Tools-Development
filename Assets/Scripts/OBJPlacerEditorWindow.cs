@@ -16,6 +16,8 @@ public static class IntExtensions
     public static string ItemWeight(this int i) => $"items[{i}].weight";
 
     public static string ItemObj(this int i) => $"items[{i}].gObject";
+
+    public static string ItemOffset(this int i) => $"items[{i}].yOffset";
 }
 
 public class OBJPlacerEditorWindow : EditorWindow
@@ -81,11 +83,17 @@ public class OBJPlacerEditorWindow : EditorWindow
             objectField.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath(index.ItemObj()), bindingMode = BindingMode.TwoWay });
             objectField.Bind(serializedObject);
 
-            Slider slider = element.Q<Slider>();
+            Slider slider = element.Q<Slider>("Weight");
             slider.dataSource = slider.parent.dataSource;
 
             slider.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath(index.ItemWeight()), bindingMode = BindingMode.TwoWay });
             slider.Bind(serializedObject);
+
+            Slider slider2 = element.Q<Slider>("YOffset");
+            slider2.dataSource = slider2.parent.dataSource;
+
+            slider2.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath(index.ItemOffset()), bindingMode = BindingMode.TwoWay });
+            slider2.Bind(serializedObject);
         };
 
         Action<VisualElement, int> bindGroup = (element, index) =>

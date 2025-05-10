@@ -170,7 +170,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
     /// returns a random object based on the weightings
     /// </summary>
     /// <returns></returns>
-    (GameObject, int) GetOBJToSpawn()
+    (GameObject, int, int) GetOBJToSpawn()
     {
         float rand = Random.Range(0f, 100f);
         float temp = 0;
@@ -196,13 +196,13 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
                     if (rand2 > temp2 && rand2 <= temp2 + serializedClass.groups[i].items[j].weight)
                     {
-                        return (serializedClass.groups[i].items[j].gObject, i);
+                        return (serializedClass.groups[i].items[j].gObject, i, j);
                     }
                 }
             }
         }
 
-        return (null, 0);
+        return (null, 0, 0);
     }
 
     /// <summary>
@@ -237,7 +237,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                 distance -= 0.1f;
             }
         }
-        brushPts[brushPts.Count-1] = brushPts[0];
+        brushPts.Add(brushPts[0]);
     }
 
     void DrawHandles()
@@ -295,7 +295,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
                     if (pos.Item2 != Vector3.down)  // if valid ray cast
                     {
-                        (GameObject, int) spawnData = GetOBJToSpawn();
+                        (GameObject, int, int) spawnData = GetOBJToSpawn();
 
                         if (spawnData.Item1 != null)
                         {
@@ -311,7 +311,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
                             pos.Item1 += pos.Item2 * (obj.GetComponent<Renderer>().bounds.size.y / 2);
 
-                            obj.GetComponent<Transform>().position = pos.Item1;
+                            obj.GetComponent<Transform>().position = pos.Item1 + (pos.Item2.normalized * serializedClass.groups[spawnData.Item2].items[spawnData.Item3].yOffset);
                         }
                     }
                 }
