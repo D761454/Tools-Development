@@ -6,7 +6,7 @@ using UnityEditor.ShortcutManagement;
 using System.Collections.Generic;
 
 [EditorTool("Brush Tool")]
-[Icon("Assets/Scripts/tool-Icon.png")]
+[Icon("Assets/OBJPlacementTool/Icons/tool-Icon.png")]
 public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 {
     private static OBJPlacerScriptableOBJ serializedClass;
@@ -20,12 +20,12 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
     /// </summary>
     void OnEnable()
     {
-        serializedClass = AssetDatabase.LoadAssetAtPath<OBJPlacerScriptableOBJ>("Assets/Scripts/OBJ Placer Scriptable OBJ.asset");
+        serializedClass = AssetDatabase.LoadAssetAtPath<OBJPlacerScriptableOBJ>("Assets/OBJPlacementTool/Scripts/OBJ Placer Scriptable OBJ.asset");
 
         if (!serializedClass)
         {
             serializedClass = CreateInstance<OBJPlacerScriptableOBJ>();
-            AssetDatabase.CreateAsset(serializedClass, "Assets/Scripts/OBJ Placer Scriptable OBJ.asset");
+            AssetDatabase.CreateAsset(serializedClass, "Assets/OBJPlacementTool/Scripts/OBJ Placer Scriptable OBJ.asset");
             AssetDatabase.Refresh();
         }
     }

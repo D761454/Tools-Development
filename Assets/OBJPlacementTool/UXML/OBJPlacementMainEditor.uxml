@@ -1,15 +1,15 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <Style src="project://database/Assets/USS/OBJPlacementMainEditor.uss?fileID=7433441132597879392&amp;guid=52fca3da623538b48aed777ef516371a&amp;type=3#OBJPlacementMainEditor" />
+    <Style src="project://database/Assets/OBJPlacementTool/USS/OBJPlacementMainEditor.uss?fileID=7433441132597879392&amp;guid=52fca3da623538b48aed777ef516371a&amp;type=3#OBJPlacementMainEditor" />
     <ui:VisualElement name="container">
         <ui:Label text="Brush Attributes:" name="btitle" class="title" />
         <ui:Slider label="Brush Size" value="50" high-value="100" binding-path="brushSize" show-input-field="true" fill="true" data-source-path="brushSize" name="bSize" data-source="project://database/Assets/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" tooltip="Size of the region to paint to.">
             <Bindings>
-                <ui:DataBinding property="value" update-trigger="OnSourceChanged" binding-mode="TwoWay" />
+                <ui:DataBinding property="value" update-trigger="OnSourceChanged" binding-mode="TwoWay" data-source="project://database/Assets/OBJPlacementTool/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" data-source-path="brushSize" />
             </Bindings>
         </ui:Slider>
         <ui:SliderInt label="Density" value="42" high-value="100" name="density" fill="true" show-input-field="true" tooltip="Density of painted objects." data-source="project://database/Assets/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" data-source-path="density">
             <Bindings>
-                <ui:DataBinding property="value" binding-mode="TwoWay" />
+                <ui:DataBinding property="value" binding-mode="TwoWay" data-source="project://database/Assets/OBJPlacementTool/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" data-source-path="density" />
             </Bindings>
         </ui:SliderInt>
         <ui:EnumField label="Brush Type" type="Brushes, Assembly-CSharp">
