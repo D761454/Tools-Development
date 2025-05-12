@@ -120,14 +120,16 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
         // use random pos to get new ray origin to then re calc ray along offset to get prefab specific normal
         RaycastHit newPosHit;
 
-        Vector3 newOirigin = (hitPos + randomPos) + (surfaceNormal * 100f);
+        Vector3 newOirigin = (hitPos + randomPos) + (surfaceNormal * 50f);
 
-        if (Physics.Raycast(newOirigin, -surfaceNormal, out newPosHit, 1000f, ~serializedClass.ignoreLayers)){
-            return (newPosHit.point, newPosHit.normal.normalized);
-        }
-        else{
+        if (Physics.Raycast(newOirigin, -surfaceNormal, out newPosHit, 1000f)){
+            if ((serializedClass.ignoreLayers & (1 << newPosHit.collider.gameObject.layer)) == 0)
+            {
+                return (newPosHit.point, newPosHit.normal.normalized);
+            }
             return (Vector3.zero, Vector3.down);
         }
+        return (Vector3.zero, Vector3.down);
     }
 
     /// <summary>
@@ -227,7 +229,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
             {
                 RaycastHit hit;
                 Vector3 sPos = rPos * distance;
-                Vector3 nOg = (raycastHit.point + sPos) + (Vector3.up * 100f);
+                Vector3 nOg = (raycastHit.point + sPos) + (Vector3.up * 50f);
 
                 if (Physics.Raycast(nOg, -Vector3.up, out hit, 1000f, ~serializedClass.ignoreLayers))
                 {
