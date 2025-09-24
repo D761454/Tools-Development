@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <Style src="project://database/Assets/USS/OBJPlacementMainEditor.uss?fileID=7433441132597879392&amp;guid=52fca3da623538b48aed777ef516371a&amp;type=3#OBJPlacementMainEditor" />
+    <Style src="project://database/Assets/CPlace/USS/OBJPlacementMainEditor.uss?fileID=7433441132597879392&amp;guid=52fca3da623538b48aed777ef516371a&amp;type=3#OBJPlacementMainEditor" />
     <ui:VisualElement name="container">
         <ui:Label text="Brush Attributes:" name="btitle" class="title" />
         <ui:Slider label="Brush Size" value="50" high-value="100" binding-path="brushSize" show-input-field="true" fill="true" data-source-path="brushSize" name="bSize" data-source="project://database/Assets/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" tooltip="Size of the region to paint to.">
@@ -12,9 +12,9 @@
                 <ui:DataBinding property="value" binding-mode="TwoWay" />
             </Bindings>
         </ui:SliderInt>
-        <ui:EnumField label="Brush Type" type="Brushes, Assembly-CSharp">
+        <ui:EnumField label="Brush Type" type="Brushes, CPlace">
             <Bindings>
-                <ui:DataBinding property="value" data-source-path="brushType" data-source="project://database/Assets/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-mode="TwoWay" />
+                <ui:DataBinding property="value" data-source-path="brushType" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-mode="TwoWay" />
             </Bindings>
         </ui:EnumField>
         <uie:LayerMaskField label="Layers to Ignore" value="0">
