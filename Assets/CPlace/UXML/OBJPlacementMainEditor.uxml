@@ -4,22 +4,22 @@
         <ui:Label text="Brush Attributes:" name="btitle" class="title" />
         <ui:Slider label="Brush Size" value="50" high-value="100" binding-path="brushSize" show-input-field="true" fill="true" data-source-path="brushSize" name="bSize" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" tooltip="Size of the region to paint to.">
             <Bindings>
-                <ui:DataBinding property="value" update-trigger="OnSourceChanged" binding-mode="TwoWay" />
+                <ui:DataBinding property="value" update-trigger="OnSourceChanged" binding-mode="TwoWay" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" data-source-path="brushSize" />
             </Bindings>
         </ui:Slider>
         <ui:SliderInt label="Density" value="42" high-value="100" name="density" fill="true" show-input-field="true" tooltip="Density of painted objects." data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" data-source-path="density">
             <Bindings>
-                <ui:DataBinding property="value" binding-mode="TwoWay" />
+                <ui:DataBinding property="value" binding-mode="TwoWay" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" data-source-path="density" />
             </Bindings>
         </ui:SliderInt>
-        <ui:EnumField label="Brush Type" type="Brushes, CPlace" class="ddField">
+        <ui:EnumField label="Brush Type" type="Brushes, CPlace" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" data-source-path="brushType" class="ddField">
             <Bindings>
-                <ui:DataBinding property="value" data-source-path="brushType" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-mode="TwoWay" />
+                <ui:DataBinding property="value" binding-mode="TwoWay" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" data-source-path="brushType" />
             </Bindings>
         </ui:EnumField>
-        <uie:LayerMaskField label="Layers to Ignore" value="0" class="ddField">
+        <uie:LayerMaskField label="Layers to Ignore" value="0" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" data-source-path="ignoreLayers" class="ddField">
             <Bindings>
-                <ui:DataBinding property="value" data-source-path="ignoreLayers" data-source="project://database/Assets/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-mode="TwoWay" />
+                <ui:DataBinding property="value" binding-mode="TwoWay" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" data-source-path="ignoreLayers" />
             </Bindings>
         </uie:LayerMaskField>
     </ui:VisualElement>
