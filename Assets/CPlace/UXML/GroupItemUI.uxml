@@ -1,12 +1,12 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <Style src="project://database/Assets/USS/OBJPlacementMainEditor.uss?fileID=7433441132597879392&amp;guid=52fca3da623538b48aed777ef516371a&amp;type=3#OBJPlacementMainEditor" />
+    <Style src="project://database/Assets/CPlace/USS/OBJPlacementMainEditor.uss?fileID=7433441132597879392&amp;guid=52fca3da623538b48aed777ef516371a&amp;type=3#OBJPlacementMainEditor" />
     <ui:VisualElement name="container" style="flex-grow: 1;">
-        <uie:ObjectField label="Prefab" data-source="project://database/Assets/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" type="UnityEngine.GameObject, UnityEngine.CoreModule" tooltip="Item to be painted." class="objectField">
+        <uie:ObjectField label="Prefab" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" type="UnityEngine.GameObject, UnityEngine.CoreModule" tooltip="Item to be painted." class="objectField">
             <Bindings>
                 <ui:DataBinding property="value" data-source-path="gObject" binding-mode="TwoWay" />
             </Bindings>
         </uie:ObjectField>
-        <ui:Slider label="Weight:" value="42" high-value="100" data-source="project://database/Assets/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" tooltip="Chance this item is selected from the group." fill="true" show-input-field="true" name="Weight" />
-        <ui:Slider data-source="project://database/Assets/Scripts/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" tooltip="Offset along the objects local Y when placed." label="Y Offset:" fill="true" show-input-field="true" direction="Horizontal" low-value="-100" high-value="100" name="YOffset" />
+        <ui:Slider label="Weight:" value="42" high-value="100" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" tooltip="Chance this item is selected from the group." fill="true" show-input-field="true" name="Weight" />
+        <ui:Slider data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" tooltip="Offset along the objects local Y when placed." label="Y Offset:" fill="true" show-input-field="true" direction="Horizontal" low-value="-100" high-value="100" name="YOffset" />
     </ui:VisualElement>
 </ui:UXML>
