@@ -5,7 +5,6 @@ using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 
 public static class IntExtensions
 {
@@ -45,12 +44,12 @@ public class OBJPlacerEditorWindow : EditorWindow
     [InitializeOnLoadMethod]
     private static void OnLoad()
     {
-        serializedClass = AssetDatabase.LoadAssetAtPath<OBJPlacerScriptableOBJ>("Assets/Scripts/OBJ Placer Scriptable OBJ.asset");
+        serializedClass = AssetDatabase.LoadAssetAtPath<OBJPlacerScriptableOBJ>("Assets/CPlace/Scripts/SaveLoad/OBJ Placer Scriptable OBJ.asset");
 
         if (!serializedClass)
         {
             serializedClass = CreateInstance<OBJPlacerScriptableOBJ>();
-            AssetDatabase.CreateAsset(serializedClass, "Assets/Scripts/OBJ Placer Scriptable OBJ.asset");
+            AssetDatabase.CreateAsset(serializedClass, "Assets/CPlace/Scripts/SaveLoad/OBJ Placer Scriptable OBJ.asset");
             AssetDatabase.Refresh();
         }
     }
@@ -62,14 +61,14 @@ public class OBJPlacerEditorWindow : EditorWindow
     {
         VisualElement root = new VisualElement();
 
-        visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UXML/OBJPlacementMainEditor.uxml");
+        visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/CPlace/UXML/OBJPlacementMainEditor.uxml");
         visualTree.CloneTree(root);
 
-        StyleSheet sheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/USS/OBJPlacementMainEditor.uss");
+        StyleSheet sheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/CPlace/USS/OBJPlacementMainEditor.uss");
         root.styleSheets.Add(sheet);
 
-        groupTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UXML/GroupUI.uxml");
-        groupItemTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UXML/GroupItemUI.uxml");
+        groupTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/CPlace/UXML/GroupUI.uxml");
+        groupItemTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/CPlace/UXML/GroupItemUI.uxml");
 
         Func<VisualElement> makeGroup = () => groupTree.Instantiate();
         Func<VisualElement> makeItem = () => groupItemTree.Instantiate();
