@@ -96,14 +96,13 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
     {
         for (int i = 0; i < groups.Count; i++)
         {
-            if (groupParents.Count <= i) // new obj
+            if (groupParents.Count <= i) // if more groups than group parents, make new group parent
             {
-                GameObject temp = new GameObject(groups[i].name);
-                groupParents.Add(temp);
+                GenerateNewParent(i);
             }
-            else if (groupParents[i] == null) // if obj for group allready present, set it, else create new obj
+            else if (groupParents[i] == null)
             {
-                GameObject[] parents = FindObjectsByType<GameObject>(FindObjectsSortMode.None);
+                GameObject[] parents = GetAllWithComponent<PaletteContainer>();
                 bool exists = false;
                 
                 for (int j = 0; j < parents.Length; j++)
@@ -118,8 +117,7 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
 
                 if (!exists)
                 {
-                    GameObject temp = new GameObject(groups[i].name);
-                    groupParents[i] = temp;
+                    GenerateNewParent(i);
                 }
             }
             else // update name
@@ -127,6 +125,19 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
                 groupParents[i].name = groups[i].name;
             }
         }
+    }
+
+    private GameObject[] GetAllWithComponent<T>() where T : Component
+    {
+        return FindObjectsByType<T>(FindObjectsSortMode.None) as GameObject[];
+    }
+
+    private void GenerateNewParent(int id)
+    {
+        GameObject temp = new GameObject(groups[id].name);
+        temp.AddComponent<PaletteContainer>();
+        temp.GetComponent<PaletteContainer>().SetID(id);
+        groupParents.Add(temp);
     }
 }
 
