@@ -1,6 +1,7 @@
-using UnityEngine;
 using System;
 using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
 public enum Brushes
 {
     DEFAULT,
@@ -20,6 +21,32 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
     public int density = 50;
     public Brushes brushType = Brushes.DEFAULT;
     public int ignoreLayers = 4;
+    public string paletteName = string.Empty;
+
+    public void SavePalette()
+    {
+        SavedPaletteScript paletteToSave;
+
+        paletteToSave = AssetDatabase.LoadAssetAtPath<SavedPaletteScript>($"Assets/CPlace/Scripts/SaveLoad/{paletteName}-Palette.asset");
+
+        if (paletteToSave)
+        {
+            paletteToSave.m_id++;
+        }
+        else
+        {
+            paletteToSave = CreateInstance<SavedPaletteScript>();
+            AssetDatabase.CreateAsset(paletteToSave, $"Assets/CPlace/Scripts/SaveLoad/{paletteName}-Palette.asset");
+        }
+
+        // might need to place into both if editing values after creating asset does not work
+        paletteToSave.m_density = density;
+        paletteToSave.m_groups = groups;
+        paletteToSave.m_ignoreLayers = ignoreLayers;
+        paletteToSave.m_paletteName = paletteName;
+
+        AssetDatabase.Refresh();
+    }
 
     /// <summary>
     /// scale all weights, keeping the same ratio and making them add up to 100
@@ -102,7 +129,7 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
             }
             else if (groupParents[i] == null)
             {
-                GameObject[] parents = GetAllWithComponent<PaletteContainer>();
+                GameObject[] parents = GetAllWithComponent<GroupParent>();
                 bool exists = false;
                 
                 for (int j = 0; j < parents.Length; j++)
@@ -135,8 +162,7 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
     private void GenerateNewParent(int id)
     {
         GameObject temp = new GameObject(groups[id].name);
-        temp.AddComponent<PaletteContainer>();
-        temp.GetComponent<PaletteContainer>().SetID(id);
+        temp.AddComponent<GroupParent>();
         groupParents.Add(temp);
     }
 }
