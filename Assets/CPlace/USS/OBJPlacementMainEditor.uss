@@ -91,3 +91,9 @@
 .badButton {
     background-color: rgb(229, 0, 0);
 }
+
+.name {
+    margin-right: 5px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+}

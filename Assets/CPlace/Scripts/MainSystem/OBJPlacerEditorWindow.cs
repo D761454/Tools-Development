@@ -23,6 +23,7 @@ public class OBJPlacerEditorWindow : EditorWindow
 {
     private static OBJPlacerScriptableOBJ serializedClass;
     private SerializedObject serializedObject;
+    private VisualElement root;
 
     [SerializeField] VisualTreeAsset visualTree;
     [SerializeField] VisualTreeAsset groupTree;
@@ -34,6 +35,7 @@ public class OBJPlacerEditorWindow : EditorWindow
     [MenuItem("OBJ Placement/Placement Tool Editor _b")]
     public static void Init()
     {
+        Debug.Log("init");
         OBJPlacerEditorWindow window = GetWindow<OBJPlacerEditorWindow>();
         window.titleContent = new GUIContent("Placement Tool");
     }
@@ -59,9 +61,11 @@ public class OBJPlacerEditorWindow : EditorWindow
     /// </summary>
     public void CreateGUI()
     {
+        Debug.Log("create gui");
+
         if (serializedClass.root == null)
         {
-            VisualElement root = new VisualElement();
+            root = new VisualElement();
 
             visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/CPlace/UXML/OBJPlacementMainEditor.uxml");
             visualTree.CloneTree(root);
@@ -71,7 +75,6 @@ public class OBJPlacerEditorWindow : EditorWindow
 
             groupTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/CPlace/UXML/GroupUI.uxml");
             groupItemTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/CPlace/UXML/GroupItemUI.uxml");
-
 
             Func<VisualElement> makeGroup = () => groupTree.Instantiate();
             Func<VisualElement> makeItem = () => groupItemTree.Instantiate();
@@ -162,20 +165,19 @@ public class OBJPlacerEditorWindow : EditorWindow
             btn.clicked += () =>
             {
                 serializedClass.ResetPalette();
-                if (serializedClass.root != null)
-                {
-                    serializedClass.root.Clear();
-                    serializedClass.root = null;
-                }
+
             };
             btn.RegisterCallback((MouseOverEvent evt) => btn.style.backgroundColor = Color.red);
             btn.RegisterCallback((MouseLeaveEvent evt) => btn.style.backgroundColor = Color.red * 0.9f);
+
+            serializedClass.groups.Add(new GroupStruct());
+            serializedClass.groups.RemoveAt(serializedClass.groups.Count - 1);
 
             rootVisualElement.Add(root);
         }
         else
         {
-            rootVisualElement.Clear();
+            Debug.Log("loading saved root");
             rootVisualElement.Add(serializedClass.root);
         }
     }
@@ -197,8 +199,11 @@ public class OBJPlacerEditorWindow : EditorWindow
 
     private void OnDestroy()
     {
-        //serializedClass.root.Clear();
-        serializedClass.root = rootVisualElement;
+        //if (serializedClass.root != root)
+        //{
+        //    Debug.Log("updating saved root");
+        //    serializedClass.root = root;
+        //}
     }
 }
 
