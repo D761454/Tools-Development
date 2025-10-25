@@ -13,7 +13,7 @@
         </ui:TextField>
         <ui:Slider label="Brush Size:" value="50" high-value="100" binding-path="brushSize" show-input-field="true" fill="true" name="bSize" tooltip="Size of the region to paint to." data-source-type="OBJPlacerScriptableOBJ, CPlace" data-source-path="brushSize" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ">
             <Bindings>
-                <ui:DataBinding property="value" data-source-path="brushSize" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-mode="ToTarget" />
+                <ui:DataBinding property="value" data-source-path="brushSize" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-mode="TwoWay" />
             </Bindings>
         </ui:Slider>
         <ui:SliderInt label="Density:" value="42" high-value="100" name="density" fill="true" show-input-field="true" tooltip="Density of painted objects." data-source-type="OBJPlacerScriptableOBJ, CPlace" data-source-path="density" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-path="density">
@@ -40,7 +40,7 @@
         <ui:ScrollView>
             <ui:ListView show-foldout-header="true" show-border="true" show-add-remove-footer="true" header-title="Groups:" virtualization-method="DynamicHeight" reorderable="false" reorder-mode="Simple" name="GroupsList" show-bound-collection-size="true" selection-type="None" fixed-item-height="99" horizontal-scrolling="false" tooltip="A parent for a collection of related items." enabled="true" data-source-type="OBJPlacerScriptableOBJ, CPlace" data-source-path="groups" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-path="groups">
                 <Bindings>
-                    <ui:DataBinding property="viewDataKey" data-source-path="groups" data-source-type="OBJPlacerScriptableOBJ, CPlace" binding-mode="ToTarget" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" />
+                    <ui:DataBinding property="viewDataKey" data-source-path="groups" data-source-type="OBJPlacerScriptableOBJ, CPlace" binding-mode="TwoWay" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" />
                 </Bindings>
             </ui:ListView>
         </ui:ScrollView>

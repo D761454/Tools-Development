@@ -59,107 +59,125 @@ public class OBJPlacerEditorWindow : EditorWindow
     /// </summary>
     public void CreateGUI()
     {
-        VisualElement root = new VisualElement();
-
-        visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/CPlace/UXML/OBJPlacementMainEditor.uxml");
-        visualTree.CloneTree(root);
-
-        StyleSheet sheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/CPlace/USS/OBJPlacementMainEditor.uss");
-        root.styleSheets.Add(sheet);
-
-        groupTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/CPlace/UXML/GroupUI.uxml");
-        groupItemTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/CPlace/UXML/GroupItemUI.uxml");
-
-        Func<VisualElement> makeGroup = () => groupTree.Instantiate();
-        Func<VisualElement> makeItem = () => groupItemTree.Instantiate();
-
-        Action<VisualElement, int> bindItem = (element, index) =>
+        if (serializedClass.root == null)
         {
-            ObjectField objectField = element.Q<ObjectField>();
-            objectField.dataSource = objectField.parent.dataSource;
+            VisualElement root = new VisualElement();
 
-            objectField.label = $"Object {index+1}:";
-            objectField.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath(index.ItemObj()), bindingMode = BindingMode.TwoWay });
-            objectField.Bind(serializedObject);
+            visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/CPlace/UXML/OBJPlacementMainEditor.uxml");
+            visualTree.CloneTree(root);
 
-            Slider slider = element.Q<Slider>("Weight");
-            slider.dataSource = slider.parent.dataSource;
+            StyleSheet sheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/CPlace/USS/OBJPlacementMainEditor.uss");
+            root.styleSheets.Add(sheet);
 
-            slider.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath(index.ItemWeight()), bindingMode = BindingMode.TwoWay });
-            slider.Bind(serializedObject);
+            groupTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/CPlace/UXML/GroupUI.uxml");
+            groupItemTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/CPlace/UXML/GroupItemUI.uxml");
 
-            Slider slider2 = element.Q<Slider>("YOffset");
-            slider2.dataSource = slider2.parent.dataSource;
 
-            slider2.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath(index.ItemOffset()), bindingMode = BindingMode.TwoWay });
-            slider2.Bind(serializedObject);
-        };
+            Func<VisualElement> makeGroup = () => groupTree.Instantiate();
+            Func<VisualElement> makeItem = () => groupItemTree.Instantiate();
 
-        Action<VisualElement, int> bindGroup = (element, index) =>
+            Action<VisualElement, int> bindItem = (element, index) =>
+            {
+                ObjectField objectField = element.Q<ObjectField>();
+                objectField.dataSource = objectField.parent.dataSource;
+
+                objectField.label = $"Object {index + 1}:";
+                objectField.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath(index.ItemObj()), bindingMode = BindingMode.TwoWay });
+                objectField.Bind(serializedObject);
+
+                Slider slider = element.Q<Slider>("Weight");
+                slider.dataSource = slider.parent.dataSource;
+
+                slider.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath(index.ItemWeight()), bindingMode = BindingMode.TwoWay });
+                slider.Bind(serializedObject);
+
+                Slider slider2 = element.Q<Slider>("YOffset");
+                slider2.dataSource = slider2.parent.dataSource;
+
+                slider2.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath(index.ItemOffset()), bindingMode = BindingMode.TwoWay });
+                slider2.Bind(serializedObject);
+            };
+
+            Action<VisualElement, int> bindGroup = (element, index) =>
+            {
+                // needed due to no struct intiialisation
+                GroupStruct groupStruct = serializedClass.groups[index];
+
+                if (serializedClass.groups[index].items == null)
+                {
+                    groupStruct.items = new List<GroupItemStruct>();
+                }
+                else
+                {
+                    groupStruct.items = serializedClass.groups[index].items;
+                }
+
+                if (serializedClass.groups[index].name == null || serializedClass.groups[index].name == "")
+                {
+                    groupStruct.name = $"Group {index + 1}";
+                }
+                else
+                {
+                    groupStruct.name = serializedClass.groups[index].name;
+                }
+
+                serializedClass.groups[index] = groupStruct;
+
+                Foldout foldout = element.Q<Foldout>();
+                foldout.dataSource = serializedClass;
+                foldout.SetBinding("text", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath(index.GroupName()), bindingMode = BindingMode.TwoWay });
+
+                TextField textField = element.Q<TextField>();
+                textField.dataSource = serializedClass;
+                textField.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath(index.GroupName()), bindingMode = BindingMode.TwoWay });
+                textField.Bind(serializedObject);
+
+                ListView listView = element.Q<ListView>();
+
+                listView.headerTitle = "Items:";
+                listView.name = $"Group {index + 1} List";
+
+                listView.makeItem = makeItem;
+                listView.bindItem = bindItem;
+                listView.itemsSource = serializedClass.groups[index].items;
+                listView.dataSource = serializedClass.groups[index];
+                listView.Bind(serializedObject);
+
+                Slider slider = element.Q<Slider>();
+                slider.dataSource = serializedClass;
+
+                slider.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath(index.GroupWeight()), bindingMode = BindingMode.TwoWay });
+                slider.Bind(serializedObject);
+            };
+
+            var groups = root.Q<ListView>("GroupsList");
+
+            groups.makeItem = makeGroup;
+            groups.bindItem = bindGroup;
+            groups.itemsSource = serializedClass.groups;
+
+            root.Q<Button>("regenButton").clicked += serializedClass.RegenWeights;
+            root.Q<Button>("saveButton").clicked += serializedClass.SavePalette;
+            Button btn = root.Q<Button>("resetButton");
+            btn.clicked += () =>
+            {
+                serializedClass.ResetPalette();
+                if (serializedClass.root != null)
+                {
+                    serializedClass.root.Clear();
+                    serializedClass.root = null;
+                }
+            };
+            btn.RegisterCallback((MouseOverEvent evt) => btn.style.backgroundColor = Color.red);
+            btn.RegisterCallback((MouseLeaveEvent evt) => btn.style.backgroundColor = Color.red * 0.9f);
+
+            rootVisualElement.Add(root);
+        }
+        else
         {
-            // needed due to no struct intiialisation
-            GroupStruct groupStruct = serializedClass.groups[index];
-
-            if (serializedClass.groups[index].items == null){
-                groupStruct.items = new List<GroupItemStruct>();
-            }
-            else
-            {
-                groupStruct.items = serializedClass.groups[index].items;
-            }
-
-            if (serializedClass.groups[index].name == null || serializedClass.groups[index].name == "")
-            {
-                groupStruct.name = $"Group {index + 1}";
-            }
-            else
-            {
-                groupStruct.name = serializedClass.groups[index].name;
-            }
-            
-            serializedClass.groups[index] = groupStruct;
-
-            Foldout foldout = element.Q<Foldout>();
-            foldout.dataSource = serializedClass;
-            foldout.SetBinding("text", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath(index.GroupName()), bindingMode = BindingMode.TwoWay });
-
-            TextField textField = element.Q<TextField>();
-            textField.dataSource = serializedClass;
-            textField.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath(index.GroupName()), bindingMode = BindingMode.TwoWay });
-            textField.Bind(serializedObject);
-
-            ListView listView = element.Q<ListView>();
-
-            listView.headerTitle = "Items:";
-            listView.name = $"Group {index + 1} List";
-
-            listView.makeItem = makeItem;
-            listView.bindItem = bindItem;
-            listView.itemsSource = serializedClass.groups[index].items;
-            listView.dataSource = serializedClass.groups[index];
-            listView.Bind(serializedObject);
-
-            Slider slider = element.Q<Slider>();
-            slider.dataSource = serializedClass;
-
-            slider.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath(index.GroupWeight()), bindingMode = BindingMode.TwoWay });
-            slider.Bind(serializedObject);
-        };
-
-        var groups = root.Q<ListView>("GroupsList");
-
-        groups.makeItem = makeGroup;
-        groups.bindItem = bindGroup;
-        groups.itemsSource = serializedClass.groups;
-
-        root.Q<Button>("regenButton").clicked += serializedClass.RegenWeights;
-        root.Q<Button>("saveButton").clicked += serializedClass.SavePalette;
-        Button btn = root.Q<Button>("resetButton");
-        btn.clicked += serializedClass.ResetPalette;
-        btn.RegisterCallback((MouseOverEvent evt) => btn.style.backgroundColor = Color.red);
-        btn.RegisterCallback((MouseLeaveEvent evt) => btn.style.backgroundColor = Color.red * 0.9f);
-
-        rootVisualElement.Add(root);
+            rootVisualElement.Clear();
+            rootVisualElement.Add(serializedClass.root);
+        }
     }
 
     /// <summary>
@@ -175,6 +193,12 @@ public class OBJPlacerEditorWindow : EditorWindow
 
             serializedObject.ApplyModifiedProperties();
         }
+    }
+
+    private void OnDestroy()
+    {
+        //serializedClass.root.Clear();
+        serializedClass.root = rootVisualElement;
     }
 }
 
