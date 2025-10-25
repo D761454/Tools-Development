@@ -153,6 +153,11 @@ public class OBJPlacerEditorWindow : EditorWindow
         groups.itemsSource = serializedClass.groups;
 
         root.Q<Button>("regenButton").clicked += serializedClass.RegenWeights;
+        root.Q<Button>("saveButton").clicked += serializedClass.SavePalette;
+        Button btn = root.Q<Button>("resetButton");
+        btn.clicked += serializedClass.ResetPalette;
+        btn.RegisterCallback((MouseOverEvent evt) => btn.style.backgroundColor = Color.red);
+        btn.RegisterCallback((MouseLeaveEvent evt) => btn.style.backgroundColor = Color.red * 0.9f);
 
         rootVisualElement.Add(root);
     }
@@ -162,11 +167,14 @@ public class OBJPlacerEditorWindow : EditorWindow
     /// </summary>
     private void OnGUI()
     {
-        serializedObject = new SerializedObject(serializedClass);
-        serializedClass.GenerateSceneOBJGroups();
-        serializedObject.Update();
+        if (serializedClass)
+        {
+            serializedObject = new SerializedObject(serializedClass);
+            serializedClass.GenerateSceneOBJGroups();
+            serializedObject.Update();
 
-        serializedObject.ApplyModifiedProperties();
+            serializedObject.ApplyModifiedProperties();
+        }
     }
 }
 

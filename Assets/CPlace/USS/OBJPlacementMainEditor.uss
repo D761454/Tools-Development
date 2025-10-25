@@ -87,3 +87,7 @@
     margin-bottom: 5px;
     margin-left: 5px;
 }
+
+.badButton {
+    background-color: rgb(229, 0, 0);
+}

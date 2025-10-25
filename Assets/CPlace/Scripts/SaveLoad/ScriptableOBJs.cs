@@ -27,7 +27,7 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
     {
         SavedPaletteScript paletteToSave;
 
-        paletteToSave = AssetDatabase.LoadAssetAtPath<SavedPaletteScript>($"Assets/CPlace/Scripts/SaveLoad/{paletteName}-Palette.asset");
+        paletteToSave = AssetDatabase.LoadAssetAtPath<SavedPaletteScript>($"Assets/CPlace/Palettes/{paletteName}-Palette.asset");
 
         if (paletteToSave)
         {
@@ -36,7 +36,7 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
         else
         {
             paletteToSave = CreateInstance<SavedPaletteScript>();
-            AssetDatabase.CreateAsset(paletteToSave, $"Assets/CPlace/Scripts/SaveLoad/{paletteName}-Palette.asset");
+            AssetDatabase.CreateAsset(paletteToSave, $"Assets/CPlace/Palettes/{paletteName}-Palette.asset");
         }
 
         // might need to place into both if editing values after creating asset does not work
@@ -46,6 +46,17 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
         paletteToSave.m_paletteName = paletteName;
 
         AssetDatabase.Refresh();
+    }
+
+    public void ResetPalette()
+    {
+        brushSize = 50f;
+        density = 50;
+        brushType = Brushes.DEFAULT;
+        ignoreLayers = 4;
+        paletteName = string.Empty;
+        groups.Clear();
+        groupParents.Clear();
     }
 
     /// <summary>
