@@ -23,7 +23,6 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
     public Brushes brushType = Brushes.DEFAULT;
     public int ignoreLayers = 4;
     public string paletteName = string.Empty;
-    public VisualElement root;
 
     public void SavePalette()
     {
@@ -46,7 +45,6 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
         paletteToSave.m_groups = groups;
         paletteToSave.m_ignoreLayers = ignoreLayers;
         paletteToSave.m_paletteName = paletteName;
-        paletteToSave.m_root = root;
 
         AssetDatabase.Refresh();
     }

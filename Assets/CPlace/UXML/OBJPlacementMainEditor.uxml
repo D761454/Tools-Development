@@ -38,7 +38,11 @@
             <ui:Button text="Regenerate Weightings" tooltip="Recalculate Weightings so each group and item list(s) weights adds up to 100 respectvely." triple-click-selects-line="false" double-click-selects-word="false" name="regenButton" focusable="false" />
         </ui:VisualElement>
         <ui:ScrollView>
-            <ui:ListView show-foldout-header="true" show-border="true" show-add-remove-footer="true" header-title="Groups:" virtualization-method="DynamicHeight" reorderable="false" reorder-mode="Simple" name="GroupsList" show-bound-collection-size="true" selection-type="None" fixed-item-height="99" horizontal-scrolling="false" tooltip="A parent for a collection of related items." enabled="true" data-source-type="OBJPlacerScriptableOBJ, CPlace" data-source-path="groups" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-path="groups" item-template="project://database/Assets/CPlace/UXML/GroupUI.uxml?fileID=9197481963319205126&amp;guid=03ff4b92f225ad942ad0dcfe5ea59221&amp;type=3#GroupUI" binding-source-selection-mode="Manual" />
+            <ui:ListView show-foldout-header="true" show-border="true" show-add-remove-footer="true" header-title="Groups:" virtualization-method="DynamicHeight" reorderable="false" reorder-mode="Simple" name="GroupsList" show-bound-collection-size="true" selection-type="None" fixed-item-height="99" horizontal-scrolling="false" tooltip="A parent for a collection of related items." enabled="true" data-source-type="OBJPlacerScriptableOBJ, CPlace" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-path="groups" item-template="project://database/Assets/CPlace/UXML/GroupUI.uxml?fileID=9197481963319205126&amp;guid=03ff4b92f225ad942ad0dcfe5ea59221&amp;type=3#GroupUI" binding-source-selection-mode="AutoAssign">
+                <Bindings>
+                    <ui:DataBinding property="itemsSource" data-source-path="groups" binding-mode="TwoWay" />
+                </Bindings>
+            </ui:ListView>
         </ui:ScrollView>
     </ui:VisualElement>
 </ui:UXML>
