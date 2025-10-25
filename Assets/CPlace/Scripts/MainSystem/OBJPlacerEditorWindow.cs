@@ -65,6 +65,7 @@ public class OBJPlacerEditorWindow : EditorWindow
 
         if (serializedClass.root == null)
         {
+            #region Set Up VisualTreeasset's
             root = new VisualElement();
 
             visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/CPlace/UXML/OBJPlacementMainEditor.uxml");
@@ -75,10 +76,12 @@ public class OBJPlacerEditorWindow : EditorWindow
 
             groupTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/CPlace/UXML/GroupUI.uxml");
             groupItemTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/CPlace/UXML/GroupItemUI.uxml");
+            #endregion
 
             Func<VisualElement> makeGroup = () => groupTree.Instantiate();
             Func<VisualElement> makeItem = () => groupItemTree.Instantiate();
 
+            // called on creating new item within a group
             Action<VisualElement, int> bindItem = (element, index) =>
             {
                 ObjectField objectField = element.Q<ObjectField>();
@@ -101,11 +104,14 @@ public class OBJPlacerEditorWindow : EditorWindow
                 slider2.Bind(serializedObject);
             };
 
+            // called on creating new group
             Action<VisualElement, int> bindGroup = (element, index) =>
             {
+                #region Init Group Struct
                 // needed due to no struct intiialisation
                 GroupStruct groupStruct = serializedClass.groups[index];
 
+                // items
                 if (serializedClass.groups[index].items == null)
                 {
                     groupStruct.items = new List<GroupItemStruct>();
@@ -113,8 +119,10 @@ public class OBJPlacerEditorWindow : EditorWindow
                 else
                 {
                     groupStruct.items = serializedClass.groups[index].items;
+                    groupStruct.weight = serializedClass.groups[index].weight;
                 }
 
+                // name
                 if (serializedClass.groups[index].name == null || serializedClass.groups[index].name == "")
                 {
                     groupStruct.name = $"Group {index + 1}";
@@ -123,6 +131,7 @@ public class OBJPlacerEditorWindow : EditorWindow
                 {
                     groupStruct.name = serializedClass.groups[index].name;
                 }
+                #endregion
 
                 serializedClass.groups[index] = groupStruct;
 
@@ -137,7 +146,6 @@ public class OBJPlacerEditorWindow : EditorWindow
 
                 ListView listView = element.Q<ListView>();
 
-                listView.headerTitle = "Items:";
                 listView.name = $"Group {index + 1} List";
 
                 listView.makeItem = makeItem;
@@ -159,6 +167,7 @@ public class OBJPlacerEditorWindow : EditorWindow
             groups.bindItem = bindGroup;
             groups.itemsSource = serializedClass.groups;
 
+            #region Set Button events
             root.Q<Button>("regenButton").clicked += serializedClass.RegenWeights;
             root.Q<Button>("saveButton").clicked += serializedClass.SavePalette;
             Button btn = root.Q<Button>("resetButton");
@@ -169,9 +178,7 @@ public class OBJPlacerEditorWindow : EditorWindow
             };
             btn.RegisterCallback((MouseOverEvent evt) => btn.style.backgroundColor = Color.red);
             btn.RegisterCallback((MouseLeaveEvent evt) => btn.style.backgroundColor = Color.red * 0.9f);
-
-            serializedClass.groups.Add(new GroupStruct());
-            serializedClass.groups.RemoveAt(serializedClass.groups.Count - 1);
+            #endregion
 
             rootVisualElement.Add(root);
         }
