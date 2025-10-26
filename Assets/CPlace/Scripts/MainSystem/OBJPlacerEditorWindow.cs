@@ -128,6 +128,7 @@ public class OBJPlacerEditorWindow : EditorWindow
         groups.makeItem = makeGroup;
         groups.bindItem = bindGroup;
 
+        #region Load in Palette
         var pal = root.Q<ObjectField>("lPal");
         pal.RegisterValueChangedCallback(
             evt =>
@@ -135,13 +136,35 @@ public class OBJPlacerEditorWindow : EditorWindow
                 SavedPaletteScript temp = (SavedPaletteScript)evt.newValue;
                 if (temp != null)
                 {
-                    serializedClass.groups = temp.m_groups;
+                    List<GroupStruct> gs = new List<GroupStruct>();
+
+                    for (int i = 0; i < temp.m_groups.Count; i++)
+                    {
+                        GroupStruct g = new GroupStruct();
+                        g.weight = temp.m_groups[i].weight;
+                        g.name = temp.m_groups[i].name;
+                        g.items = new List<GroupItemStruct>();
+                        
+                        for (int j = 0; j < temp.m_groups[i].items.Count; j++)
+                        {
+                            GroupItemStruct gi = new GroupItemStruct();
+                            gi.weight = temp.m_groups[i].items[j].weight;
+                            gi.yOffset = temp.m_groups[i].items[j].yOffset;
+                            gi.gObject = temp.m_groups[i].items[j].gObject;
+                            g.items.Add(gi);
+                        }
+                        gs.Add(g);
+                    }
+
+                    serializedClass.groups = gs;
+
                     serializedClass.density = temp.m_density;
                     serializedClass.ignoreLayers = temp.m_ignoreLayers;
                     serializedClass.paletteName = temp.m_paletteName;
                     rootVisualElement.Q<ObjectField>("lPal").value = null;
                 }
             });
+        #endregion
 
         #region Set Button events
         root.Q<Button>("regenButton").clicked += serializedClass.RegenWeights;

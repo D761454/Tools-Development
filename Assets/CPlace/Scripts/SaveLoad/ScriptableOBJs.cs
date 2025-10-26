@@ -43,7 +43,32 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
 
         // might need to place into both if editing values after creating asset does not work
         paletteToSave.m_density = density;
-        paletteToSave.m_groups = groups;
+
+        if (groups.Count > 0)
+        {
+            List<GroupStruct> gs = new List<GroupStruct>();
+
+            for (int i = 0; i < groups.Count; i++)
+            {
+                GroupStruct g = new GroupStruct();
+                g.weight = groups[i].weight;
+                g.name = groups[i].name;
+                g.items = new List<GroupItemStruct>();
+
+                for (int j = 0; j < groups[i].items.Count; j++)
+                {
+                    GroupItemStruct gi = new GroupItemStruct();
+                    gi.weight = groups[i].items[j].weight;
+                    gi.yOffset = groups[i].items[j].yOffset;
+                    gi.gObject = groups[i].items[j].gObject;
+                    g.items.Add(gi);
+                }
+                gs.Add(g);
+            }
+
+            paletteToSave.m_groups = gs;
+        }
+
         paletteToSave.m_ignoreLayers = ignoreLayers;
         paletteToSave.m_paletteName = paletteName;
 
