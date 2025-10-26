@@ -97,3 +97,9 @@
     margin-bottom: 5px;
     margin-left: 5px;
 }
+
+.unity-object-field {
+    margin-right: 5px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+}

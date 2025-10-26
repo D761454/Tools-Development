@@ -34,7 +34,6 @@ public class OBJPlacerEditorWindow : EditorWindow
     [MenuItem("OBJ Placement/Placement Tool Editor _b")]
     public static void Init()
     {
-        Debug.Log("init");
         OBJPlacerEditorWindow window = GetWindow<OBJPlacerEditorWindow>();
         window.titleContent = new GUIContent("Placement Tool");
     }
@@ -128,7 +127,21 @@ public class OBJPlacerEditorWindow : EditorWindow
 
         groups.makeItem = makeGroup;
         groups.bindItem = bindGroup;
-        //groups.itemsSource = serializedClass.groups;
+
+        var pal = root.Q<ObjectField>("lPal");
+        pal.RegisterValueChangedCallback(
+            evt =>
+            {
+                SavedPaletteScript temp = (SavedPaletteScript)evt.newValue;
+                if (temp != null)
+                {
+                    serializedClass.groups = temp.m_groups;
+                    serializedClass.density = temp.m_density;
+                    serializedClass.ignoreLayers = temp.m_ignoreLayers;
+                    serializedClass.paletteName = temp.m_paletteName;
+                    rootVisualElement.Q<ObjectField>("lPal").value = null;
+                }
+            });
 
         #region Set Button events
         root.Q<Button>("regenButton").clicked += serializedClass.RegenWeights;

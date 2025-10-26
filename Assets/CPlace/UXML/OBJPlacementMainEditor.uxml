@@ -4,9 +4,10 @@
         <ui:Button text="Save Palette" tooltip="Save Palette." triple-click-selects-line="false" double-click-selects-word="false" name="saveButton" focusable="false" style="width: 50%;" />
         <ui:Button text="Reset" tooltip="Reset Current Palette." triple-click-selects-line="false" double-click-selects-word="false" name="resetButton" focusable="false" class="badButton" style="width: 45%;" />
     </ui:VisualElement>
-    <ui:ScrollView>
+    <ui:ScrollView horizontal-scroller-visibility="Hidden">
         <ui:VisualElement name="container">
             <ui:Label text="Palette Attributes:" name="btitle" class="title" />
+            <uie:ObjectField label="Load Palette:" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" name="lPal" type="SavedPaletteScript, CPlace" />
             <ui:TextField label="Palette Name:" placeholder-text="Palette Name" name="pName" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" data-source-path="paletteName" hide-placeholder-on-focus="true" binding-path="paletteName" class="name">
                 <Bindings>
                     <ui:DataBinding property="value" data-source-path="paletteName" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-mode="TwoWay" />

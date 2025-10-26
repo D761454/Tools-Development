@@ -9,5 +9,4 @@ public class SavedPaletteScript : ScriptableObject
     public int m_ignoreLayers = 4;
     public int m_id = 0;
     public string m_paletteName = string.Empty;
-    public VisualElement m_root;
 }

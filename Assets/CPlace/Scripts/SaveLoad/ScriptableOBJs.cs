@@ -24,6 +24,7 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
     public int ignoreLayers = 4;
     public string paletteName = string.Empty;
 
+
     public void SavePalette()
     {
         SavedPaletteScript paletteToSave;
