@@ -1,48 +1,50 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <Style src="project://database/Assets/CPlace/USS/OBJPlacementMainEditor.uss?fileID=7433441132597879392&amp;guid=52fca3da623538b48aed777ef516371a&amp;type=3#OBJPlacementMainEditor" />
-    <ui:VisualElement style="flex-grow: 0; flex-direction: row; justify-content: space-between; margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px;">
+    <ui:VisualElement style="flex-grow: 0; flex-direction: row; justify-content: space-between; margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px; flex-shrink: 0;">
         <ui:Button text="Save Palette" tooltip="Save Palette." triple-click-selects-line="false" double-click-selects-word="false" name="saveButton" focusable="false" style="width: 50%;" />
         <ui:Button text="Reset" tooltip="Reset Current Palette." triple-click-selects-line="false" double-click-selects-word="false" name="resetButton" focusable="false" class="badButton" style="width: 45%;" />
     </ui:VisualElement>
-    <ui:VisualElement name="container">
-        <ui:Label text="Brush Attributes:" name="btitle" class="title" />
-        <ui:TextField label="Palette Name:" placeholder-text="Palette Name" name="pName" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" data-source-path="paletteName" hide-placeholder-on-focus="true" binding-path="paletteName" class="name">
-            <Bindings>
-                <ui:DataBinding property="value" data-source-path="paletteName" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-mode="TwoWay" />
-            </Bindings>
-        </ui:TextField>
-        <ui:Slider label="Brush Size:" value="50" high-value="100" binding-path="brushSize" show-input-field="true" fill="true" name="bSize" tooltip="Size of the region to paint to." data-source-type="OBJPlacerScriptableOBJ, CPlace" data-source-path="brushSize" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ">
-            <Bindings>
-                <ui:DataBinding property="value" data-source-path="brushSize" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-mode="TwoWay" />
-            </Bindings>
-        </ui:Slider>
-        <ui:SliderInt label="Density:" value="42" high-value="100" name="density" fill="true" show-input-field="true" tooltip="Density of painted objects." data-source-type="OBJPlacerScriptableOBJ, CPlace" data-source-path="density" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-path="density">
-            <Bindings>
-                <ui:DataBinding property="value" data-source-path="density" data-source-type="OBJPlacerScriptableOBJ, CPlace" binding-mode="TwoWay" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" />
-            </Bindings>
-        </ui:SliderInt>
-        <ui:EnumField label="Brush Type:" type="Brushes, CPlace" data-source-type="OBJPlacerScriptableOBJ, CPlace" data-source-path="brushType" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-path="brushType" class="ddField">
-            <Bindings>
-                <ui:DataBinding property="value" data-source-path="brushType" data-source-type="OBJPlacerScriptableOBJ, CPlace" binding-mode="TwoWay" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" />
-            </Bindings>
-        </ui:EnumField>
-        <uie:LayerMaskField label="Layers to Ignore:" value="0" data-source-type="OBJPlacerScriptableOBJ, CPlace" data-source-path="ignoreLayers" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-path="ignoreLayers" class="ddField">
-            <Bindings>
-                <ui:DataBinding property="value" data-source-path="ignoreLayers" data-source-type="OBJPlacerScriptableOBJ, CPlace" binding-mode="TwoWay" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" />
-            </Bindings>
-        </uie:LayerMaskField>
-    </ui:VisualElement>
-    <ui:VisualElement name="container">
-        <ui:VisualElement style="flex-grow: 0; flex-direction: row; justify-content: space-between; margin-top: 5px; margin-bottom: 5px;">
-            <ui:Label text="Tool Attributes:" name="ttitle" class="title" />
-            <ui:Button text="Regenerate Weightings" tooltip="Recalculate Weightings so each group and item list(s) weights adds up to 100 respectvely." triple-click-selects-line="false" double-click-selects-word="false" name="regenButton" focusable="false" />
-        </ui:VisualElement>
-        <ui:ScrollView>
-            <ui:ListView show-foldout-header="true" show-border="true" show-add-remove-footer="true" header-title="Groups:" virtualization-method="DynamicHeight" reorderable="false" reorder-mode="Simple" name="GroupsList" show-bound-collection-size="true" selection-type="None" fixed-item-height="99" horizontal-scrolling="false" tooltip="A parent for a collection of related items." enabled="true" data-source-type="OBJPlacerScriptableOBJ, CPlace" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-path="groups" item-template="project://database/Assets/CPlace/UXML/GroupUI.uxml?fileID=9197481963319205126&amp;guid=03ff4b92f225ad942ad0dcfe5ea59221&amp;type=3#GroupUI" binding-source-selection-mode="AutoAssign">
+    <ui:ScrollView>
+        <ui:VisualElement name="container">
+            <ui:Label text="Palette Attributes:" name="btitle" class="title" />
+            <ui:TextField label="Palette Name:" placeholder-text="Palette Name" name="pName" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" data-source-path="paletteName" hide-placeholder-on-focus="true" binding-path="paletteName" class="name">
                 <Bindings>
-                    <ui:DataBinding property="itemsSource" data-source-path="groups" binding-mode="TwoWay" />
+                    <ui:DataBinding property="value" data-source-path="paletteName" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-mode="TwoWay" />
                 </Bindings>
-            </ui:ListView>
-        </ui:ScrollView>
-    </ui:VisualElement>
+            </ui:TextField>
+            <ui:Slider label="Brush Size:" value="50" high-value="100" binding-path="brushSize" show-input-field="true" fill="true" name="bSize" tooltip="Size of the region to paint to." data-source-type="OBJPlacerScriptableOBJ, CPlace" data-source-path="brushSize" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ">
+                <Bindings>
+                    <ui:DataBinding property="value" data-source-path="brushSize" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-mode="TwoWay" />
+                </Bindings>
+            </ui:Slider>
+            <ui:SliderInt label="Density:" value="42" high-value="100" name="density" fill="true" show-input-field="true" tooltip="Density of painted objects." data-source-type="OBJPlacerScriptableOBJ, CPlace" data-source-path="density" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-path="density">
+                <Bindings>
+                    <ui:DataBinding property="value" data-source-path="density" data-source-type="OBJPlacerScriptableOBJ, CPlace" binding-mode="TwoWay" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" />
+                </Bindings>
+            </ui:SliderInt>
+            <ui:EnumField label="Brush Type:" type="Brushes, CPlace" data-source-type="OBJPlacerScriptableOBJ, CPlace" data-source-path="brushType" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-path="brushType" class="ddField">
+                <Bindings>
+                    <ui:DataBinding property="value" data-source-path="brushType" data-source-type="OBJPlacerScriptableOBJ, CPlace" binding-mode="TwoWay" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" />
+                </Bindings>
+            </ui:EnumField>
+            <uie:LayerMaskField label="Layers to Ignore:" value="0" data-source-type="OBJPlacerScriptableOBJ, CPlace" data-source-path="ignoreLayers" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-path="ignoreLayers" class="ddField">
+                <Bindings>
+                    <ui:DataBinding property="value" data-source-path="ignoreLayers" data-source-type="OBJPlacerScriptableOBJ, CPlace" binding-mode="TwoWay" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" />
+                </Bindings>
+            </uie:LayerMaskField>
+        </ui:VisualElement>
+        <ui:VisualElement name="container">
+            <ui:VisualElement style="flex-grow: 0; flex-direction: row; justify-content: space-between; margin-top: 5px; margin-bottom: 5px;">
+                <ui:Label text="Tool Attributes:" name="ttitle" class="title" />
+                <ui:Button text="Regenerate Weightings" tooltip="Recalculate Weightings so each group and item list(s) weights adds up to 100 respectvely." triple-click-selects-line="false" double-click-selects-word="false" name="regenButton" focusable="false" />
+            </ui:VisualElement>
+            <ui:ScrollView>
+                <ui:ListView show-foldout-header="true" show-border="true" show-add-remove-footer="true" header-title="Groups:" virtualization-method="DynamicHeight" reorderable="false" reorder-mode="Simple" name="GroupsList" show-bound-collection-size="true" selection-type="None" fixed-item-height="99" horizontal-scrolling="false" tooltip="A parent for a collection of related items." enabled="true" data-source-type="OBJPlacerScriptableOBJ, CPlace" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-path="groups" item-template="project://database/Assets/CPlace/UXML/GroupUI.uxml?fileID=9197481963319205126&amp;guid=03ff4b92f225ad942ad0dcfe5ea59221&amp;type=3#GroupUI" binding-source-selection-mode="AutoAssign">
+                    <Bindings>
+                        <ui:DataBinding property="itemsSource" data-source-path="groups" binding-mode="TwoWay" />
+                    </Bindings>
+                </ui:ListView>
+            </ui:ScrollView>
+        </ui:VisualElement>
+    </ui:ScrollView>
 </ui:UXML>
