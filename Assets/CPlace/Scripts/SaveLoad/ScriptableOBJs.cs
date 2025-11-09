@@ -68,8 +68,12 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
 
             paletteToSave.m_groups = gs;
         }
+        else
+        {
+            paletteToSave.m_groups.Clear();
+        }
 
-        paletteToSave.m_ignoreLayers = ignoreLayers;
+            paletteToSave.m_ignoreLayers = ignoreLayers;
         paletteToSave.m_paletteName = paletteName;
 
         AssetDatabase.Refresh();
