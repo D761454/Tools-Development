@@ -426,7 +426,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6708021941384494296, guid: 5181728c2f085be46ba21da2af33eb5d, type: 3}
       propertyPath: m_Name
-      value: terrain (1)
+      value: Cube 1
       objectReference: {fileID: 0}
     - target: {fileID: 6708021941384494296, guid: 5181728c2f085be46ba21da2af33eb5d, type: 3}
       propertyPath: m_Layer
@@ -580,7 +580,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6708021941384494296, guid: 5181728c2f085be46ba21da2af33eb5d, type: 3}
       propertyPath: m_Name
-      value: terrain (2)
+      value: Cube 2
       objectReference: {fileID: 0}
     - target: {fileID: 6708021941384494296, guid: 5181728c2f085be46ba21da2af33eb5d, type: 3}
       propertyPath: m_Layer

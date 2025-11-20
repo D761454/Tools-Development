@@ -31,7 +31,7 @@ public class OBJPlacerEditorWindow : EditorWindow
     /// <summary>
     /// Access via menu and create window
     /// </summary>
-    [MenuItem("OBJ Placement/Placement Tool Editor _b")]
+    [MenuItem("Tools/CPlace _b")]
     public static void Init()
     {
         OBJPlacerEditorWindow window = GetWindow<OBJPlacerEditorWindow>();
@@ -144,7 +144,7 @@ public class OBJPlacerEditorWindow : EditorWindow
                         g.weight = temp.m_groups[i].weight;
                         g.name = temp.m_groups[i].name;
                         g.items = new List<GroupItemStruct>();
-                        
+
                         for (int j = 0; j < temp.m_groups[i].items.Count; j++)
                         {
                             GroupItemStruct gi = new GroupItemStruct();

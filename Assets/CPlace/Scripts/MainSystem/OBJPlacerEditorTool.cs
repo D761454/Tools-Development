@@ -35,7 +35,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
     /// <summary>
     /// shortcut U to enable tool
     /// </summary>
-    [Shortcut("OBJ Placement/OBJBrushTool", null, KeyCode.U, ShortcutModifiers.None)]
+    [Shortcut("Tools/CPlace", null, KeyCode.U, ShortcutModifiers.None)]
     public static void CustomEnable()
     {
         ToolManager.SetActiveTool<OBJPlacerEditorTool>();
@@ -43,7 +43,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
     void OnDisable()
     {
-        
+
     }
 
     /// <summary>
@@ -111,7 +111,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
     {
         // uniform distribution
         float randRadius = Mathf.Sqrt(Random.value) * ((serializedClass.brushSize / 2) * scalar);
-        
+
         float randomRotation = Random.Range(0f, 360f);
 
         float rad = randomRotation * Mathf.Deg2Rad;
@@ -272,7 +272,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
             if (e.type == EventType.MouseDown && e.button == 0 && !CheckForMissingReferences())
             {
                 int total = ObjectsToSpawn();
-                    
+
                 for (int i = 0; i < total; i++)
                 {
                     (Vector3, Vector3) pos;
