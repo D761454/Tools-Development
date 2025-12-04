@@ -24,6 +24,8 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
     public int ignoreLayers = 4;
     public string paletteName = string.Empty;
 
+    [NonReorderable]
+    public List<string> zoneTypes = new List<string> { "NoPlacement" };
 
     public void SavePalette()
     {
@@ -132,10 +134,10 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
                 {
                     group.weight = ((groups[i].weight / (float)total) * 100);
                 }
-                
+
                 totalGroup += group.weight;
             }
-            
+
             for (int j = 0; j < groups[i].items.Count; j++)
             {
                 var item = group.items[j];
@@ -154,7 +156,7 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
                     {
                         item.weight = ((groups[i].items[j].weight / (float)gTotal[i]) * 100);
                     }
-                    
+
                     totalItem += item.weight;
                 }
 
@@ -180,7 +182,7 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
             {
                 GameObject[] parents = GetAllWithComponent<GroupParent>();
                 bool exists = false;
-                
+
                 for (int j = 0; j < parents.Length; j++)
                 {
                     if (parents[j].name == groups[i].name)

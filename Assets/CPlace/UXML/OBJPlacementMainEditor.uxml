@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <Style src="project://database/Assets/CPlace/USS/OBJPlacementMainEditor.uss?fileID=7433441132597879392&amp;guid=52fca3da623538b48aed777ef516371a&amp;type=3#OBJPlacementMainEditor" />
-    <ui:TabView>
+    <ui:TabView tabindex="0">
         <ui:Tab label="Palette Editor" closeable="false" tooltip="Edit Palette data and save New Palettes.">
             <ui:VisualElement style="flex-grow: 1; margin-top: 10px;">
                 <ui:VisualElement style="flex-grow: 0; flex-direction: row; justify-content: space-between; margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px; flex-shrink: 0;">
@@ -57,13 +57,12 @@
             <ui:VisualElement style="flex-grow: 1; margin-top: 10px;">
                 <ui:ScrollView horizontal-scroller-visibility="Hidden">
                     <ui:VisualElement name="container">
-                        <ui:Label text="Palette Attributes:" name="title" class="title" />
-                    </ui:VisualElement>
-                    <ui:VisualElement name="container">
                         <ui:VisualElement style="flex-grow: 0; flex-direction: row; justify-content: space-between; margin-top: 5px; margin-bottom: 5px;">
-                            <ui:Label text="Tool Attributes:" name="title" class="title" />
+                            <ui:Label text="Zones:" name="title" class="title" />
                         </ui:VisualElement>
-                        <ui:ScrollView />
+                        <ui:ScrollView>
+                            <ui:ListView header-title="Zones:" show-foldout-header="true" show-add-remove-footer="true" virtualization-method="DynamicHeight" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" data-source-path="zoneTypes" binding-source-selection-mode="AutoAssign" show-border="true" name="ZoneTypeList" selection-type="None" />
+                        </ui:ScrollView>
                     </ui:VisualElement>
                 </ui:ScrollView>
             </ui:VisualElement>

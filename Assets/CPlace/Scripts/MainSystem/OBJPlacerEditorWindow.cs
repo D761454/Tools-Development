@@ -27,6 +27,9 @@ public class OBJPlacerEditorWindow : EditorWindow
     [SerializeField] VisualTreeAsset visualTree;
     [SerializeField] VisualTreeAsset groupTree;
     [SerializeField] VisualTreeAsset groupItemTree;
+    [SerializeField] VisualTreeAsset zoneTree;
+
+    ListView zonesList;
 
     /// <summary>
     /// Access via menu and create window
@@ -70,10 +73,13 @@ public class OBJPlacerEditorWindow : EditorWindow
 
         groupTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/CPlace/UXML/GroupUI.uxml");
         groupItemTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/CPlace/UXML/GroupItemUI.uxml");
+
+        zoneTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/CPlace/UXML/ZoneUI.uxml");
         #endregion
 
         Func<VisualElement> makeGroup = () => groupTree.Instantiate();
         Func<VisualElement> makeItem = () => groupItemTree.Instantiate();
+        Func<VisualElement> makeZone = () => zoneTree.Instantiate();
 
         // called on creating new item within a group
         Action<VisualElement, int> bindItem = (element, index) =>
@@ -123,7 +129,23 @@ public class OBJPlacerEditorWindow : EditorWindow
             listView.itemsSource = serializedClass.groups[index].items;
         };
 
+        Action<VisualElement, int> bindZone = (element, index) =>
+        {
+            TextField tf = element.Q<TextField>();
+            tf.label = index.ToString();
+            tf.value = serializedClass.zoneTypes[index];
+            tf.dataSource = serializedClass;
+            tf.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"zoneTypes[{index}]"), bindingMode = BindingMode.TwoWay });
+            tf.Bind(serializedObject);
+        };
+
         var groups = root.Q<ListView>("GroupsList");
+        zonesList = root.Q<ListView>("ZoneTypeList");
+        zonesList.itemsSource = serializedClass.zoneTypes;
+        zonesList.reorderable = false;
+
+        zonesList.makeItem = makeZone;
+        zonesList.bindItem = bindZone;
 
         groups.makeItem = makeGroup;
         groups.bindItem = bindGroup;
@@ -193,7 +215,16 @@ public class OBJPlacerEditorWindow : EditorWindow
             serializedClass.GenerateSceneOBJGroups();
             serializedObject.Update();
 
-            serializedObject.ApplyModifiedProperties();
+            if (serializedClass.zoneTypes.Count == 1)
+            {
+                zonesList.allowRemove = false;
+            }
+            else
+            {
+                zonesList.allowRemove = true;
+            }
+
+                serializedObject.ApplyModifiedProperties();
         }
     }
 }
