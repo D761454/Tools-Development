@@ -142,7 +142,6 @@ public class OBJPlacerEditorWindow : EditorWindow
         var groups = root.Q<ListView>("GroupsList");
         zonesList = root.Q<ListView>("ZoneTypeList");
         zonesList.itemsSource = serializedClass.zoneTypes;
-        zonesList.reorderable = false;
 
         zonesList.makeItem = makeZone;
         zonesList.bindItem = bindZone;
@@ -224,7 +223,7 @@ public class OBJPlacerEditorWindow : EditorWindow
                 zonesList.allowRemove = true;
             }
 
-                serializedObject.ApplyModifiedProperties();
+            serializedObject.ApplyModifiedProperties();
         }
     }
 }

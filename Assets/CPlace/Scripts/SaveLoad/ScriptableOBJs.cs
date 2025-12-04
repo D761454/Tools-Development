@@ -24,8 +24,7 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
     public int ignoreLayers = 4;
     public string paletteName = string.Empty;
 
-    [NonReorderable]
-    public List<string> zoneTypes = new List<string> { "NoPlacement" };
+    [NonReorderable] public List<string> zoneTypes = new List<string> { "NoPlacement" };
 
     public void SavePalette()
     {
