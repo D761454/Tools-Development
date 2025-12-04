@@ -60,9 +60,7 @@
                         <ui:VisualElement style="flex-grow: 0; flex-direction: row; justify-content: space-between; margin-top: 5px; margin-bottom: 5px;">
                             <ui:Label text="Zones:" name="title" class="title" />
                         </ui:VisualElement>
-                        <ui:ScrollView>
-                            <ui:ListView header-title="Zones:" show-foldout-header="true" show-add-remove-footer="true" virtualization-method="DynamicHeight" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-source-selection-mode="AutoAssign" show-border="true" name="ZoneTypeList" selection-type="None" item-template="project://database/Assets/CPlace/UXML/ZoneUI.uxml?fileID=9197481963319205126&amp;guid=206ef2c3b5155314aa989dd653801f1e&amp;type=3#ZoneUI" binding-path="zoneTypes" data-source-path="zoneTypes" />
-                        </ui:ScrollView>
+                        <ui:ScrollView />
                     </ui:VisualElement>
                 </ui:ScrollView>
             </ui:VisualElement>
