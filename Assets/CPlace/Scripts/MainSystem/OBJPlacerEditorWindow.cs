@@ -129,22 +129,11 @@ public class OBJPlacerEditorWindow : EditorWindow
             listView.itemsSource = serializedClass.groups[index].items;
         };
 
-        Action<VisualElement, int> bindZone = (element, index) =>
-        {
-            TextField tf = element.Q<TextField>();
-            tf.label = index.ToString();
-            tf.value = serializedClass.zoneTypes[index];
-            tf.dataSource = serializedClass;
-            tf.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"zoneTypes[{index}]"), bindingMode = BindingMode.TwoWay });
-            tf.Bind(serializedObject);
-        };
-
         var groups = root.Q<ListView>("GroupsList");
         zonesList = root.Q<ListView>("ZoneTypeList");
         zonesList.itemsSource = serializedClass.zoneTypes;
 
         zonesList.makeItem = makeZone;
-        zonesList.bindItem = bindZone;
 
         groups.makeItem = makeGroup;
         groups.bindItem = bindGroup;
@@ -213,16 +202,6 @@ public class OBJPlacerEditorWindow : EditorWindow
             serializedObject = new SerializedObject(serializedClass);
             serializedClass.GenerateSceneOBJGroups();
             serializedObject.Update();
-
-            if (serializedClass.zoneTypes.Count == 1)
-            {
-                zonesList.allowRemove = false;
-            }
-            else
-            {
-                zonesList.allowRemove = true;
-            }
-
             serializedObject.ApplyModifiedProperties();
         }
     }

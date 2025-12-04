@@ -24,7 +24,7 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
     public int ignoreLayers = 4;
     public string paletteName = string.Empty;
 
-    [NonReorderable] public List<string> zoneTypes = new List<string> { "NoPlacement" };
+    public List<Zone> zoneTypes = new List<Zone>();
 
     public void SavePalette()
     {
@@ -74,7 +74,7 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
             paletteToSave.m_groups.Clear();
         }
 
-            paletteToSave.m_ignoreLayers = ignoreLayers;
+        paletteToSave.m_ignoreLayers = ignoreLayers;
         paletteToSave.m_paletteName = paletteName;
 
         AssetDatabase.Refresh();
@@ -231,4 +231,11 @@ public struct GroupStruct
     public string name;
     public List<GroupItemStruct> items;
     public float weight;
+}
+
+[Serializable]
+public struct Zone
+{
+    public string name;
+    public SavedPaletteScript zonePalette;
 }
