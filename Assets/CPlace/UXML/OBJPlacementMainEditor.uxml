@@ -60,7 +60,13 @@
                         <ui:VisualElement style="flex-grow: 0; flex-direction: row; justify-content: space-between; margin-top: 5px; margin-bottom: 5px;">
                             <ui:Label text="Zones:" name="title" class="title" />
                         </ui:VisualElement>
-                        <ui:ScrollView />
+                        <ui:ScrollView>
+                            <ui:ListView show-foldout-header="true" show-border="true" show-add-remove-footer="true" header-title="Zones:" virtualization-method="DynamicHeight" reorderable="false" reorder-mode="Simple" name="ZoneTypeList" show-bound-collection-size="true" selection-type="None" fixed-item-height="99" horizontal-scrolling="false" enabled="true" data-source-type="OBJPlacerScriptableOBJ, CPlace" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-path="zoneTypes" item-template="project://database/Assets/CPlace/UXML/ZoneUI.uxml?fileID=9197481963319205126&amp;guid=50d1f66eda3583f44886df1e8f637265&amp;type=3#ZoneUI" binding-source-selection-mode="AutoAssign">
+                                <Bindings>
+                                    <ui:DataBinding property="itemsSource" data-source-path="zoneTypes" binding-mode="TwoWay" />
+                                </Bindings>
+                            </ui:ListView>
+                        </ui:ScrollView>
                     </ui:VisualElement>
                 </ui:ScrollView>
             </ui:VisualElement>

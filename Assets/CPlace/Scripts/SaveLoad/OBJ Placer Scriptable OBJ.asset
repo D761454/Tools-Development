@@ -19,5 +19,4 @@ MonoBehaviour:
   brushType: 0
   ignoreLayers: 4
   paletteName: 
-  zoneTypes:
-  - NoPlacement
+  zoneTypes: []

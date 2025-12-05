@@ -74,12 +74,12 @@ public class OBJPlacerEditorWindow : EditorWindow
         groupTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/CPlace/UXML/GroupUI.uxml");
         groupItemTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/CPlace/UXML/GroupItemUI.uxml");
 
-        //zoneTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/CPlace/UXML/ZoneUI.uxml");
+        zoneTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/CPlace/UXML/ZoneUI.uxml");
         #endregion
 
         Func<VisualElement> makeGroup = () => groupTree.Instantiate();
         Func<VisualElement> makeItem = () => groupItemTree.Instantiate();
-        //Func<VisualElement> makeZone = () => zoneTree.Instantiate();
+        Func<VisualElement> makeZone = () => zoneTree.Instantiate();
 
         // called on creating new item within a group
         Action<VisualElement, int> bindItem = (element, index) =>
@@ -130,11 +130,9 @@ public class OBJPlacerEditorWindow : EditorWindow
         };
 
         var groups = root.Q<ListView>("GroupsList");
-        //zonesList = root.Q<ListView>("ZoneTypeList");
-        //zonesList.itemsSource = serializedClass.zoneTypes;
+        zonesList = root.Q<ListView>("ZoneTypeList");
 
-        //zonesList.makeItem = makeZone;
-
+        zonesList.makeItem = makeZone;
         groups.makeItem = makeGroup;
         groups.bindItem = bindGroup;
 
