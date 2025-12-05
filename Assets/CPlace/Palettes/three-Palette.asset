@@ -9,12 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a992d7bdf8ee9204f86e33fd3ecf6cdc, type: 3}
-  m_Name: OBJ Placer Scriptable OBJ
+  m_Script: {fileID: 11500000, guid: 09cd60e2944b4234fab44aadb6c6e449, type: 3}
+  m_Name: three-Palette
   m_EditorClassIdentifier: 
-  groupParents:
-  - {fileID: 0}
-  groups:
+  m_groups:
   - name: Group 1
     items:
     - gObject: {fileID: 3415384118034924596, guid: 62da35f2d656fa24eaf480661bb70d5b, type: 3}
@@ -24,13 +22,7 @@ MonoBehaviour:
       weight: 50
       yOffset: 0
     weight: 100
-  brushSize: 50
-  density: 50
-  brushType: 0
-  ignoreLayers: 4
-  paletteName: three
-  zoneTypes:
-  - name: 1
-    zonePalette: {fileID: 11400000, guid: b2b759125caeeb54f9ab9278d6e721ff, type: 2}
-  - name: 7
-    zonePalette: {fileID: 11400000, guid: bc55fdd498b44f7498690e9c11f25300, type: 2}
+  m_density: 50
+  m_ignoreLayers: 4
+  m_id: 0
+  m_paletteName: three

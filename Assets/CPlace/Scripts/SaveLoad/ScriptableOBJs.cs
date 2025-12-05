@@ -24,7 +24,13 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
     public int ignoreLayers = 4;
     public string paletteName = string.Empty;
 
-    public List<Zone> zoneTypes = new List<Zone>();
+    [SerializeField] public List<Zone> zoneTypes = new List<Zone>();
+
+    protected void OnDisable()
+    {
+        EditorUtility.SetDirty(this);
+        AssetDatabase.SaveAssets();
+    }
 
     public void SavePalette()
     {
@@ -77,6 +83,8 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
         paletteToSave.m_ignoreLayers = ignoreLayers;
         paletteToSave.m_paletteName = paletteName;
 
+        EditorUtility.SetDirty(paletteToSave);
+        AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
     }
 

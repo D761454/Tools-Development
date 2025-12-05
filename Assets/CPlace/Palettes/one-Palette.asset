@@ -10,10 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 09cd60e2944b4234fab44aadb6c6e449, type: 3}
-  m_Name: r-Palette
+  m_Name: one-Palette
   m_EditorClassIdentifier: 
-  m_groups: []
-  m_density: 50
+  m_groups:
+  - name: Group 1
+    items: []
+    weight: 0
+  - name: Group 2
+    items: []
+    weight: 0
+  m_density: 25
   m_ignoreLayers: 4
   m_id: 0
-  m_paletteName: 
+  m_paletteName: one
