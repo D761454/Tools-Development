@@ -12,23 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a992d7bdf8ee9204f86e33fd3ecf6cdc, type: 3}
   m_Name: OBJ Placer Scriptable OBJ
   m_EditorClassIdentifier: 
-  groupParents:
-  - {fileID: 0}
-  groups:
-  - name: Group 1
-    items:
-    - gObject: {fileID: 3415384118034924596, guid: 62da35f2d656fa24eaf480661bb70d5b, type: 3}
-      weight: 50
-      yOffset: 0
-    - gObject: {fileID: 3415384118034924596, guid: 011e661f2f21bac41a609262d4bf04b4, type: 3}
-      weight: 50
-      yOffset: 0
-    weight: 100
+  groupParents: []
+  groups: []
   brushSize: 50
   density: 50
   brushType: 0
   ignoreLayers: 4
-  paletteName: three
+  paletteName: 
   zoneTypes:
   - name: 1
     zonePalette: {fileID: 11400000, guid: b2b759125caeeb54f9ab9278d6e721ff, type: 2}

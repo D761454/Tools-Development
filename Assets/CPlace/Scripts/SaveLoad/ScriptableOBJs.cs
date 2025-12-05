@@ -26,6 +26,17 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
 
     [SerializeField] public List<Zone> zoneTypes = new List<Zone>();
 
+    protected void OnEnable()
+    {
+        brushSize = 50f;
+        density = 50;
+        brushType = Brushes.DEFAULT;
+        ignoreLayers = 4;
+        paletteName = string.Empty;
+        groupParents.Clear();
+        groups.Clear();
+    }
+
     protected void OnDisable()
     {
         EditorUtility.SetDirty(this);
