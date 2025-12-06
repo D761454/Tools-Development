@@ -58,14 +58,31 @@
                 <ui:ScrollView horizontal-scroller-visibility="Hidden">
                     <ui:VisualElement name="container">
                         <ui:VisualElement style="flex-grow: 0; flex-direction: row; justify-content: space-between; margin-top: 5px; margin-bottom: 5px;">
-                            <ui:Label text="Zones:" name="title" class="title" />
+                            <ui:Label text="Zones Attributes:" name="title" class="title" />
                         </ui:VisualElement>
                         <ui:ScrollView>
-                            <ui:ListView show-foldout-header="true" show-border="true" show-add-remove-footer="true" header-title="Zones:" virtualization-method="DynamicHeight" reorderable="false" reorder-mode="Simple" name="ZoneTypeList" show-bound-collection-size="true" selection-type="None" fixed-item-height="99" horizontal-scrolling="false" enabled="true" data-source-type="OBJPlacerScriptableOBJ, CPlace" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-path="zoneTypes" item-template="project://database/Assets/CPlace/UXML/ZoneUI.uxml?fileID=9197481963319205126&amp;guid=50d1f66eda3583f44886df1e8f637265&amp;type=3#ZoneUI" binding-source-selection-mode="AutoAssign">
+                            <ui:ListView show-foldout-header="true" show-border="true" show-add-remove-footer="true" header-title="Zones:" virtualization-method="DynamicHeight" reorderable="false" reorder-mode="Simple" name="ZoneTypeList" show-bound-collection-size="true" selection-type="Single" fixed-item-height="99" horizontal-scrolling="false" enabled="true" data-source-type="OBJPlacerScriptableOBJ, CPlace" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-path="zoneTypes" item-template="project://database/Assets/CPlace/UXML/ZoneUI.uxml?fileID=9197481963319205126&amp;guid=50d1f66eda3583f44886df1e8f637265&amp;type=3#ZoneUI" binding-source-selection-mode="AutoAssign">
                                 <Bindings>
                                     <ui:DataBinding property="itemsSource" data-source-path="zoneTypes" binding-mode="TwoWay" />
                                 </Bindings>
                             </ui:ListView>
+                            <ui:VisualElement name="VisualElement" style="flex-grow: 1; flex-direction: row; justify-content: space-between;">
+                                <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
+                                    <ui:Label text="Zone to Edit: " class="title" />
+                                    <ui:Label text="Zone Name&#10;" name="zoneTitle" class="title" />
+                                </ui:VisualElement>
+                                <ui:Button text="Paint Zone" name="pzone" style="width: 33%;" />
+                            </ui:VisualElement>
+                            <uie:ObjectField label="Zone Palette:" name="zPal" type="SavedPaletteScript, CPlace" />
+                            <ui:VisualElement style="flex-grow: 1; flex-direction: row; justify-content: space-between;">
+                                <uie:ObjectField label="Scene Parent:" name="sPar" />
+                                <ui:Button text="New Scene Parent" name="nPar" style="width: 33%;" />
+                            </ui:VisualElement>
+                            <ui:VisualElement style="flex-grow: 1; flex-direction: row; justify-content: space-between;">
+                                <uie:ObjectField label="Active Sub-Zone:" name="aSzone" />
+                                <ui:Button text="New Sub-Zone" name="nSzone" style="width: 33%;" />
+                            </ui:VisualElement>
+                            <ui:Button text="Paint All" name="pAll" style="width: 50%; align-self: auto;" />
                         </ui:ScrollView>
                     </ui:VisualElement>
                 </ui:ScrollView>

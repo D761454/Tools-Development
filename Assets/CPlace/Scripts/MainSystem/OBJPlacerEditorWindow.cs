@@ -93,7 +93,7 @@ public class OBJPlacerEditorWindow : EditorWindow
         Action<VisualElement, int> bindGroup = (element, index) =>
         {
             #region Init Group Struct
-            // needed due to no struct intiialisation
+            // needed due to no struct initialization
             GroupStruct groupStruct = serializedClass.groups[index];
 
             // items
@@ -131,6 +131,21 @@ public class OBJPlacerEditorWindow : EditorWindow
 
         var groups = root.Q<ListView>("GroupsList");
         zonesList = root.Q<ListView>("ZoneTypeList");
+
+        // On item selected - bind all following elements to current zone
+        zonesList.itemsChosen += (items) =>
+        {
+            foreach (Zone item in items)
+            {
+                root.Q<Label>("zoneTitle").text = item.name;
+                root.Q<ObjectField>("zPal").value = item.zonePalette;
+                GameObject zP = GameObject.Find(item.name + "Parent");
+                if (zP)
+                {
+                    root.Q<ObjectField>("sPar").value = zP;
+                }
+            }
+        };
 
         zonesList.makeItem = makeZone;
         groups.makeItem = makeGroup;
