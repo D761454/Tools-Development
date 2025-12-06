@@ -15,7 +15,6 @@ public enum Brushes
 [Serializable, CreateAssetMenu(fileName = "OBJ Placer Scriptable OBJ", menuName = "Scriptable Objects/OBJ Placer Scriptable OBJ")]
 public class OBJPlacerScriptableOBJ : ScriptableObject
 {
-    public List<GameObject> groupParents = new List<GameObject>();
     public List<GroupStruct> groups = new List<GroupStruct>();
 
     public float brushSize = 50f;
@@ -33,7 +32,6 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
         brushType = Brushes.DEFAULT;
         ignoreLayers = 4;
         paletteName = string.Empty;
-        groupParents.Clear();
         groups.Clear();
     }
 
@@ -113,8 +111,6 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
             groups[j].items.Clear();
         }
         groups.Clear();
-
-        groupParents.Clear();
     }
 
     /// <summary>
@@ -185,54 +181,9 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
         }
     }
 
-    /// <summary>
-    /// generate objects in the scene to act as groups for instantiated prefabs to parent to
-    /// </summary>
-    public void GenerateSceneOBJGroups()
-    {
-        for (int i = 0; i < groups.Count; i++)
-        {
-            if (groupParents.Count <= i) // if more groups than group parents, make new group parent
-            {
-                GenerateNewParent(i);
-            }
-            else if (groupParents[i] == null)
-            {
-                GameObject[] parents = GetAllWithComponent<GroupParent>();
-                bool exists = false;
-
-                for (int j = 0; j < parents.Length; j++)
-                {
-                    if (parents[j].name == groups[i].name)
-                    {
-                        groupParents[i] = parents[j];
-                        exists = true;
-                        break;
-                    }
-                }
-
-                if (!exists)
-                {
-                    GenerateNewParent(i);
-                }
-            }
-            else // update name
-            {
-                groupParents[i].name = groups[i].name;
-            }
-        }
-    }
-
     private GameObject[] GetAllWithComponent<T>() where T : Component
     {
         return FindObjectsByType<T>(FindObjectsSortMode.None) as GameObject[];
-    }
-
-    private void GenerateNewParent(int id)
-    {
-        GameObject temp = new GameObject(groups[id].name);
-        temp.AddComponent<GroupParent>();
-        groupParents.Add(temp);
     }
 }
 

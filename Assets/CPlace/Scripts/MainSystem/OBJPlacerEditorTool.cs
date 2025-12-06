@@ -51,8 +51,6 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
     /// </summary>
     public override void OnActivated()
     {
-        serializedClass.GenerateSceneOBJGroups();
-
         serializedClass.RegenWeights();
 
         if (!EditorWindow.HasOpenInstances<OBJPlacerEditorWindow>())
@@ -308,7 +306,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
                             obj.layer = LayerMask.NameToLayer("Ignore Raycast");
 
-                            obj.GetComponent<Transform>().SetParent(serializedClass.groupParents[spawnData.Item2].transform, true);
+                            //obj.GetComponent<Transform>().SetParent(serializedClass.groupParents[spawnData.Item2].transform, true);
 
                             obj.GetComponent<Transform>().rotation = Quaternion.FromToRotation(obj.GetComponent<Transform>().up, pos.Item2);
                             obj.GetComponent<Transform>().Rotate(pos.Item2, Random.Range(0f, 360f), Space.World);

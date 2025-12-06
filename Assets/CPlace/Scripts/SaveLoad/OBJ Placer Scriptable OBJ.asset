@@ -12,15 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a992d7bdf8ee9204f86e33fd3ecf6cdc, type: 3}
   m_Name: OBJ Placer Scriptable OBJ
   m_EditorClassIdentifier: 
-  groupParents: []
   groups: []
   brushSize: 50
   density: 50
   brushType: 0
   ignoreLayers: 4
   paletteName: 
-  zoneTypes:
-  - name: 1
-    zonePalette: {fileID: 11400000, guid: b2b759125caeeb54f9ab9278d6e721ff, type: 2}
-  - name: 7
-    zonePalette: {fileID: 11400000, guid: bc55fdd498b44f7498690e9c11f25300, type: 2}
+  zoneTypes: []

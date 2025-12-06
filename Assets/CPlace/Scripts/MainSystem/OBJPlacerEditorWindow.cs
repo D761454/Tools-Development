@@ -198,7 +198,6 @@ public class OBJPlacerEditorWindow : EditorWindow
         if (serializedClass)
         {
             serializedObject = new SerializedObject(serializedClass);
-            serializedClass.GenerateSceneOBJGroups();
             serializedObject.Update();
             serializedObject.ApplyModifiedProperties();
         }
