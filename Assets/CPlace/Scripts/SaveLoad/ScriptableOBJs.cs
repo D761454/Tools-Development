@@ -128,7 +128,7 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
                 zoneTypes[activeZoneIndex] = zone;
             }
 
-            GameObject subZoneObj = new GameObject($"{zone.name}-SubZone");
+            GameObject subZoneObj = new GameObject($"{zone.name}-SubZone" + ((zone.parentObject.GetComponentsInChildren<Transform>()).Length + 1));
             subZoneObj.transform.parent = zone.parentObject.transform;
             activeSubZone = subZoneObj;
         }
