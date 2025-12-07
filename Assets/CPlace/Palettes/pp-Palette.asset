@@ -9,15 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a992d7bdf8ee9204f86e33fd3ecf6cdc, type: 3}
-  m_Name: OBJ Placer Scriptable OBJ
+  m_Script: {fileID: 11500000, guid: 09cd60e2944b4234fab44aadb6c6e449, type: 3}
+  m_Name: pp-Palette
   m_EditorClassIdentifier: 
-  groups: []
-  brushSize: 50
-  density: 50
-  brushType: 0
-  ignoreLayers: 4
-  paletteName: 
-  zoneTypes: []
-  activeZoneIndex: -1
-  activeSubZone: {fileID: 0}
+  m_groups: []
+  m_density: 50
+  m_ignoreLayers: 4
+  m_id: 0
+  m_paletteName: pp

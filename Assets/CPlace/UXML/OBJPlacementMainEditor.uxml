@@ -69,17 +69,21 @@
                             <ui:VisualElement name="VisualElement" style="flex-grow: 1; flex-direction: row; justify-content: space-between;">
                                 <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
                                     <ui:Label text="Zone to Edit: " class="title" />
-                                    <ui:Label text="Zone Name&#10;" name="zoneTitle" class="title" />
+                                    <ui:Label text="Zone Name" name="zoneTitle" binding-path="name" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" class="title" />
                                 </ui:VisualElement>
                                 <ui:Button text="Paint Zone" name="pzone" style="width: 33%;" />
                             </ui:VisualElement>
-                            <uie:ObjectField label="Zone Palette:" name="zPal" type="SavedPaletteScript, CPlace" />
+                            <uie:ObjectField label="Zone Palette:" name="zPal" type="SavedPaletteScript, CPlace" binding-path="zonePalette" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" />
                             <ui:VisualElement style="flex-grow: 1; flex-direction: row; justify-content: space-between;">
-                                <uie:ObjectField label="Scene Parent:" name="sPar" />
+                                <uie:ObjectField label="Scene Parent:" name="sPar" type="UnityEngine.GameObject, UnityEngine.CoreModule" />
                                 <ui:Button text="New Scene Parent" name="nPar" style="width: 33%;" />
                             </ui:VisualElement>
                             <ui:VisualElement style="flex-grow: 1; flex-direction: row; justify-content: space-between;">
-                                <uie:ObjectField label="Active Sub-Zone:" name="aSzone" />
+                                <uie:ObjectField label="Active Sub-Zone:" name="aSzone" type="UnityEngine.GameObject, UnityEngine.CoreModule" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" binding-path="activeSubZone">
+                                    <Bindings>
+                                        <ui:DataBinding property="value" data-source-path="activeSubZone" binding-mode="TwoWay" />
+                                    </Bindings>
+                                </uie:ObjectField>
                                 <ui:Button text="New Sub-Zone" name="nSzone" style="width: 33%;" />
                             </ui:VisualElement>
                             <ui:Button text="Paint All" name="pAll" style="width: 50%; align-self: auto;" />

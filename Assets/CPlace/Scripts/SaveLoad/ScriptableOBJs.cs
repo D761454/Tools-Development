@@ -24,6 +24,9 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
     public string paletteName = string.Empty;
 
     [SerializeField] public List<Zone> zoneTypes = new List<Zone>();
+    public int activeZoneIndex = -1;
+
+    public GameObject activeSubZone;
 
     protected void OnEnable()
     {
@@ -33,6 +36,8 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
         ignoreLayers = 4;
         paletteName = string.Empty;
         groups.Clear();
+        activeSubZone = null;
+        activeZoneIndex = -1;
     }
 
     protected void OnDisable()
@@ -95,6 +100,38 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
         EditorUtility.SetDirty(paletteToSave);
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
+    }
+
+    public void GenerateParent()
+    {
+        if (activeZoneIndex != -1)
+        {
+            var zone = zoneTypes[activeZoneIndex];
+            if (zone.parentObject == null || !GameObject.Find($"{zone.name}-Parent"))
+            {
+                GameObject parentObj = new GameObject($"{zone.name}-Parent");
+                zone.parentObject = parentObj;
+                zoneTypes[activeZoneIndex] = zone;
+            }
+        }
+    }
+
+    public void GenerateSubZone()
+    {
+        if (activeZoneIndex != -1)
+        {
+            var zone = zoneTypes[activeZoneIndex];
+            if (zone.parentObject == null || !GameObject.Find($"{zone.name}-Parent"))
+            {
+                GameObject parentObj = new GameObject($"{zone.name}-Parent");
+                zone.parentObject = parentObj;
+                zoneTypes[activeZoneIndex] = zone;
+            }
+
+            GameObject subZoneObj = new GameObject($"{zone.name}-SubZone");
+            subZoneObj.transform.parent = zone.parentObject.transform;
+            activeSubZone = subZoneObj;
+        }
     }
 
     public void ResetPalette()
@@ -208,4 +245,5 @@ public struct Zone
 {
     public string name;
     public SavedPaletteScript zonePalette;
+    public GameObject parentObject;
 }

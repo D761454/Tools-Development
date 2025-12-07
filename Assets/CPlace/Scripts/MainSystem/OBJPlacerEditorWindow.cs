@@ -132,19 +132,57 @@ public class OBJPlacerEditorWindow : EditorWindow
         var groups = root.Q<ListView>("GroupsList");
         zonesList = root.Q<ListView>("ZoneTypeList");
 
-        // On item selected - bind all following elements to current zone
-        zonesList.itemsChosen += (items) =>
+        zonesList.selectionChanged += (items) =>
         {
             foreach (Zone item in items)
             {
-                root.Q<Label>("zoneTitle").text = item.name;
-                root.Q<ObjectField>("zPal").value = item.zonePalette;
-                GameObject zP = GameObject.Find(item.name + "Parent");
-                if (zP)
+                if (!serializedClass.zoneTypes.Contains(item))
+                    continue;
+
+                int i = serializedClass.zoneTypes.IndexOf(item);
+                serializedClass.activeZoneIndex = i;
+
+                Label zT = root.Q<Label>("zoneTitle");
+                zT.dataSource = serializedClass;
+                zT.SetBinding("text", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"zoneTypes[{i}].name"), bindingMode = BindingMode.ToTarget });
+                zT.Bind(serializedObject);
+
+                ObjectField zP = root.Q<ObjectField>("zPal");
+                zP.dataSource = serializedClass;
+                zP.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"zoneTypes[{i}].zonePalette"), bindingMode = BindingMode.TwoWay });
+                zP.Bind(serializedObject);
+
+                GameObject par = GameObject.Find(serializedClass.zoneTypes[i].name + "-Parent");
+
+                if (par)
                 {
-                    root.Q<ObjectField>("sPar").value = zP;
+                    Zone t = serializedClass.zoneTypes[i];
+                    t.parentObject = par;
+                    serializedClass.zoneTypes[i] = t;
                 }
+
+                ObjectField sP = root.Q<ObjectField>("sPar");
+                sP.dataSource = serializedClass;
+                sP.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"zoneTypes[{i}].parentObject"), bindingMode = BindingMode.TwoWay });
+                sP.Bind(serializedObject);
             }
+        };
+
+        zonesList.itemsRemoved += (items) =>
+        {
+            serializedClass.activeZoneIndex = -1;
+            Label zT = root.Q<Label>("zoneTitle");
+            zT.ClearBinding("text");
+            zT.text = "Zone Name";
+            ObjectField zP = root.Q<ObjectField>("zPal");
+            zP.ClearBinding("value");
+            zP.value = null;
+            ObjectField sP = root.Q<ObjectField>("sPar");
+            sP.ClearBinding("value");
+            sP.value = null;
+            ObjectField aS = root.Q<ObjectField>("aSzone");
+            aS.ClearBinding("value");
+            aS.value = null;
         };
 
         zonesList.makeItem = makeZone;
@@ -192,6 +230,8 @@ public class OBJPlacerEditorWindow : EditorWindow
         #region Set Button events
         root.Q<Button>("regenButton").clicked += serializedClass.RegenWeights;
         root.Q<Button>("saveButton").clicked += serializedClass.SavePalette;
+        root.Q<Button>("nPar").clicked += serializedClass.GenerateParent;
+        root.Q<Button>("nSzone").clicked += serializedClass.GenerateSubZone;
         Button btn = root.Q<Button>("resetButton");
         btn.clicked += () =>
         {
@@ -203,6 +243,11 @@ public class OBJPlacerEditorWindow : EditorWindow
         #endregion
 
         rootVisualElement.Add(root);
+    }
+
+    private void OBJPlacerEditorWindow_clicked()
+    {
+        throw new NotImplementedException();
     }
 
     /// <summary>
