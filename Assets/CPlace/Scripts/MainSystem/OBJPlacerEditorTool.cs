@@ -4,6 +4,8 @@ using UnityEditor;
 using UnityEditor.EditorTools;
 using UnityEditor.ShortcutManagement;
 using System.Collections.Generic;
+using System.Xml.Serialization;
+using UnityEditor.TerrainTools;
 
 [EditorTool("Brush Tool")]
 [Icon("Assets/CPlace/Images/tool-Icon.png")]
@@ -16,6 +18,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
     RaycastHit raycastHit;
 
     float CheckDiff = 20f;
+    float handleScale = 0.01f;
 
     /// <summary>
     /// Get/Create Serializable Obj for data storage
@@ -244,7 +247,42 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
     void DrawHandles()
     {
+        for (int  i = 0;  i < serializedClass.zoneTypes.Count;  i++)
+        {
+            GameObject gO = GameObject.Find(serializedClass.zoneTypes[i].name + "-Parent");
+
+            if (gO)
+            {
+                Handles.color = gO.GetComponent<SceneZone>().m_uiColor;
+                SubZone[] sZ = gO.GetComponentsInChildren<SubZone>();
+
+                if (sZ.Length > 0)
+                {
+                    for (int j = 0; j < sZ.Length; j++)
+                    {
+                        Handles.DrawAAPolyLine(2f, sZ[j].pointPositions.ToArray());
+                        for (int k = 0; k < sZ[j].pointPositions.Count; k++)
+                        {
+                            Handles.DrawSolidDisc(sZ[j].points[k].point, sZ[j].points[k].normal, Vector3.Distance(Camera.current.transform.position, sZ[j].points[k].point) * handleScale);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    void DrawRayHandles()
+    {
+        Handles.color = Color.yellow;
+        Gizmos.color = Color.yellow;
+
         Handles.DrawAAPolyLine(2f, brushPts.ToArray());
+
+        if (serializedClass.activeSubZone)
+        {
+            Handles.color = serializedClass.activeSubZone.GetComponentInParent<SceneZone>().m_uiColor;
+            Handles.DrawSolidDisc(raycastHit.point, raycastHit.normal, raycastHit.distance * handleScale);
+        }
     }
 
     /// <summary>
@@ -255,19 +293,41 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
     {
         Event e = Event.current;
 
-        Handles.color = Color.yellow;
-        Gizmos.color = Color.yellow;
-
         Vector3 mousePosition = e.mousePosition;
 
         Ray ray = HandleUtility.GUIPointToWorldRay(mousePosition);
 
+        DrawHandles();
+
         if (Physics.Raycast(ray, out raycastHit, 1000f, ~serializedClass.ignoreLayers))
         {
             GenerateBrushOutlinePoints();
-            DrawHandles();
+            DrawRayHandles();
 
-            if (e.type == EventType.MouseDown && e.button == 0 && !CheckForMissingReferences())
+            if (serializedClass.activeSubZone && e.button == 0 && e.type == EventType.MouseDown)
+            {
+                bool reposition = false;
+
+                if (serializedClass.activeSubZone.GetComponent<SubZone>().points.Count > 0)
+                {
+                    for (int i = 0; i < serializedClass.activeSubZone.GetComponent<SubZone>().points.Count; i++)
+                    {
+                        if (Vector3.Distance(serializedClass.activeSubZone.GetComponent<SubZone>().points[i].point, raycastHit.point) < ((raycastHit.distance * 2.0f) * handleScale))
+                        {
+                            reposition = true;
+                            RepositionPoint(ref raycastHit, i);
+                        }
+                    }
+                }
+
+                if (!reposition)
+                {
+                    Debug.Log("Added Point");
+                    serializedClass.activeSubZone.GetComponent<SubZone>().points.Add(raycastHit);
+                }
+            }
+
+            if (e.type == EventType.MouseDown && e.button == 1 && !CheckForMissingReferences())
             {
                 int total = ObjectsToSpawn();
 
@@ -326,6 +386,17 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
     public void OnDrawHandles()
     {
 
+    }
+
+    private void RepositionPoint(ref RaycastHit raycastHit, int i)
+    {
+        Handles.color = Color.red;
+        Handles.DrawSolidDisc(serializedClass.activeSubZone.GetComponent<SubZone>().points[i].point, serializedClass.activeSubZone.GetComponent<SubZone>().points[i].normal, raycastHit.distance * handleScale);
+
+        if (Event.current.button == 1 && (Event.current.type == EventType.MouseDown || Event.current.type == EventType.MouseDrag))
+        {
+            serializedClass.activeSubZone.GetComponent<SubZone>().points[i] = raycastHit;
+        }
     }
 }
 

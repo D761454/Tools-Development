@@ -110,6 +110,7 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
             if (zone.parentObject == null || !GameObject.Find($"{zone.name}-Parent"))
             {
                 GameObject parentObj = new GameObject($"{zone.name}-Parent");
+                parentObj.AddComponent<SceneZone>();
                 zone.parentObject = parentObj;
                 zoneTypes[activeZoneIndex] = zone;
             }
@@ -124,11 +125,13 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
             if (zone.parentObject == null || !GameObject.Find($"{zone.name}-Parent"))
             {
                 GameObject parentObj = new GameObject($"{zone.name}-Parent");
+                parentObj.AddComponent<SceneZone>();
                 zone.parentObject = parentObj;
                 zoneTypes[activeZoneIndex] = zone;
             }
 
             GameObject subZoneObj = new GameObject($"{zone.name}-SubZone" + ((zone.parentObject.GetComponentsInChildren<Transform>()).Length + 1));
+            subZoneObj.AddComponent<SubZone>();
             subZoneObj.transform.parent = zone.parentObject.transform;
             activeSubZone = subZoneObj;
         }
