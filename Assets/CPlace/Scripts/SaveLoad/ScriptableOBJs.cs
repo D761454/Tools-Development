@@ -111,6 +111,8 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
             {
                 GameObject parentObj = new GameObject($"{zone.name}-Parent");
                 parentObj.AddComponent<SceneZone>();
+                parentObj.GetComponent<SceneZone>().m_currentPalette = zone.zonePalette;
+                parentObj.GetComponent<SceneZone>().m_currentID = zone.zonePalette.m_id;
                 zone.parentObject = parentObj;
                 zoneTypes[activeZoneIndex] = zone;
             }
@@ -126,6 +128,8 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
             {
                 GameObject parentObj = new GameObject($"{zone.name}-Parent");
                 parentObj.AddComponent<SceneZone>();
+                parentObj.GetComponent<SceneZone>().m_currentPalette = zone.zonePalette;
+                parentObj.GetComponent<SceneZone>().m_currentID = zone.zonePalette.m_id;
                 zone.parentObject = parentObj;
                 zoneTypes[activeZoneIndex] = zone;
             }

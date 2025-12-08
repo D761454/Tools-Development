@@ -254,6 +254,8 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
             if (gO)
             {
                 Handles.color = gO.GetComponent<SceneZone>().m_uiColor;
+                Gizmos.color = gO.GetComponent<SceneZone>().m_uiColor;
+
                 SubZone[] sZ = gO.GetComponentsInChildren<SubZone>();
 
                 if (sZ.Length > 0)
@@ -261,9 +263,9 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                     for (int j = 0; j < sZ.Length; j++)
                     {
                         Handles.DrawAAPolyLine(2f, sZ[j].pointPositions.ToArray());
-                        for (int k = 0; k < sZ[j].pointPositions.Count; k++)
+                        for (int k = 0; k < sZ[j].points.Count; k++)
                         {
-                            Handles.DrawSolidDisc(sZ[j].points[k].point, sZ[j].points[k].normal, Vector3.Distance(Camera.current.transform.position, sZ[j].points[k].point) * handleScale);
+                            Handles.DrawSolidDisc(sZ[j].points[k].point, sZ[j].points[k].normal, 1.0f);
                         }
                     }
                 }
@@ -312,8 +314,16 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                 {
                     for (int i = 0; i < serializedClass.activeSubZone.GetComponent<SubZone>().points.Count; i++)
                     {
-                        if (Vector3.Distance(serializedClass.activeSubZone.GetComponent<SubZone>().points[i].point, raycastHit.point) < ((raycastHit.distance * 2.0f) * handleScale))
+                        if (Vector3.Distance(serializedClass.activeSubZone.GetComponent<SubZone>().points[i].point, raycastHit.point) < 2.0f)
                         {
+                            if (e.keyCode == KeyCode.LeftShift)
+                            {
+                                Debug.Log("Removing Point");
+                                serializedClass.activeSubZone.GetComponent<SubZone>().points.RemoveAt(i);
+                                serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.RemoveAt(i);
+                                return;
+                            }
+
                             reposition = true;
                             RepositionPoint(ref raycastHit, i);
                         }
@@ -322,8 +332,24 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
                 if (!reposition)
                 {
-                    Debug.Log("Added Point");
-                    serializedClass.activeSubZone.GetComponent<SubZone>().points.Add(raycastHit);
+                    Debug.Log("Adding Point");
+
+                    if (serializedClass.activeSubZone.GetComponent<SubZone>().points.Count > 1)
+                    {
+                        serializedClass.activeSubZone.GetComponent<SubZone>().points.RemoveAt(serializedClass.activeSubZone.GetComponent<SubZone>().points.Count - 1);
+                        serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.RemoveAt(serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Count - 1);
+
+                        serializedClass.activeSubZone.GetComponent<SubZone>().points.Add(raycastHit);
+                        serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Add(raycastHit.point);
+                    }
+                    else
+                    {
+                        serializedClass.activeSubZone.GetComponent<SubZone>().points.Add(raycastHit);
+                        serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Add(raycastHit.point);
+                    }
+
+                    serializedClass.activeSubZone.GetComponent<SubZone>().points.Add(serializedClass.activeSubZone.GetComponent<SubZone>().points[0]);
+                    serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Add(serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions[0]);
                 }
             }
 
@@ -390,6 +416,8 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
     private void RepositionPoint(ref RaycastHit raycastHit, int i)
     {
+        Debug.Log("Repositioning Point");
+
         Handles.color = Color.red;
         Handles.DrawSolidDisc(serializedClass.activeSubZone.GetComponent<SubZone>().points[i].point, serializedClass.activeSubZone.GetComponent<SubZone>().points[i].normal, raycastHit.distance * handleScale);
 
