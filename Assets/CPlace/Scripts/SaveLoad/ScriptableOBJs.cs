@@ -112,7 +112,10 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
                 GameObject parentObj = new GameObject($"{zone.name}-Parent");
                 parentObj.AddComponent<SceneZone>();
                 parentObj.GetComponent<SceneZone>().m_currentPalette = zone.zonePalette;
-                parentObj.GetComponent<SceneZone>().m_currentID = zone.zonePalette.m_id;
+                if (zone.zonePalette)
+                {
+                    parentObj.GetComponent<SceneZone>().m_currentID = zone.zonePalette.m_id;
+                }
                 zone.parentObject = parentObj;
                 zoneTypes[activeZoneIndex] = zone;
             }
@@ -223,11 +226,6 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
 
             groups[i] = group;
         }
-    }
-
-    private GameObject[] GetAllWithComponent<T>() where T : Component
-    {
-        return FindObjectsByType<T>(FindObjectsSortMode.None) as GameObject[];
     }
 }
 

@@ -278,7 +278,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
         Handles.color = Color.yellow;
         Gizmos.color = Color.yellow;
 
-        Handles.DrawAAPolyLine(2f, brushPts.ToArray());
+        //Handles.DrawAAPolyLine(2f, brushPts.ToArray());
 
         if (serializedClass.activeSubZone)
         {
@@ -303,7 +303,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
         if (Physics.Raycast(ray, out raycastHit, 1000f, ~serializedClass.ignoreLayers))
         {
-            GenerateBrushOutlinePoints();
+            //GenerateBrushOutlinePoints();
             DrawRayHandles();
 
             if (serializedClass.activeSubZone && e.button == 0 && e.type == EventType.MouseDown)

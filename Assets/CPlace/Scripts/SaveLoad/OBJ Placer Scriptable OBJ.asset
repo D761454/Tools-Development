@@ -18,6 +18,12 @@ MonoBehaviour:
   brushType: 0
   ignoreLayers: 4
   paletteName: 
-  zoneTypes: []
+  zoneTypes:
+  - name: one
+    zonePalette: {fileID: 0}
+    parentObject: {fileID: 0}
+  - name: two
+    zonePalette: {fileID: 0}
+    parentObject: {fileID: 0}
   activeZoneIndex: -1
   activeSubZone: {fileID: 0}

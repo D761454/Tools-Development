@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using System;
 using System.Collections.Generic;
+using Helpers;
 
 public static class IntExtensions
 {
@@ -232,22 +233,15 @@ public class OBJPlacerEditorWindow : EditorWindow
         root.Q<Button>("saveButton").clicked += serializedClass.SavePalette;
         root.Q<Button>("nPar").clicked += serializedClass.GenerateParent;
         root.Q<Button>("nSzone").clicked += serializedClass.GenerateSubZone;
-        Button btn = root.Q<Button>("resetButton");
-        btn.clicked += () =>
-        {
-            serializedClass.ResetPalette();
+        root.Q<Button>("pAll").clicked += PaintAll;
 
-        };
+        Button btn = root.Q<Button>("resetButton");
+        btn.clicked += serializedClass.ResetPalette;
         btn.RegisterCallback((MouseOverEvent evt) => btn.style.backgroundColor = Color.red);
         btn.RegisterCallback((MouseLeaveEvent evt) => btn.style.backgroundColor = Color.red * 0.9f);
         #endregion
 
         rootVisualElement.Add(root);
-    }
-
-    private void OBJPlacerEditorWindow_clicked()
-    {
-        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -261,6 +255,13 @@ public class OBJPlacerEditorWindow : EditorWindow
             serializedObject.Update();
             serializedObject.ApplyModifiedProperties();
         }
+    }
+
+    private void PaintAll()
+    {
+        List<SceneZone> zones = Functions.GetAllWithComponent<SceneZone>();
+
+
     }
 }
 
