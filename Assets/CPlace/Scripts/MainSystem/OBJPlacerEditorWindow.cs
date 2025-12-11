@@ -7,7 +7,6 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-
 public static class IntExtensions
 {
     public static string GroupWeight(this int i) => $"groups[{i}].weight";
@@ -32,6 +31,7 @@ public class OBJPlacerEditorWindow : EditorWindow
     [SerializeField] VisualTreeAsset zoneTree;
 
     ListView zonesList;
+    RaycastHit raycastHit;
 
     /// <summary>
     /// Access via menu and create window
@@ -257,7 +257,7 @@ public class OBJPlacerEditorWindow : EditorWindow
     }
 
     /// <summary>
-    /// handle gui events, Update Serializable Obj
+    /// handle GUI events, Update Serializable Obj
     /// </summary>
     private void OnGUI()
     {
@@ -274,6 +274,19 @@ public class OBJPlacerEditorWindow : EditorWindow
         List<SceneZone> zones = Functions.GetAllWithComponent<SceneZone>();
         int density = 0, rows = 0, columns = 0;
         (Vector2, Vector2) minmax;
+        List<PolygonCollider2D> nullZones = new List<PolygonCollider2D>();
+
+        foreach (SceneZone zone in zones)
+        {
+            if (zone.m_currentPalette == null)
+            {
+                List<SubZone> subZones = zone.gameObject.GetComponentsInChildren<SubZone>().ToList();
+                foreach (SubZone subZone in subZones)
+                {
+                    nullZones.Add(subZone.GetComponent<PolygonCollider2D>());
+                }
+            }
+        }
 
         foreach (SceneZone zone in zones)
         {
@@ -289,6 +302,7 @@ public class OBJPlacerEditorWindow : EditorWindow
             {
                 minmax = Functions.GetMinMax(subZone.pointPositions); // get the min and max position - 2D, x and z
                 (float, float) distance = Functions.GetDistance(minmax.Item1, minmax.Item2); // get the distances on the x and y for the grid
+                float yRayBase = subZone.pointPositions[0].y + 100f;
 
                 // define the grid - at each grid intersection - spawn an object using density as chance, then apply an offset
                 rows = (int)(distance.Item1 / (density / 10));
@@ -298,7 +312,64 @@ public class OBJPlacerEditorWindow : EditorWindow
                 {
                     for (int j = 0; j < columns; j++)
                     {
+                        bool breakout = false;
+                        Vector3 origin = new Vector3(minmax.Item1.x + (i * (distance.Item1 / rows)), yRayBase, minmax.Item1.y + (j * (distance.Item2 / columns)));
+                        Vector2 colliderOverlapCheck = new Vector2(raycastHit.point.x, raycastHit.point.z);
+                        Physics.Raycast(origin, Vector3.down, out raycastHit, 1000f, ~zone.m_currentPalette.m_ignoreLayers);
 
+                        (Vector3, Vector3) pos;
+
+                        #region Check if Hit is in zone and not in nullzone.
+                        foreach (PolygonCollider2D collider in nullZones)
+                        {
+                            if (collider.OverlapPoint(colliderOverlapCheck))
+                            {
+                                breakout = true;
+                            }
+                        }
+
+                        if (!subZone.GetComponent<PolygonCollider2D>().OverlapPoint(colliderOverlapCheck))
+                        {
+                            breakout = true;
+                        }
+
+                        if (breakout)
+                        {
+                            continue;
+                        }
+                        #endregion
+
+                        if (Functions.CheckForMissingReferences(zone.m_currentPalette))
+                        {
+                            break;
+                        }
+
+                        pos = Functions.GenerateRandomSpawnPosition(raycastHit.point, Vector3.up, 2f, zone.m_currentPalette.m_ignoreLayers);
+
+                        if (pos.Item2 == Vector3.down)
+                        {
+                            continue;
+                        }
+
+                        (GameObject, int, int) spawnData = Functions.GetOBJToSpawn(zone.m_currentPalette);
+
+                        if (spawnData.Item1 == null)
+                        {
+                            continue;
+                        }
+
+                        GameObject obj = PrefabUtility.InstantiatePrefab(spawnData.Item1) as GameObject;
+                        SceneVisibilityManager.instance.DisablePicking(obj, false);
+
+                        obj.layer = LayerMask.NameToLayer("Ignore Raycast");
+
+                        obj.GetComponent<Transform>().rotation = Quaternion.FromToRotation(obj.GetComponent<Transform>().up, pos.Item2);
+                        obj.GetComponent<Transform>().Rotate(pos.Item2, UnityEngine.Random.Range(0f, 360f), Space.World);
+
+                        pos.Item1 += pos.Item2 * (obj.GetComponent<Renderer>().bounds.size.y / 2);
+
+                        obj.GetComponent<Transform>().position = pos.Item1 + (pos.Item2.normalized * zone.m_currentPalette.m_groups[spawnData.Item2].items[spawnData.Item3].yOffset);
+                        obj.GetComponent<Transform>().SetParent(subZone.gameObject.transform);
                     }
                 }
             }

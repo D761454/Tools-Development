@@ -4,8 +4,6 @@ using UnityEditor;
 using UnityEditor.EditorTools;
 using UnityEditor.ShortcutManagement;
 using System.Collections.Generic;
-using System.Xml.Serialization;
-using UnityEditor.TerrainTools;
 using Helpers;
 
 [EditorTool("Brush Tool")]

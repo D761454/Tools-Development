@@ -63,5 +63,97 @@ namespace Helpers
 
             return (min, max);
         }
+        public static bool CheckForMissingReferences(SavedPaletteScript palette)
+        {
+            bool output = false;
+
+            if (palette.m_groups == null || palette.m_groups.Count == 0)
+            {
+                Debug.LogException(new System.Exception($"Tool Group(s) missing / empty!"));
+                return true;
+            }
+
+            // check for missing references
+            for (int i = 0; i < palette.m_groups.Count; i++)
+            {
+                if (palette.m_groups[i].items == null || palette.m_groups[i].items.Count == 0)
+                {
+                    Debug.LogException(new System.Exception($"Group Item(s) is missing / empty! {palette.m_groups[i].name}"));
+                    output = true;
+                }
+
+                for (int j = 0; j < palette.m_groups[i].items.Count; j++)
+                {
+                    if (palette.m_groups[i].items[j].gObject == null)
+                    {
+                        Debug.LogException(new System.Exception($"Group Item(s) is missing an assigned Object! {palette.m_groups[i].name}, Object: {j + 1}"));
+                        output = true;
+                    }
+                }
+            }
+
+            return output;
+        }
+
+        public static (Vector3, Vector3) GenerateRandomSpawnPosition(Vector3 hitPos, Vector3 surfaceNormal, float scalar, int ignore)
+        {
+            float CheckDiff = 20f;
+            float randRadius = Mathf.Sqrt(Random.value) * scalar;
+            float randomRotation = Random.Range(0f, 360f);
+
+            float rad = randomRotation * Mathf.Deg2Rad;
+            Vector3 randomPos = new Vector3(Mathf.Cos(rad) - Mathf.Sin(rad), 0, Mathf.Sin(rad) + Mathf.Cos(rad));
+            randomPos.Normalize();
+            randomPos *= randRadius;
+
+            // use random pos to get new ray origin to then re calc ray along offset to get prefab specific normal
+            RaycastHit newPosHit;
+            Vector3 newOirigin = (hitPos + randomPos) + (surfaceNormal * CheckDiff);
+
+            if (Physics.Raycast(newOirigin, -surfaceNormal, out newPosHit, 1000f))
+            {
+                if ((ignore & (1 << newPosHit.collider.gameObject.layer)) == 0)
+                {
+                    return (newPosHit.point, newPosHit.normal.normalized);
+                }
+                return (Vector3.zero, Vector3.down);
+            }
+            return (Vector3.zero, Vector3.down);
+        }
+
+        public static (GameObject, int, int) GetOBJToSpawn(SavedPaletteScript palette)
+        {
+            float rand = Random.Range(0f, 100f);
+            float temp = 0;
+
+            for (int i = 0; i < palette.m_groups.Count; i++)
+            {
+                if (i > 0)
+                {
+                    temp += palette.m_groups[i - 1].weight;
+                }
+
+                if (rand > temp && rand <= temp + palette.m_groups[i].weight)
+                {
+                    float rand2 = Random.Range(0f, 100f);
+                    float temp2 = 0;
+
+                    for (int j = 0; j < palette.m_groups[i].items.Count; j++)
+                    {
+                        if (j > 0)
+                        {
+                            temp2 += palette.m_groups[i].items[j - 1].weight;
+                        }
+
+                        if (rand2 > temp2 && rand2 <= temp2 + palette.m_groups[i].items[j].weight)
+                        {
+                            return (palette.m_groups[i].items[j].gObject, i, j);
+                        }
+                    }
+                }
+            }
+
+            return (null, 0, 0);
+        }
     }
 }
