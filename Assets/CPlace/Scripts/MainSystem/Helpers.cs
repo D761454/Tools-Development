@@ -28,5 +28,40 @@ namespace Helpers
 
             return list.ToArray();
         }
+
+        public static (float, float) GetDistance(Vector2 a, Vector2 b)
+        {
+            float xr = (a.x > b.x) ? a.x - b.x : b.x - a.x;
+            float yr = (a.y > b.y) ? a.y - b.y : b.y - a.x;
+
+            return (xr, yr);
+        }
+
+        public static (Vector2, Vector2) GetMinMax(List<Vector3> pos)
+        {
+            Vector2 min = new Vector2(pos[0].x, pos[0].z), max = new Vector2(pos[0].x, pos[0].z);
+
+            foreach (Vector3 v in pos)
+            {
+                if (v.x < min.x)
+                {
+                    min.x = v.x;
+                }
+                else if (v.x > max.x)
+                {
+                    max.x = v.x;
+                }
+                if (v.z < min.y)
+                {
+                    min.y = v.z;
+                }
+                else if (v.z > max.y)
+                {
+                    max.y = v.z;
+                }
+            }
+
+            return (min, max);
+        }
     }
 }

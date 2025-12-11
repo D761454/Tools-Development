@@ -1,12 +1,12 @@
 #if UNITY_EDITOR
-using UnityEngine;
-using UnityEditor;
-using UnityEngine.UIElements;
-using UnityEditor.UIElements;
+using Helpers;
 using System;
 using System.Collections.Generic;
-using Helpers;
 using System.Linq;
+using UnityEditor;
+using UnityEditor.UIElements;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 public static class IntExtensions
 {
@@ -261,12 +261,28 @@ public class OBJPlacerEditorWindow : EditorWindow
     private void PaintAll()
     {
         List<SceneZone> zones = Functions.GetAllWithComponent<SceneZone>();
+        int density = 0, rows = 0, columns = 0;
+        (Vector2, Vector2) minmax;
 
         foreach (SceneZone zone in zones)
         {
+            if (!zone.m_currentPalette)
+            {
+                continue;
+            }
+
+            density = zone.m_currentPalette.m_density;
+
             List<SubZone> subZones = zone.GetComponentsInChildren<SubZone>().ToList();
             foreach (SubZone subZone in subZones)
             {
+                minmax = Functions.GetMinMax(subZone.pointPositions); // get the min and max position - 2D, x and z
+                (float, float) distance = Functions.GetDistance(minmax.Item1, minmax.Item2); // get the distances on the x and y for the grid
+
+                // define the grid - at each grid intersection - spawn an object using density as chance, then apply an offset
+                rows = ((int)distance.Item1) / density;
+                columns = ((int)distance.Item2) / density;
+
 
             }
         }
