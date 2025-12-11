@@ -6,6 +6,7 @@ using UnityEditor.UIElements;
 using System;
 using System.Collections.Generic;
 using Helpers;
+using System.Linq;
 
 public static class IntExtensions
 {
@@ -261,7 +262,14 @@ public class OBJPlacerEditorWindow : EditorWindow
     {
         List<SceneZone> zones = Functions.GetAllWithComponent<SceneZone>();
 
+        foreach (SceneZone zone in zones)
+        {
+            List<SubZone> subZones = zone.GetComponentsInChildren<SubZone>().ToList();
+            foreach (SubZone subZone in subZones)
+            {
 
+            }
+        }
     }
 }
 

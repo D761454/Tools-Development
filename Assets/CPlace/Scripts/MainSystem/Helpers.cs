@@ -15,5 +15,18 @@ namespace Helpers
         {
             return MonoBehaviour.FindObjectsByType<T>(FindObjectsSortMode.None).ToList<T>();
         }
+
+        public static Vector2[] To2DVectorArray(this List<Vector3> i)
+        {
+            List<Vector2> list = new List<Vector2>();
+
+            foreach (var v in i)
+            {
+                Vector2 temp = new Vector2(v.x, v.z);
+                list.Add(temp);
+            }
+
+            return list.ToArray();
+        }
     }
 }

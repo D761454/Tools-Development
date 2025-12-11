@@ -6,6 +6,7 @@ using UnityEditor.ShortcutManagement;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using UnityEditor.TerrainTools;
+using Helpers;
 
 [EditorTool("Brush Tool")]
 [Icon("Assets/CPlace/Images/tool-Icon.png")]
@@ -351,6 +352,8 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                     serializedClass.activeSubZone.GetComponent<SubZone>().points.Add(serializedClass.activeSubZone.GetComponent<SubZone>().points[0]);
                     serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Add(serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions[0]);
                 }
+
+                serializedClass.activeSubZone.GetComponent<PolygonCollider2D>().points = serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.To2DVectorArray();
             }
 
             if (e.type == EventType.MouseDown && e.button == 1 && !CheckForMissingReferences())

@@ -139,6 +139,7 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
 
             GameObject subZoneObj = new GameObject($"{zone.name}-SubZone" + ((zone.parentObject.GetComponentsInChildren<Transform>()).Length + 1));
             subZoneObj.AddComponent<SubZone>();
+            subZoneObj.AddComponent<PolygonCollider2D>();
             subZoneObj.transform.parent = zone.parentObject.transform;
             activeSubZone = subZoneObj;
         }
