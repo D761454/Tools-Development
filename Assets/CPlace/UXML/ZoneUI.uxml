@@ -6,10 +6,5 @@
                 <engine:DataBinding property="value" data-source-path="name" binding-mode="TwoWay" />
             </Bindings>
         </engine:TextField>
-        <editor:ObjectField label="Palette:" type="SavedPaletteScript, CPlace" tooltip="Item to be painted." class="objectField">
-            <Bindings>
-                <engine:DataBinding property="value" data-source-path="zonePalette" binding-mode="TwoWay" />
-            </Bindings>
-        </editor:ObjectField>
     </engine:VisualElement>
 </engine:UXML>

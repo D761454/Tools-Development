@@ -150,9 +150,11 @@ public class OBJPlacerEditorWindow : EditorWindow
                 zT.Bind(serializedObject);
 
                 ObjectField zP = root.Q<ObjectField>("zPal");
+                zP.UnregisterValueChangedCallback(ChangePalette);
                 zP.dataSource = serializedClass;
                 zP.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"zoneTypes[{i}].zonePalette"), bindingMode = BindingMode.TwoWay });
                 zP.Bind(serializedObject);
+                zP.RegisterValueChangedCallback(ChangePalette);
 
                 GameObject par = GameObject.Find(serializedClass.zoneTypes[i].name + "-Parent");
 
@@ -245,6 +247,15 @@ public class OBJPlacerEditorWindow : EditorWindow
         rootVisualElement.Add(root);
     }
 
+    private void ChangePalette(ChangeEvent<UnityEngine.Object> evt)
+    {
+        GameObject obj = GameObject.Find(serializedClass.zoneTypes[serializedClass.activeZoneIndex].name + "-Parent");
+        if (obj)
+        {
+            obj.GetComponent<SceneZone>().m_currentPalette = (SavedPaletteScript)evt.newValue;
+        }
+    }
+
     /// <summary>
     /// handle gui events, Update Serializable Obj
     /// </summary>
@@ -283,6 +294,13 @@ public class OBJPlacerEditorWindow : EditorWindow
                 rows = (int)(distance.Item1 / (density / 10));
                 columns = (int)(distance.Item2 / (density / 10));
 
+                for (int i = 0; i < rows; i++)
+                {
+                    for (int j = 0; j < columns; j++)
+                    {
+
+                    }
+                }
             }
         }
     }
