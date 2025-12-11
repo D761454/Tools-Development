@@ -273,16 +273,15 @@ public class OBJPlacerEditorWindow : EditorWindow
 
             density = zone.m_currentPalette.m_density;
 
-            List<SubZone> subZones = zone.GetComponentsInChildren<SubZone>().ToList();
+            List<SubZone> subZones = zone.gameObject.GetComponentsInChildren<SubZone>().ToList();
             foreach (SubZone subZone in subZones)
             {
                 minmax = Functions.GetMinMax(subZone.pointPositions); // get the min and max position - 2D, x and z
                 (float, float) distance = Functions.GetDistance(minmax.Item1, minmax.Item2); // get the distances on the x and y for the grid
 
                 // define the grid - at each grid intersection - spawn an object using density as chance, then apply an offset
-                rows = ((int)distance.Item1) / density;
-                columns = ((int)distance.Item2) / density;
-
+                rows = (int)(distance.Item1 / (density / 10));
+                columns = (int)(distance.Item2 / (density / 10));
 
             }
         }

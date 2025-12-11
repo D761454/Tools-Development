@@ -20,7 +20,7 @@ MonoBehaviour:
   paletteName: 
   zoneTypes:
   - name: one
-    zonePalette: {fileID: 0}
+    zonePalette: {fileID: 11400000, guid: 40dbedbcb03e83046a3b5c7a8716b530, type: 2}
     parentObject: {fileID: 0}
   - name: two
     zonePalette: {fileID: 0}
