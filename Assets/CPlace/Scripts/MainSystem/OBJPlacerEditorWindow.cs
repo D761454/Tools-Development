@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Xml.Serialization;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -530,6 +531,16 @@ public class OBJPlacerEditorWindow : EditorWindow
             {
                 Destroy(obj.gameObject);
             }
+        }
+    }
+
+    private void ClearZonePointsInActive()
+    {
+        if (serializedClass.activeSubZone)
+        {
+            serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Clear();
+            // could cause issues - may need to just assign an empty vector array
+            serializedClass.activeSubZone.GetComponent<PolygonCollider2D>().points = serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.To2DVectorArray();
         }
     }
 }
