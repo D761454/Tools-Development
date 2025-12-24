@@ -32,7 +32,7 @@ namespace Helpers
         public static (float, float) GetDistance(Vector2 a, Vector2 b)
         {
             float xr = (a.x > b.x) ? a.x - b.x : b.x - a.x;
-            float yr = (a.y > b.y) ? a.y - b.y : b.y - a.x;
+            float yr = (a.y > b.y) ? a.y - b.y : b.y - a.y;
 
             return (xr, yr);
         }

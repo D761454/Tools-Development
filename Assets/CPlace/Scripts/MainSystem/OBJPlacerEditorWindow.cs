@@ -314,7 +314,7 @@ public class OBJPlacerEditorWindow : EditorWindow
             {
                 minmax = Functions.GetMinMax(subZone.pointPositions); // get the min and max position - 2D, x and z
                 (float, float) distance = Functions.GetDistance(minmax.Item1, minmax.Item2); // get the distances on the x and y for the grid
-                float yRayBase = subZone.pointPositions[0].y + 100f;
+                float yRayBase = subZone.pointPositions[0].y + 500f;
 
                 // define the grid - at each grid intersection - spawn an object using density as chance, then apply an offset
                 rows = (int)(distance.Item1 / (density / 10));
@@ -388,6 +388,8 @@ public class OBJPlacerEditorWindow : EditorWindow
         }
     }
 
+
+    // active zone is based on zone selected for editing - not active sub zone
     private void PaintActiveZone()
     {
         int density = 0, rows = 0, columns = 0;
@@ -419,7 +421,7 @@ public class OBJPlacerEditorWindow : EditorWindow
 
                 minmax = Functions.GetMinMax(aZone.pointPositions); // get the min and max position - 2D, x and z
                 (float, float) distance = Functions.GetDistance(minmax.Item1, minmax.Item2); // get the distances on the x and y for the grid
-                float yRayBase = aZone.pointPositions[0].y + 100f;
+                float yRayBase = aZone.pointPositions[0].y + 500f;
 
                 // define the grid - at each grid intersection - spawn an object using density as chance, then apply an offset
                 rows = (int)(distance.Item1 / (density / 10));
@@ -525,7 +527,7 @@ public class OBJPlacerEditorWindow : EditorWindow
                 {
                     minmax = Functions.GetMinMax(subZone.pointPositions); // get the min and max position - 2D, x and z
                     (float, float) distance = Functions.GetDistance(minmax.Item1, minmax.Item2); // get the distances on the x and y for the grid
-                    float yRayBase = subZone.pointPositions[0].y + 100f;
+                    float yRayBase = subZone.pointPositions[0].y + 500f;
 
                     // define the grid - at each grid intersection - spawn an object using density as chance, then apply an offset
                     rows = (int)(distance.Item1 / (density / 10));
