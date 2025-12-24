@@ -279,7 +279,7 @@ public class OBJPlacerEditorWindow : EditorWindow
         }
     }
 
-    #region button commands
+    #region button methods
     private void PaintAll()
     {
         List<SceneZone> zones = Functions.GetAllWithComponent<SceneZone>();
@@ -388,8 +388,6 @@ public class OBJPlacerEditorWindow : EditorWindow
         }
     }
 
-
-    // active zone is based on zone selected for editing - not active sub zone
     private void PaintActiveZone()
     {
         int density = 0, rows = 0, columns = 0;
@@ -495,15 +493,16 @@ public class OBJPlacerEditorWindow : EditorWindow
         }
     }
 
+    // active zone is based on zone selected for editing - not active sub zone
     private void PaintActiveZoneType()
     {
         int density = 0, rows = 0, columns = 0;
         (Vector2, Vector2) minmax;
         List<PolygonCollider2D> nullZones = new List<PolygonCollider2D>();
 
-        if (serializedClass.activeSubZone)
+        if (serializedClass.activeZoneIndex != -1)
         {
-            SceneZone par = serializedClass.activeSubZone.GetComponentInParent<SceneZone>();
+            SceneZone par = GameObject.Find(serializedClass.zoneTypes[serializedClass.activeZoneIndex].name + "-Parent").GetComponent<SceneZone>();
             List<SubZone> subZones = par.gameObject.GetComponentsInChildren<SubZone>().ToList();
             List<SceneZone> zones = Functions.GetAllWithComponent<SceneZone>();
 
