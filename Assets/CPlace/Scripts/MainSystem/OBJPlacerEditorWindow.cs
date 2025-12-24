@@ -241,6 +241,13 @@ public class OBJPlacerEditorWindow : EditorWindow
         root.Q<Button>("nSzone").clicked += serializedClass.GenerateSubZone;
         root.Q<Button>("pAll").clicked += PaintAll;
 
+        root.Q<Button>("pZone").clicked += PaintActiveZoneType;
+        root.Q<Button>("pActive").clicked += PaintActiveZone;
+        root.Q<Button>("cAll").clicked += ClearAllObjects;
+        root.Q<Button>("cAllOfType").clicked += ClearAllOfActiveZoneType;
+        root.Q<Button>("cActive").clicked += ClearActiveZone;
+        root.Q<Button>("cActivePts").clicked += ClearZonePointsInActiveZone;
+
         Button btn = root.Q<Button>("resetButton");
         btn.clicked += serializedClass.ResetPalette;
         btn.RegisterCallback((MouseOverEvent evt) => btn.style.backgroundColor = Color.red);
@@ -272,9 +279,11 @@ public class OBJPlacerEditorWindow : EditorWindow
         }
     }
 
+    #region button commands
     private void PaintAll()
     {
         List<SceneZone> zones = Functions.GetAllWithComponent<SceneZone>();
+        Debug.Log("zone count: " + zones.Count);
         int density = 0, rows = 0, columns = 0;
         (Vector2, Vector2) minmax;
         List<PolygonCollider2D> nullZones = new List<PolygonCollider2D>();
@@ -379,44 +388,7 @@ public class OBJPlacerEditorWindow : EditorWindow
         }
     }
 
-    private void ClearAll()
-    {
-        List<SceneZone> zones = Functions.GetAllWithComponent<SceneZone>();
-
-        foreach (SceneZone zone in zones)
-        {
-            List<SubZone> subZones = zone.gameObject.GetComponentsInChildren<SubZone>().ToList();
-
-            foreach (SubZone subZone in subZones)
-            {
-                List<Transform> objects = subZone.gameObject.GetComponentsInChildren<Transform>().ToList();
-
-                foreach(Transform obj in objects)
-                {
-                    Destroy(obj.gameObject);
-                }
-            }
-        }
-    }
-
-    private void ClearAllOfActiveZone()
-    {
-        GameObject par = serializedClass.activeSubZone.GetComponentInParent<SceneZone>().gameObject;
-
-        List<SubZone> subZones = par.GetComponentsInChildren<SubZone>().ToList();
-
-        foreach (SubZone subZone in subZones)
-        {
-            List<Transform> objects = subZone.gameObject.GetComponentsInChildren<Transform>().ToList();
-
-            foreach (Transform obj in objects)
-            {
-                Destroy(obj.gameObject);
-            }
-        }
-    }
-
-    private void PaintActive()
+    private void PaintActiveZone()
     {
         int density = 0, rows = 0, columns = 0;
         (Vector2, Vector2) minmax;
@@ -521,28 +493,189 @@ public class OBJPlacerEditorWindow : EditorWindow
         }
     }
 
-    private void ClearActive()
+    private void PaintActiveZoneType()
+    {
+        int density = 0, rows = 0, columns = 0;
+        (Vector2, Vector2) minmax;
+        List<PolygonCollider2D> nullZones = new List<PolygonCollider2D>();
+
+        if (serializedClass.activeSubZone)
+        {
+            SceneZone par = serializedClass.activeSubZone.GetComponentInParent<SceneZone>();
+            List<SubZone> subZones = par.gameObject.GetComponentsInChildren<SubZone>().ToList();
+            List<SceneZone> zones = Functions.GetAllWithComponent<SceneZone>();
+
+            foreach (SceneZone zone in zones)
+            {
+                if (zone.m_currentPalette == null)
+                {
+                    List<SubZone> sZs = zone.gameObject.GetComponentsInChildren<SubZone>().ToList();
+                    foreach (SubZone subZone in sZs)
+                    {
+                        nullZones.Add(subZone.GetComponent<PolygonCollider2D>());
+                    }
+                }
+            }
+
+            if (par.m_currentPalette)
+            {
+                density = par.m_currentPalette.m_density;
+
+                foreach (SubZone subZone in subZones)
+                {
+                    minmax = Functions.GetMinMax(subZone.pointPositions); // get the min and max position - 2D, x and z
+                    (float, float) distance = Functions.GetDistance(minmax.Item1, minmax.Item2); // get the distances on the x and y for the grid
+                    float yRayBase = subZone.pointPositions[0].y + 100f;
+
+                    // define the grid - at each grid intersection - spawn an object using density as chance, then apply an offset
+                    rows = (int)(distance.Item1 / (density / 10));
+                    columns = (int)(distance.Item2 / (density / 10));
+
+                    for (int i = 0; i < rows; i++)
+                    {
+                        for (int j = 0; j < columns; j++)
+                        {
+                            bool breakout = false;
+                            Vector3 origin = new Vector3(minmax.Item1.x + (i * (distance.Item1 / rows)), yRayBase, minmax.Item1.y + (j * (distance.Item2 / columns)));
+                            Vector2 colliderOverlapCheck = new Vector2(raycastHit.point.x, raycastHit.point.z);
+                            Physics.Raycast(origin, Vector3.down, out raycastHit, 1000f, ~par.m_currentPalette.m_ignoreLayers);
+
+                            (Vector3, Vector3) pos;
+
+                            #region Check if Hit is in zone and not in nullzone.
+                            foreach (PolygonCollider2D collider in nullZones)
+                            {
+                                if (collider.OverlapPoint(colliderOverlapCheck))
+                                {
+                                    breakout = true;
+                                }
+                            }
+
+                            if (!subZone.GetComponent<PolygonCollider2D>().OverlapPoint(colliderOverlapCheck))
+                            {
+                                breakout = true;
+                            }
+
+                            if (breakout)
+                            {
+                                continue;
+                            }
+                            #endregion
+
+                            if (Functions.CheckForMissingReferences(par.m_currentPalette))
+                            {
+                                break;
+                            }
+
+                            pos = Functions.GenerateRandomSpawnPosition(raycastHit.point, Vector3.up, 2f, par.m_currentPalette.m_ignoreLayers);
+
+                            if (pos.Item2 == Vector3.down)
+                            {
+                                continue;
+                            }
+
+                            (GameObject, int, int) spawnData = Functions.GetOBJToSpawn(par.m_currentPalette);
+
+                            if (spawnData.Item1 == null)
+                            {
+                                continue;
+                            }
+
+                            GameObject obj = PrefabUtility.InstantiatePrefab(spawnData.Item1) as GameObject;
+                            SceneVisibilityManager.instance.DisablePicking(obj, false);
+
+                            obj.layer = LayerMask.NameToLayer("Ignore Raycast");
+
+                            obj.GetComponent<Transform>().rotation = Quaternion.FromToRotation(obj.GetComponent<Transform>().up, pos.Item2);
+                            obj.GetComponent<Transform>().Rotate(pos.Item2, UnityEngine.Random.Range(0f, 360f), Space.World);
+
+                            pos.Item1 += pos.Item2 * (obj.GetComponent<Renderer>().bounds.size.y / 2);
+
+                            obj.GetComponent<Transform>().position = pos.Item1 + (pos.Item2.normalized * par.m_currentPalette.m_groups[spawnData.Item2].items[spawnData.Item3].yOffset);
+                            obj.GetComponent<Transform>().SetParent(subZone.gameObject.transform);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void ClearAllObjects()
+    {
+        List<SceneZone> zones = Functions.GetAllWithComponent<SceneZone>();
+
+        foreach (SceneZone zone in zones)
+        {
+            List<SubZone> subZones = zone.gameObject.GetComponentsInChildren<SubZone>().ToList();
+
+            foreach (SubZone subZone in subZones)
+            {
+                List<Transform> objects = subZone.gameObject.GetComponentsInChildren<Transform>().ToList();
+
+                for (int i = 0; i < objects.Count; i++)
+                {
+                    if (objects[i].gameObject == subZone.gameObject)
+                    {
+                        continue;
+                    }
+                    DestroyImmediate(objects[i].gameObject);
+                }
+            }
+        }
+    }
+
+    private void ClearAllOfActiveZoneType()
+    {
+        if (serializedClass.activeSubZone)
+        {
+            GameObject par = serializedClass.activeSubZone.GetComponentInParent<SceneZone>().gameObject;
+
+            List<SubZone> subZones = par.GetComponentsInChildren<SubZone>().ToList();
+
+            foreach (SubZone subZone in subZones)
+            {
+                List<Transform> objects = subZone.gameObject.GetComponentsInChildren<Transform>().ToList();
+
+                for (int i = 0; i < objects.Count; i++)
+                {
+                    if (objects[i].gameObject == subZone.gameObject)
+                    {
+                        continue;
+                    }
+                    DestroyImmediate(objects[i].gameObject);
+                }
+            }
+        }
+    }
+
+    private void ClearActiveZone()
     {
         if (serializedClass.activeSubZone)
         {
             List<Transform> objects = serializedClass.activeSubZone.GetComponentsInChildren<Transform>().ToList();
 
-            foreach (Transform obj in objects)
+            for (int i = 0; i < objects.Count; i++)
             {
-                Destroy(obj.gameObject);
+                if (objects[i].gameObject == serializedClass.activeSubZone)
+                {
+                    continue;
+                }
+                DestroyImmediate(objects[i].gameObject);
             }
         }
     }
 
-    private void ClearZonePointsInActive()
+    private void ClearZonePointsInActiveZone()
     {
         if (serializedClass.activeSubZone)
         {
             serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Clear();
             // could cause issues - may need to just assign an empty vector array
             serializedClass.activeSubZone.GetComponent<PolygonCollider2D>().points = serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.To2DVectorArray();
+            serializedClass.activeSubZone.GetComponent<SubZone>().ClearPoints();
         }
     }
+    #endregion
 }
 
 #endif

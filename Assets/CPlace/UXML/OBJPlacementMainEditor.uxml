@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <Style src="project://database/Assets/CPlace/USS/OBJPlacementMainEditor.uss?fileID=7433441132597879392&amp;guid=52fca3da623538b48aed777ef516371a&amp;type=3#OBJPlacementMainEditor" />
-    <ui:TabView tabindex="0">
+    <ui:TabView>
         <ui:Tab label="Palette Editor" closeable="false" tooltip="Edit Palette data and save New Palettes." name="PaletteEditor">
             <ui:VisualElement style="flex-grow: 1; margin-top: 10px;">
                 <ui:VisualElement style="flex-grow: 0; flex-direction: row; justify-content: space-between; margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px; flex-shrink: 0;">
@@ -71,7 +71,7 @@
                                     <ui:Label text="Zone to Edit: " class="title" />
                                     <ui:Label text="Zone Name" name="zoneTitle" binding-path="name" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" class="title" />
                                 </ui:VisualElement>
-                                <ui:Button text="Paint Zone" name="pzone" style="width: 33%;" />
+                                <ui:Button text="Paint Zone" name="pZone" style="width: 33%;" />
                             </ui:VisualElement>
                             <uie:ObjectField label="Zone Palette:" name="zPal" type="SavedPaletteScript, CPlace" binding-path="zonePalette" data-source="project://database/Assets/CPlace/Scripts/SaveLoad/OBJ%20Placer%20Scriptable%20OBJ.asset?fileID=11400000&amp;guid=e513baa6d5c19c742b02525be4a87be3&amp;type=2#OBJ Placer Scriptable OBJ" />
                             <ui:VisualElement style="flex-grow: 1; flex-direction: row; justify-content: space-between;">
@@ -87,6 +87,11 @@
                                 <ui:Button text="New Sub-Zone" name="nSzone" style="width: 33%;" />
                             </ui:VisualElement>
                             <ui:Button text="Paint All" name="pAll" style="width: 50%; align-self: auto;" />
+                            <ui:Button text="Paint Active Sub-Zone" name="pActive" style="width: 50%; align-self: auto;" />
+                            <ui:Button text="Clear All Objects" name="cAll" style="width: 50%; align-self: auto;" />
+                            <ui:Button text="Clear All Objects From Active Zone Parent" name="cAllOfType" style="width: 50%; align-self: auto;" />
+                            <ui:Button text="Clear All Objects From Active Sub-Zone" name="cActive" style="width: 50%; align-self: auto;" />
+                            <ui:Button text="Clear All Zone Bounds From Active Sub-Zone" name="cActivePts" style="width: 50%; align-self: auto;" />
                         </ui:ScrollView>
                     </ui:VisualElement>
                 </ui:ScrollView>

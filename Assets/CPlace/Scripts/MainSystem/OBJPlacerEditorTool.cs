@@ -331,8 +331,6 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
                 if (!reposition)
                 {
-                    Debug.Log("Adding Point");
-
                     if (serializedClass.activeSubZone.GetComponent<SubZone>().points.Count > 1)
                     {
                         serializedClass.activeSubZone.GetComponent<SubZone>().points.RemoveAt(serializedClass.activeSubZone.GetComponent<SubZone>().points.Count - 1);
