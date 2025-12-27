@@ -3,13 +3,10 @@ using Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Xml.Serialization;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-using UnityEngine.XR;
 public static class IntExtensions
 {
     public static string GroupWeight(this int i) => $"groups[{i}].weight";
@@ -239,7 +236,7 @@ public class OBJPlacerEditorWindow : EditorWindow
         root.Q<Button>("saveButton").clicked += serializedClass.SavePalette;
         root.Q<Button>("nPar").clicked += serializedClass.GenerateParent;
         root.Q<Button>("nSzone").clicked += serializedClass.GenerateSubZone;
-        root.Q<Button>("pAll").clicked += PaintAll;
+        root.Q<Button>("pAll").clicked += PaintAllConf;
 
         root.Q<Button>("pZone").clicked += PaintActiveZoneType;
         root.Q<Button>("pActive").clicked += PaintActiveZone;
@@ -280,7 +277,7 @@ public class OBJPlacerEditorWindow : EditorWindow
     }
 
     #region button methods
-    private void PaintAll()
+    public void PaintAll()
     {
         List<SceneZone> zones = Functions.GetAllWithComponent<SceneZone>();
         Debug.Log("zone count: " + zones.Count);
@@ -388,7 +385,7 @@ public class OBJPlacerEditorWindow : EditorWindow
         }
     }
 
-    private void PaintActiveZone()
+    public void PaintActiveZone()
     {
         int density = 0, rows = 0, columns = 0;
         (Vector2, Vector2) minmax;
@@ -494,7 +491,7 @@ public class OBJPlacerEditorWindow : EditorWindow
     }
 
     // active zone is based on zone selected for editing - not active sub zone
-    private void PaintActiveZoneType()
+    public void PaintActiveZoneType()
     {
         int density = 0, rows = 0, columns = 0;
         (Vector2, Vector2) minmax;
@@ -601,7 +598,7 @@ public class OBJPlacerEditorWindow : EditorWindow
         }
     }
 
-    private void ClearAllObjects()
+    public void ClearAllObjects()
     {
         List<SceneZone> zones = Functions.GetAllWithComponent<SceneZone>();
 
@@ -625,7 +622,7 @@ public class OBJPlacerEditorWindow : EditorWindow
         }
     }
 
-    private void ClearAllOfActiveZoneType()
+    public void ClearAllOfActiveZoneType()
     {
         if (serializedClass.activeSubZone)
         {
@@ -649,7 +646,7 @@ public class OBJPlacerEditorWindow : EditorWindow
         }
     }
 
-    private void ClearActiveZone()
+    public void ClearActiveZone()
     {
         if (serializedClass.activeSubZone)
         {
@@ -666,7 +663,7 @@ public class OBJPlacerEditorWindow : EditorWindow
         }
     }
 
-    private void ClearZonePointsInActiveZone()
+    public void ClearZonePointsInActiveZone()
     {
         if (serializedClass.activeSubZone)
         {
@@ -676,6 +673,15 @@ public class OBJPlacerEditorWindow : EditorWindow
             serializedClass.activeSubZone.GetComponent<SubZone>().ClearPoints();
         }
     }
+    #endregion
+
+    #region popup methods
+    private void PaintAllConf()
+    {
+        //var popUp = GetWindow<PopUpWindow>();
+        PopUpWindow.Init("Paint all Zones Confirmation.", "Are you sure you want to paint all zones present within the scene? \nDoing so will not delete any objects already placed within zones.", PaintAll);
+    }
+
     #endregion
 }
 
