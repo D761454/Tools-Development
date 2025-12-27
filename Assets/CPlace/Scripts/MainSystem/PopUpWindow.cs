@@ -12,11 +12,13 @@ public class PopUpWindow : EditorWindow
 
     static string content = string.Empty;
     static Action methodToDo;
+    static bool cancelable = true;
 
-    public static void Init(string title, string text, Action method)
+    public static void Init(string title, string text, Action method, bool cancel = true)
     {
         methodToDo = method;
         content = text;
+        cancelable = cancel;
         PopUpWindow window = GetWindow<PopUpWindow>(title);
         window.minSize = new Vector2(400f, 100f);
         window.maxSize = new Vector2(401f, 101f);
@@ -39,8 +41,24 @@ public class PopUpWindow : EditorWindow
 
         #region Set Button events
         root.Q<Label>("text").text = content;
-        root.Q<Button>("Y").clicked += Confirm;
-        root.Q<Button>("N").clicked += this.Close;
+        Button y = root.Q<Button>("Y");
+        y.clicked += Confirm;
+        y.RegisterCallback((MouseOverEvent evt) => {
+            y.style.backgroundColor = Color.cornflowerBlue;
+            });
+        y.RegisterCallback((MouseLeaveEvent evt) => {
+            y.style.backgroundColor = new Color(0.33f, 0.33f, 0.33f);
+            });
+
+        Button n = root.Q<Button>("N");
+        n.visible = cancelable;
+        n.clicked += this.Close;
+        n.RegisterCallback((MouseOverEvent evt) => {
+            n.style.backgroundColor = Color.cornflowerBlue;
+        });
+        n.RegisterCallback((MouseLeaveEvent evt) => {
+            n.style.backgroundColor = new Color(0.33f, 0.33f, 0.33f);
+        });
         #endregion
 
         rootVisualElement.Add(root);

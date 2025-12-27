@@ -1,7 +1,7 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <Style src="project://database/Assets/CPlace/USS/OBJPlacementMainEditor.uss?fileID=7433441132597879392&amp;guid=52fca3da623538b48aed777ef516371a&amp;type=3#OBJPlacementMainEditor" />
     <ui:VisualElement name="container" style="flex-grow: 1; align-items: stretch; justify-content: space-between; flex-shrink: 0;">
-        <ui:Label text="dgverth rdehrtg herrtjuyuk rtykjtyhygrs&#10; ytjurgerhyfytiu6 rhrtyh drfgbderyuhrtfnhrt" name="text" style="color: rgb(0, 72, 255); white-space: normal; text-overflow: ellipsis;" />
+        <ui:Label text="dgverth rdehrtg herrtjuyuk rtykjtyhygrs&#10; ytjurgerhyfytiu6 rhrtyh drfgbderyuhrtfnhrt" name="text" style="color: rgb(0, 134, 255); white-space: normal; text-overflow: ellipsis;" />
         <ui:VisualElement name="container" style="flex-grow: 0; flex-direction: row; align-items: flex-start; justify-content: flex-end; align-self: auto; align-content: auto;">
             <ui:Button text="Confirm" name="Y" />
             <ui:Button text="Cancel" name="N" />
