@@ -15,10 +15,9 @@ public class PopUpWindow : EditorWindow
 
     public static void Init(string title, string text, Action method)
     {
-        PopUpWindow window = GetWindow<PopUpWindow>();
         methodToDo = method;
         content = text;
-        window.titleContent = new GUIContent(title);
+        PopUpWindow window = GetWindow<PopUpWindow>(title);
         window.minSize = new Vector2(400f, 100f);
         window.maxSize = new Vector2(401f, 101f);
     }
