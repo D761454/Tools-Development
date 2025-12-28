@@ -238,12 +238,12 @@ public class OBJPlacerEditorWindow : EditorWindow
         root.Q<Button>("nSzone").clicked += serializedClass.GenerateSubZone;
         root.Q<Button>("pAll").clicked += PaintAllConf;
 
-        root.Q<Button>("pZone").clicked += PaintActiveZoneType;
-        root.Q<Button>("pActive").clicked += PaintActiveZone;
-        root.Q<Button>("cAll").clicked += ClearAllObjects;
-        root.Q<Button>("cAllOfType").clicked += ClearAllOfActiveZoneType;
-        root.Q<Button>("cActive").clicked += ClearActiveZone;
-        root.Q<Button>("cActivePts").clicked += ClearZonePointsInActiveZone;
+        root.Q<Button>("pZone").clicked += PaintZoneTypeConf;
+        root.Q<Button>("pActive").clicked += PaintActiveZoneConf;
+        root.Q<Button>("cAll").clicked += ClearAllConf;
+        root.Q<Button>("cAllOfType").clicked += ClearActiveTypeConf;
+        root.Q<Button>("cActive").clicked += ClearActiveZoneConf;
+        root.Q<Button>("cActivePts").clicked += ClearActiveZonePtsConf;
 
         Button btn = root.Q<Button>("resetButton");
         btn.clicked += serializedClass.ResetPalette;
@@ -678,8 +678,37 @@ public class OBJPlacerEditorWindow : EditorWindow
     #region popup methods
     private void PaintAllConf()
     {
-        //var popUp = GetWindow<PopUpWindow>();
-        PopUpWindow.Init("Paint all Zones Confirmation.", "Are you sure you want to paint all zones present within the scene? \nDoing so will not delete any objects already placed within zones.", PaintAll);
+        PopUpWindow.Init("Paint All Zones Confirmation.", "Are you sure you want to Paint ALL zones present within the Scene? \nDoing so will NOT delete any objects already placed within zones.", PaintAll);
+    }
+
+    private void PaintZoneTypeConf()
+    {
+        PopUpWindow.Init($"Paint All Sub Zones of {serializedClass.zoneTypes[serializedClass.activeZoneIndex].name}.", $"Are you sure you want to Paint ALL Sub-Zones of Zone {serializedClass.zoneTypes[serializedClass.activeZoneIndex].name} present within the Scene? \nDoing so will NOT delete any objects already placed within related Sub-Zones.", PaintActiveZoneType);
+    }
+
+    private void PaintActiveZoneConf()
+    {
+        PopUpWindow.Init("Paint Active Sub-Zone Confirmation.", $"Are you sure you want to Paint the Active Sub-Zone? \nDoing so will NOT delete any objects already placed within the zone.\nActive Sub-Zone: {serializedClass.activeSubZone.name}", PaintActiveZone);
+    }
+
+    private void ClearAllConf()
+    {
+        PopUpWindow.Init("Clear All Zones Confirmation.", "Are you sure you want to Clear ALL zones present within the Scene?", ClearAllObjects);
+    }
+
+    private void ClearActiveTypeConf()
+    {
+        PopUpWindow.Init($"Clear All Sub Zones of {serializedClass.zoneTypes[serializedClass.activeZoneIndex].name}.", $"Are you sure you want to Clear ALL Sub-Zones of Zone {serializedClass.zoneTypes[serializedClass.activeZoneIndex].name} present within the Scene?", ClearAllOfActiveZoneType);
+    }
+
+    private void ClearActiveZoneConf()
+    {
+        PopUpWindow.Init("Clear Active Sub-Zone Confirmation.", $"Are you sure you want to Clear the Active Sub-Zone?\nActive Sub-Zone: {serializedClass.activeSubZone.name}", ClearActiveZone);
+    }
+
+    private void ClearActiveZonePtsConf()
+    {
+        PopUpWindow.Init("Clear Active Sub-Zone Location Vertices Confirmation.", $"Are you sure you want to Clear ALL Location Vertices for the Active Sub-Zone? \nDoing so will require the replacement of zone bounds for the Sub-Zone to be used during Painting.\nActive Sub-Zone: {serializedClass.activeSubZone.name}", ClearZonePointsInActiveZone);
     }
 
     #endregion
