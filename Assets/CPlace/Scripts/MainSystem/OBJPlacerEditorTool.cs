@@ -18,6 +18,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
     float CheckDiff = 20f;
     float handleScale = 0.01f;
+    int reposPt = 0;
 
     /// <summary>
     /// Get/Create Serializable Obj for data storage
@@ -315,16 +316,24 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                     {
                         if (Vector3.Distance(serializedClass.activeSubZone.GetComponent<SubZone>().points[i].point, raycastHit.point) < 2.0f)
                         {
-                            if (e.keyCode == KeyCode.LeftShift)
+                            if (e.shift)
                             {
                                 Debug.Log("Removing Point");
                                 serializedClass.activeSubZone.GetComponent<SubZone>().points.RemoveAt(i);
                                 serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.RemoveAt(i);
+
+                                if (serializedClass.activeSubZone.GetComponent<SubZone>().points.Count == 1) // handles the wrap around entry
+                                {
+                                    serializedClass.activeSubZone.GetComponent<SubZone>().points.RemoveAt(0);
+                                    serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.RemoveAt(0);
+                                }
+
                                 return;
                             }
 
                             reposition = true;
-                            RepositionPoint(ref raycastHit, i);
+                            reposPt = i;
+                            RepositionPoint(ref raycastHit, reposPt);
                         }
                     }
                 }
@@ -415,14 +424,13 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
     private void RepositionPoint(ref RaycastHit raycastHit, int i)
     {
-        Debug.Log("Repositioning Point");
-
         Handles.color = Color.red;
         Handles.DrawSolidDisc(serializedClass.activeSubZone.GetComponent<SubZone>().points[i].point, serializedClass.activeSubZone.GetComponent<SubZone>().points[i].normal, raycastHit.distance * handleScale);
 
         if (Event.current.button == 1 && (Event.current.type == EventType.MouseDown || Event.current.type == EventType.MouseDrag))
         {
             serializedClass.activeSubZone.GetComponent<SubZone>().points[i] = raycastHit;
+            serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions[i] = raycastHit.point;
         }
     }
 }
