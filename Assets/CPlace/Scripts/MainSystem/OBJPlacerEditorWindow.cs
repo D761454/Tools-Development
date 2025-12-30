@@ -246,7 +246,7 @@ public class OBJPlacerEditorWindow : EditorWindow
         root.Q<Button>("cActivePts").clicked += ClearActiveZonePtsConf;
 
         Button btn = root.Q<Button>("resetButton");
-        btn.clicked += serializedClass.ResetPalette;
+        btn.clicked += ResetPaletteConf;
         btn.RegisterCallback((MouseOverEvent evt) => btn.style.backgroundColor = Color.red);
         btn.RegisterCallback((MouseLeaveEvent evt) => btn.style.backgroundColor = Color.red * 0.9f);
         #endregion
@@ -709,6 +709,11 @@ public class OBJPlacerEditorWindow : EditorWindow
     private void ClearActiveZonePtsConf()
     {
         PopUpWindow.Init("Clear Active Sub-Zone Location Vertices Confirmation.", $"Are you sure you want to Clear ALL Location Vertices for the Active Sub-Zone? \nDoing so will require the replacement of zone bounds for the Sub-Zone to be used during Painting.\nActive Sub-Zone: {serializedClass.activeSubZone.name}", ClearZonePointsInActiveZone);
+    }
+
+    private void ResetPaletteConf()
+    {
+        PopUpWindow.Init("Reset Palette Confirmation.", "Are you sure you want to Reset the current Palette? \nThis will clear all Groups and Items within the Palette.", serializedClass.ResetPalette);
     }
 
     #endregion
