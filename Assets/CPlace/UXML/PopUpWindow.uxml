@@ -4,6 +4,7 @@
         <ui:Label text="dgverth rdehrtg herrtjuyuk rtykjtyhygrs&#10; ytjurgerhyfytiu6 rhrtyh drfgbderyuhrtfnhrt" name="text" style="white-space: normal; text-overflow: ellipsis;" />
         <ui:VisualElement name="container" style="flex-grow: 0; flex-direction: row; align-items: flex-start; justify-content: flex-end; align-self: auto; align-content: auto;">
             <ui:Button text="Confirm" name="Y" />
+            <ui:Button text="Save and Reset" name="Y2" />
             <ui:Button text="Cancel" name="N" />
         </ui:VisualElement>
     </ui:VisualElement>

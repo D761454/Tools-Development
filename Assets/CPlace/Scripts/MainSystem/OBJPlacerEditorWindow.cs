@@ -678,42 +678,42 @@ public class OBJPlacerEditorWindow : EditorWindow
     #region popup methods
     private void PaintAllConf()
     {
-        PopUpWindow.Init("Paint All Zones Confirmation.", "Are you sure you want to Paint ALL zones present within the Scene? \nDoing so will NOT delete any objects already placed within zones.", PaintAll);
+        PopUpWindow.Init("Paint All Zones Confirmation.", "Are you sure you want to Paint ALL zones present within the Scene? \nDoing so will NOT delete any objects already placed within zones.", "Confirm", PaintAll);
     }
 
     private void PaintZoneTypeConf()
     {
-        PopUpWindow.Init($"Paint All Sub Zones of {serializedClass.zoneTypes[serializedClass.activeZoneIndex].name}.", $"Are you sure you want to Paint ALL Sub-Zones of Zone {serializedClass.zoneTypes[serializedClass.activeZoneIndex].name} present within the Scene? \nDoing so will NOT delete any objects already placed within related Sub-Zones.", PaintActiveZoneType);
+        PopUpWindow.Init($"Paint All Sub Zones of {serializedClass.zoneTypes[serializedClass.activeZoneIndex].name}.", $"Are you sure you want to Paint ALL Sub-Zones of Zone {serializedClass.zoneTypes[serializedClass.activeZoneIndex].name} present within the Scene? \nDoing so will NOT delete any objects already placed within related Sub-Zones.", "Confirm", PaintActiveZoneType);
     }
 
     private void PaintActiveZoneConf()
     {
-        PopUpWindow.Init("Paint Active Sub-Zone Confirmation.", $"Are you sure you want to Paint the Active Sub-Zone? \nDoing so will NOT delete any objects already placed within the zone.\nActive Sub-Zone: {serializedClass.activeSubZone.name}", PaintActiveZone);
+        PopUpWindow.Init("Paint Active Sub-Zone Confirmation.", $"Are you sure you want to Paint the Active Sub-Zone? \nDoing so will NOT delete any objects already placed within the zone.\nActive Sub-Zone: {serializedClass.activeSubZone.name}", "Confirm", PaintActiveZone);
     }
 
     private void ClearAllConf()
     {
-        PopUpWindow.Init("Clear All Zones Confirmation.", "Are you sure you want to Clear ALL zones present within the Scene?", ClearAllObjects);
+        PopUpWindow.Init("Clear All Zones Confirmation.", "Are you sure you want to Clear ALL zones present within the Scene?", "Confirm", ClearAllObjects);
     }
 
     private void ClearActiveTypeConf()
     {
-        PopUpWindow.Init($"Clear All Sub Zones of {serializedClass.zoneTypes[serializedClass.activeZoneIndex].name}.", $"Are you sure you want to Clear ALL Sub-Zones of Zone {serializedClass.zoneTypes[serializedClass.activeZoneIndex].name} present within the Scene?", ClearAllOfActiveZoneType);
+        PopUpWindow.Init($"Clear All Sub Zones of {serializedClass.zoneTypes[serializedClass.activeZoneIndex].name}.", $"Are you sure you want to Clear ALL Sub-Zones of Zone {serializedClass.zoneTypes[serializedClass.activeZoneIndex].name} present within the Scene?", "Confirm", ClearAllOfActiveZoneType);
     }
 
     private void ClearActiveZoneConf()
     {
-        PopUpWindow.Init("Clear Active Sub-Zone Confirmation.", $"Are you sure you want to Clear the Active Sub-Zone?\nActive Sub-Zone: {serializedClass.activeSubZone.name}", ClearActiveZone);
+        PopUpWindow.Init("Clear Active Sub-Zone Confirmation.", $"Are you sure you want to Clear the Active Sub-Zone?\nActive Sub-Zone: {serializedClass.activeSubZone.name}", "Confirm", ClearActiveZone);
     }
 
     private void ClearActiveZonePtsConf()
     {
-        PopUpWindow.Init("Clear Active Sub-Zone Location Vertices Confirmation.", $"Are you sure you want to Clear ALL Location Vertices for the Active Sub-Zone? \nDoing so will require the replacement of zone bounds for the Sub-Zone to be used during Painting.\nActive Sub-Zone: {serializedClass.activeSubZone.name}", ClearZonePointsInActiveZone);
+        PopUpWindow.Init("Clear Active Sub-Zone Location Vertices Confirmation.", $"Are you sure you want to Clear ALL Location Vertices for the Active Sub-Zone? \nDoing so will require the replacement of zone bounds for the Sub-Zone to be used during Painting.\nActive Sub-Zone: {serializedClass.activeSubZone.name}", "Confirm", ClearZonePointsInActiveZone);
     }
 
     private void ResetPaletteConf()
     {
-        PopUpWindow.Init("Reset Palette Confirmation.", "Are you sure you want to Reset the current Palette? \nThis will clear all Groups and Items within the Palette.", serializedClass.ResetPalette);
+        PopUpWindow.Init("Reset Palette Confirmation.", "Are you sure you want to Reset the current Palette? \nThis will clear all Groups and Items within the Palette.", "Confirm", serializedClass.ResetPalette, true, "Save and Reset", serializedClass.SavePalette, true);
     }
 
     #endregion
