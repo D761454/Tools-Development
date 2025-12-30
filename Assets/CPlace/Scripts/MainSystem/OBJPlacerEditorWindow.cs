@@ -622,11 +622,12 @@ public class OBJPlacerEditorWindow : EditorWindow
         }
     }
 
+    // active zone is based on zone selected for editing - not active sub zone
     public void ClearAllOfActiveZoneType()
     {
-        if (serializedClass.activeSubZone)
+        if (serializedClass.activeZoneIndex != -1)
         {
-            GameObject par = serializedClass.activeSubZone.GetComponentInParent<SceneZone>().gameObject;
+            SceneZone par = GameObject.Find(serializedClass.zoneTypes[serializedClass.activeZoneIndex].name + "-Parent").GetComponent<SceneZone>();
 
             List<SubZone> subZones = par.GetComponentsInChildren<SubZone>().ToList();
 
