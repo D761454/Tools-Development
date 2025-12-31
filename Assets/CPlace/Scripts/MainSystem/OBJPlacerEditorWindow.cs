@@ -32,6 +32,7 @@ public class OBJPlacerEditorWindow : EditorWindow
 
     ListView zonesList;
     RaycastHit raycastHit;
+    static List<SceneZone> outdatedZones = new List<SceneZone>();
 
     /// <summary>
     /// Access via menu and create window
@@ -56,6 +57,37 @@ public class OBJPlacerEditorWindow : EditorWindow
             serializedClass = CreateInstance<OBJPlacerScriptableOBJ>();
             AssetDatabase.CreateAsset(serializedClass, "Assets/CPlace/Scripts/SaveLoad/OBJ Placer Scriptable OBJ.asset");
             AssetDatabase.Refresh();
+        }
+
+        UnityEditor.SceneManagement.EditorSceneManager.sceneOpened += CheckPalettesForOutdatedData;
+    }
+
+    static void CheckPalettesForOutdatedData(UnityEngine.SceneManagement.Scene scene, UnityEditor.SceneManagement.OpenSceneMode mode)
+    {
+        outdatedZones.Clear();
+
+        List<SceneZone> zones = Functions.GetAllWithComponent<SceneZone>();
+        for (int i = 0; i < zones.Count; i++)
+        {
+            for (int j = 0; j < serializedClass.zoneTypes.Count; j++)
+            {
+                if (zones[i].m_zoneName == serializedClass.zoneTypes[j].name)
+                {
+                    zones[i].UpdateToCurrent();
+                    zones[i].m_currentPalette = serializedClass.zoneTypes[j].zonePalette;
+                    zones[i].m_currentID = serializedClass.zoneTypes[j].zonePalette.m_id;
+
+                    if (zones[i].m_previousID != zones[i].m_currentID || zones[i].m_previousPalette != zones[i].m_currentPalette)
+                    {
+                        outdatedZones.Add(zones[i]);
+                    }
+                }
+            }
+        }
+
+        if (outdatedZones.Count > 0)
+        {
+            OutdatedZonesConf();
         }
     }
 
@@ -535,8 +567,8 @@ public class OBJPlacerEditorWindow : EditorWindow
                         {
                             bool breakout = false;
                             Vector3 origin = new Vector3(minmax.Item1.x + (i * (distance.Item1 / rows)), yRayBase, minmax.Item1.y + (j * (distance.Item2 / columns)));
-                            Vector2 colliderOverlapCheck = new Vector2(raycastHit.point.x, raycastHit.point.z);
                             Physics.Raycast(origin, Vector3.down, out raycastHit, 1000f, ~par.m_currentPalette.m_ignoreLayers);
+                            Vector2 colliderOverlapCheck = new Vector2(raycastHit.point.x, raycastHit.point.z); // swapped with above line
 
                             (Vector3, Vector3) pos;
 
@@ -664,6 +696,143 @@ public class OBJPlacerEditorWindow : EditorWindow
         }
     }
 
+    public static void RegenerateZones()
+    {
+        #region Clear Outdated Zones
+        for (int i = 0; i < outdatedZones.Count; i++)
+        {
+            List<SubZone> subZones = outdatedZones[i].GetComponentsInChildren<SubZone>().ToList();
+
+            foreach (SubZone subZone in subZones)
+            {
+                List<Transform> objects = subZone.gameObject.GetComponentsInChildren<Transform>().ToList();
+
+                for (int j = 0; j < objects.Count; j++)
+                {
+                    if (objects[j].gameObject == subZone.gameObject)
+                    {
+                        continue;
+                    }
+                    DestroyImmediate(objects[j].gameObject);
+                }
+            }
+        }
+        #endregion
+
+        RaycastHit raycastHitS;
+
+        #region Repaint Outdated Zones
+        for (int i = 0; i < outdatedZones.Count; i++)
+        {
+            int density = 0, rows = 0, columns = 0;
+            (Vector2, Vector2) minmax;
+            List<PolygonCollider2D> nullZones = new List<PolygonCollider2D>();
+
+            SceneZone par = GameObject.Find(outdatedZones[i].m_zoneName + "-Parent").GetComponent<SceneZone>();
+            List<SubZone> subZones = par.gameObject.GetComponentsInChildren<SubZone>().ToList();
+            List<SceneZone> zones = Functions.GetAllWithComponent<SceneZone>();
+
+            foreach (SceneZone zone in zones)
+            {
+                if (zone.m_currentPalette == null)
+                {
+                    List<SubZone> sZs = zone.gameObject.GetComponentsInChildren<SubZone>().ToList();
+                    foreach (SubZone subZone in sZs)
+                    {
+                        nullZones.Add(subZone.GetComponent<PolygonCollider2D>());
+                    }
+                }
+            }
+
+            if (par.m_currentPalette)
+            {
+                density = par.m_currentPalette.m_density;
+
+                foreach (SubZone subZone in subZones)
+                {
+                    minmax = Functions.GetMinMax(subZone.pointPositions); // get the min and max position - 2D, x and z
+                    (float, float) distance = Functions.GetDistance(minmax.Item1, minmax.Item2); // get the distances on the x and y for the grid
+                    float yRayBase = subZone.pointPositions[0].y + 500f;
+
+                    // define the grid - at each grid intersection - spawn an object using density as chance, then apply an offset
+                    rows = (int)(distance.Item1 / (density / 10));
+                    columns = (int)(distance.Item2 / (density / 10));
+
+                    for (int i = 0; i < rows; i++)
+                    {
+                        for (int j = 0; j < columns; j++)
+                        {
+                            bool breakout = false;
+                            Vector3 origin = new Vector3(minmax.Item1.x + (i * (distance.Item1 / rows)), yRayBase, minmax.Item1.y + (j * (distance.Item2 / columns)));
+                            Physics.Raycast(origin, Vector3.down, out raycastHitS, 1000f, ~par.m_currentPalette.m_ignoreLayers);
+                            Vector2 colliderOverlapCheck = new Vector2(raycastHitS.point.x, raycastHitS.point.z);
+
+                            (Vector3, Vector3) pos;
+
+                            #region Check if Hit is in zone and not in nullzone.
+                            foreach (PolygonCollider2D collider in nullZones)
+                            {
+                                if (collider.OverlapPoint(colliderOverlapCheck))
+                                {
+                                    breakout = true;
+                                }
+                            }
+
+                            if (!subZone.GetComponent<PolygonCollider2D>().OverlapPoint(colliderOverlapCheck))
+                            {
+                                breakout = true;
+                            }
+
+                            if (breakout)
+                            {
+                                continue;
+                            }
+                            #endregion
+
+                            if (Functions.CheckForMissingReferences(par.m_currentPalette))
+                            {
+                                break;
+                            }
+
+                            pos = Functions.GenerateRandomSpawnPosition(raycastHitS.point, Vector3.up, 2f, par.m_currentPalette.m_ignoreLayers);
+
+                            if (pos.Item2 == Vector3.down)
+                            {
+                                continue;
+                            }
+
+                            (GameObject, int, int) spawnData = Functions.GetOBJToSpawn(par.m_currentPalette);
+
+                            if (spawnData.Item1 == null)
+                            {
+                                continue;
+                            }
+
+                            GameObject obj = PrefabUtility.InstantiatePrefab(spawnData.Item1) as GameObject;
+                            SceneVisibilityManager.instance.DisablePicking(obj, false);
+
+                            obj.layer = LayerMask.NameToLayer("Ignore Raycast");
+
+                            obj.GetComponent<Transform>().rotation = Quaternion.FromToRotation(obj.GetComponent<Transform>().up, pos.Item2);
+                            obj.GetComponent<Transform>().Rotate(pos.Item2, UnityEngine.Random.Range(0f, 360f), Space.World);
+
+                            pos.Item1 += pos.Item2 * (obj.GetComponent<Renderer>().bounds.size.y / 2);
+
+                            obj.GetComponent<Transform>().position = pos.Item1 + (pos.Item2.normalized * par.m_currentPalette.m_groups[spawnData.Item2].items[spawnData.Item3].yOffset);
+                            obj.GetComponent<Transform>().SetParent(subZone.gameObject.transform);
+                        }
+                    }
+                }
+            }
+        }
+        #endregion
+
+        for (int i = 0; i < outdatedZones.Count; i++)
+        {
+            outdatedZones[i].UpdateToCurrent();
+        }
+    }
+
     public void ClearZonePointsInActiveZone()
     {
         if (serializedClass.activeSubZone)
@@ -715,6 +884,11 @@ public class OBJPlacerEditorWindow : EditorWindow
     private void ResetPaletteConf()
     {
         PopUpWindow.Init("Reset Palette Confirmation.", "Are you sure you want to Reset the current Palette? \nThis will clear all Groups and Items within the Palette.", "Confirm", serializedClass.ResetPalette, true, "Save and Reset", serializedClass.SavePalette, true);
+    }
+
+    private static void OutdatedZonesConf()
+    {
+        PopUpWindow.Init("Zones Using Outdated Palette Data.", $"Some Zones present within the level have NOT been re-painted following changes to their associated Palettes.\nWould you like to automatically regenerate these Zones?", "Regenerate Zones", RegenerateZones);
     }
 
     #endregion
