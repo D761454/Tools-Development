@@ -25,5 +25,6 @@ MonoBehaviour:
   - name: two
     zonePalette: {fileID: 11400000, guid: b16d4e34a9c9452449dc27af6fcb7444, type: 2}
     parentObject: {fileID: 0}
+  showTutorial: 1
   activeZoneIndex: -1
   activeSubZone: {fileID: 0}

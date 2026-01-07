@@ -17,8 +17,9 @@ public class PopUpWindow : EditorWindow
     static Action methodToDo2 = null;
     static bool cancelable = true;
     static bool doBothTasks = false;
+    static bool delete = true;
 
-    public static void Init(string title, string text, string firstButtonText, Action method, bool cancel = true, string secondButtonText = "NULL", Action method2 = null, bool doBothMethods = false)
+    public static void Init(bool deleteWindow, string title, string text, string firstButtonText, Action method, bool cancel = true, string secondButtonText = "NULL", Action method2 = null, bool doBothMethods = false)
     {
         methodToDo = method;
         methodToDo2 = method2;
@@ -27,10 +28,11 @@ public class PopUpWindow : EditorWindow
         cancelable = cancel;
         firstButton = firstButtonText;
         secondButton = secondButtonText;
+        delete = deleteWindow;
 
         PopUpWindow window = GetWindow<PopUpWindow>(title);
         window.minSize = new Vector2(400f, 100f);
-        window.maxSize = new Vector2(401f, 101f);
+        window.maxSize = new Vector2(601f, 301f);
     }
 
     /// <summary>
@@ -48,17 +50,33 @@ public class PopUpWindow : EditorWindow
         root.styleSheets.Add(sheet);
         #endregion
 
+        UpdateUI();
+
+        rootVisualElement.Add(root);
+    }
+
+    public void UpdateUI()
+    {
         #region Set Button events
         root.Q<Label>("text").text = content;
         Button y = root.Q<Button>("Y");
-        y.clicked += Confirm;
+
+        if (delete)
+        {
+            y.clicked += Confirm;
+        }
+        else
+        {
+            y.clicked += NoDelConfirm;
+        }
+
         y.text = firstButton;
         y.RegisterCallback((MouseOverEvent evt) => {
             y.style.backgroundColor = Color.cornflowerBlue;
-            });
+        });
         y.RegisterCallback((MouseLeaveEvent evt) => {
             y.style.backgroundColor = new Color(0.33f, 0.33f, 0.33f);
-            });
+        });
 
         Button y2 = root.Q<Button>("Y2");
         if (secondButton != "NULL")
@@ -101,8 +119,6 @@ public class PopUpWindow : EditorWindow
 
 
         #endregion
-
-        rootVisualElement.Add(root);
     }
 
     void Confirm()
@@ -111,14 +127,29 @@ public class PopUpWindow : EditorWindow
         this.Close();
     }
 
+    void NoDelConfirm()
+    {
+        methodToDo();
+    }
+
+    public void EditData(string title, string text, string firstButtonText, Action method)
+    {
+        methodToDo = method;
+        content = text;
+        firstButton = firstButtonText;
+        this.titleContent = new GUIContent(title);
+        UpdateUI();
+    }
+
     void Confirm2()
     {
+        methodToDo2();
+
         if (doBothTasks)
         {
-            methodToDo2();
+            methodToDo();
         }
 
-        methodToDo();
         this.Close();
     }
 }

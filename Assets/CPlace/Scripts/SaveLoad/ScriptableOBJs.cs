@@ -23,6 +23,7 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
     public string paletteName = string.Empty;
 
     [SerializeField] public List<Zone> zoneTypes = new List<Zone>();
+    [SerializeField] public bool showTutorial = true;
     public int activeZoneIndex = -1;
 
     public GameObject activeSubZone;

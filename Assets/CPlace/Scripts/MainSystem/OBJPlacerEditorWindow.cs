@@ -25,6 +25,8 @@ public class OBJPlacerEditorWindow : EditorWindow
     private static OBJPlacerScriptableOBJ serializedClass;
     private SerializedObject serializedObject;
 
+    static PopUpWindow pUp;
+
     [SerializeField] VisualTreeAsset visualTree;
     [SerializeField] VisualTreeAsset groupTree;
     [SerializeField] VisualTreeAsset groupItemTree;
@@ -42,6 +44,11 @@ public class OBJPlacerEditorWindow : EditorWindow
     {
         OBJPlacerEditorWindow window = GetWindow<OBJPlacerEditorWindow>();
         window.titleContent = new GUIContent("Placement Tool");
+
+        if (serializedClass && serializedClass.showTutorial)
+        {
+            Tut1();
+        }
     }
 
     /// <summary>
@@ -758,12 +765,12 @@ public class OBJPlacerEditorWindow : EditorWindow
                     rows = (int)(distance.Item1 / (density / 10));
                     columns = (int)(distance.Item2 / (density / 10));
 
-                    for (int i = 0; i < rows; i++)
+                    for (int i2 = 0; i2 < rows; i2++)
                     {
                         for (int j = 0; j < columns; j++)
                         {
                             bool breakout = false;
-                            Vector3 origin = new Vector3(minmax.Item1.x + (i * (distance.Item1 / rows)), yRayBase, minmax.Item1.y + (j * (distance.Item2 / columns)));
+                            Vector3 origin = new Vector3(minmax.Item1.x + (i2 * (distance.Item1 / rows)), yRayBase, minmax.Item1.y + (j * (distance.Item2 / columns)));
                             Physics.Raycast(origin, Vector3.down, out raycastHitS, 1000f, ~par.m_currentPalette.m_ignoreLayers);
                             Vector2 colliderOverlapCheck = new Vector2(raycastHitS.point.x, raycastHitS.point.z);
 
@@ -848,48 +855,83 @@ public class OBJPlacerEditorWindow : EditorWindow
     #region popup methods
     private void PaintAllConf()
     {
-        PopUpWindow.Init("Paint All Zones Confirmation.", "Are you sure you want to Paint ALL zones present within the Scene? \nDoing so will NOT delete any objects already placed within zones.", "Confirm", PaintAll);
+        PopUpWindow.Init(true, "Paint All Zones Confirmation.", "Are you sure you want to Paint ALL zones present within the Scene? \nDoing so will NOT delete any objects already placed within zones.", "Confirm", PaintAll);
     }
 
     private void PaintZoneTypeConf()
     {
-        PopUpWindow.Init($"Paint All Sub Zones of {serializedClass.zoneTypes[serializedClass.activeZoneIndex].name}.", $"Are you sure you want to Paint ALL Sub-Zones of Zone {serializedClass.zoneTypes[serializedClass.activeZoneIndex].name} present within the Scene? \nDoing so will NOT delete any objects already placed within related Sub-Zones.", "Confirm", PaintActiveZoneType);
+        PopUpWindow.Init(true, $"Paint All Sub Zones of {serializedClass.zoneTypes[serializedClass.activeZoneIndex].name}.", $"Are you sure you want to Paint ALL Sub-Zones of Zone {serializedClass.zoneTypes[serializedClass.activeZoneIndex].name} present within the Scene? \nDoing so will NOT delete any objects already placed within related Sub-Zones.", "Confirm", PaintActiveZoneType);
     }
 
     private void PaintActiveZoneConf()
     {
-        PopUpWindow.Init("Paint Active Sub-Zone Confirmation.", $"Are you sure you want to Paint the Active Sub-Zone? \nDoing so will NOT delete any objects already placed within the zone.\nActive Sub-Zone: {serializedClass.activeSubZone.name}", "Confirm", PaintActiveZone);
+        PopUpWindow.Init(true, "Paint Active Sub-Zone Confirmation.", $"Are you sure you want to Paint the Active Sub-Zone? \nDoing so will NOT delete any objects already placed within the zone.\nActive Sub-Zone: {serializedClass.activeSubZone.name}", "Confirm", PaintActiveZone);
     }
 
     private void ClearAllConf()
     {
-        PopUpWindow.Init("Clear All Zones Confirmation.", "Are you sure you want to Clear ALL zones present within the Scene?", "Confirm", ClearAllObjects);
+        PopUpWindow.Init(true, "Clear All Zones Confirmation.", "Are you sure you want to Clear ALL zones present within the Scene?", "Confirm", ClearAllObjects);
     }
 
     private void ClearActiveTypeConf()
     {
-        PopUpWindow.Init($"Clear All Sub Zones of {serializedClass.zoneTypes[serializedClass.activeZoneIndex].name}.", $"Are you sure you want to Clear ALL Sub-Zones of Zone {serializedClass.zoneTypes[serializedClass.activeZoneIndex].name} present within the Scene?", "Confirm", ClearAllOfActiveZoneType);
+        PopUpWindow.Init(true, $"Clear All Sub Zones of {serializedClass.zoneTypes[serializedClass.activeZoneIndex].name}.", $"Are you sure you want to Clear ALL Sub-Zones of Zone {serializedClass.zoneTypes[serializedClass.activeZoneIndex].name} present within the Scene?", "Confirm", ClearAllOfActiveZoneType);
     }
 
     private void ClearActiveZoneConf()
     {
-        PopUpWindow.Init("Clear Active Sub-Zone Confirmation.", $"Are you sure you want to Clear the Active Sub-Zone?\nActive Sub-Zone: {serializedClass.activeSubZone.name}", "Confirm", ClearActiveZone);
+        PopUpWindow.Init(true, "Clear Active Sub-Zone Confirmation.", $"Are you sure you want to Clear the Active Sub-Zone?\nActive Sub-Zone: {serializedClass.activeSubZone.name}", "Confirm", ClearActiveZone);
     }
 
     private void ClearActiveZonePtsConf()
     {
-        PopUpWindow.Init("Clear Active Sub-Zone Location Vertices Confirmation.", $"Are you sure you want to Clear ALL Location Vertices for the Active Sub-Zone? \nDoing so will require the replacement of zone bounds for the Sub-Zone to be used during Painting.\nActive Sub-Zone: {serializedClass.activeSubZone.name}", "Confirm", ClearZonePointsInActiveZone);
+        PopUpWindow.Init(true, "Clear Active Sub-Zone Location Vertices Confirmation.", $"Are you sure you want to Clear ALL Location Vertices for the Active Sub-Zone? \nDoing so will require the replacement of zone bounds for the Sub-Zone to be used during Painting.\nActive Sub-Zone: {serializedClass.activeSubZone.name}", "Confirm", ClearZonePointsInActiveZone);
     }
 
     private void ResetPaletteConf()
     {
-        PopUpWindow.Init("Reset Palette Confirmation.", "Are you sure you want to Reset the current Palette? \nThis will clear all Groups and Items within the Palette.", "Confirm", serializedClass.ResetPalette, true, "Save and Reset", serializedClass.SavePalette, true);
+        PopUpWindow.Init(true, "Reset Palette Confirmation.", "Are you sure you want to Reset the current Palette? \nThis will clear all Groups and Items within the Palette.", "Confirm", serializedClass.ResetPalette, true, "Save and Reset", serializedClass.SavePalette, true);
     }
 
     private static void OutdatedZonesConf()
     {
-        PopUpWindow.Init("Zones Using Outdated Palette Data.", $"Some Zones present within the level have NOT been re-painted following changes to their associated Palettes.\nWould you like to automatically regenerate these Zones?", "Regenerate Zones", RegenerateZones);
+        PopUpWindow.Init(true, "Zones Using Outdated Palette Data.", $"Some Zones present within the level have NOT been re-painted following changes to their associated Palettes.\nWould you like to automatically regenerate these Zones?", "Regenerate Zones", RegenerateZones);
     }
+
+    #region Tutorial Popups
+    private static void Tut1()
+    {
+        PopUpWindow.Init(false, "Welcome to CPlace!", "This tutorial will guide you through the basic functionality of CPlace.\n\nThis initial menu is used for setting up object palettes for later use to paint the world! Firstly, try naming your palette to something unique.", "Done!", Tut2, false);
+        pUp = GetWindow<PopUpWindow>();
+    }
+
+    private static void Tut2()
+    {
+        pUp.EditData("Palette Walkthrough!", "Now that our palette has a unique identifier, lets try editing the slider.\n\nThe slider edits the Density, this is how many objects are placed within the associated zones for the palette.", "Done!", Tut3);
+    }
+
+    private static void Tut3()
+    {
+        pUp.EditData("Palette Walkthrough!", "Now, lets modify the layers objects from our palette can be placed on.\n\nThe multi-selection list outlines what layers will NOT be drawn on.", "Done!", Tut4);
+    }
+
+    private static void Tut4()
+    {
+        pUp.EditData("Palette Walkthrough!", "This is the most important part of any palette, the objects associated with it.\n\n" +
+            "Here you can create a Groups for associated objects (e.g. trees), with a group name and an associated % chance to be placed when an object is placed from this palette.\n\n" +
+            "Within these groups, we can assign objects with an associated % chance to be placed when the parent group is selected.\nThere is also a Y offset for objects with a non-centered pivot.", "Done!", Tut5);
+    }
+
+    private static void Tut5()
+    {
+        pUp.EditData("Palette Walkthrough!", "Now that we have a full palette, lets save it to use later.\n\nClick the save palette Button to save it to the Palettes Folder.", "Done!", Tut6);
+    }
+
+    private static void Tut6()
+    {
+        pUp.EditData("Zones Walkthrough!", "Now we have a saved palette that we can either reload into the palette editor or use for zones.\n\nLet's switch to the Zone tab to see the other half of the tool.", "Done!", Tut6);
+    }
+    #endregion
 
     #endregion
 }
