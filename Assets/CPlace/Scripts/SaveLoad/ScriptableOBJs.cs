@@ -111,7 +111,7 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
             {
                 GameObject parentObj = new GameObject($"{zone.name}-Parent");
                 parentObj.AddComponent<SceneZone>();
-                parentObj.GetComponent<SceneZone>().SaveData(zone.zonePalette.m_paletteName, zone.zonePalette, zone.zonePalette.m_id);
+                parentObj.GetComponent<SceneZone>().SaveData(zone.name, zone.zonePalette, zone.zonePalette.m_id);
                 zone.parentObject = parentObj;
                 zoneTypes[activeZoneIndex] = zone;
                 Undo.RegisterCreatedObjectUndo(parentObj, "New Undo");
@@ -128,7 +128,7 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
             {
                 GameObject parentObj = new GameObject($"{zone.name}-Parent");
                 parentObj.AddComponent<SceneZone>();
-                parentObj.GetComponent<SceneZone>().SaveData(zone.zonePalette.m_paletteName, zone.zonePalette, zone.zonePalette.m_id);
+                parentObj.GetComponent<SceneZone>().SaveData(zone.name, zone.zonePalette, zone.zonePalette.m_id);
                 zone.parentObject = parentObj;
                 zoneTypes[activeZoneIndex] = zone;
                 Undo.RegisterCreatedObjectUndo(parentObj, "New Undo");

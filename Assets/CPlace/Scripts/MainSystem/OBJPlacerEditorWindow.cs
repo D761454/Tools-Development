@@ -66,14 +66,18 @@ public class OBJPlacerEditorWindow : EditorWindow
             AssetDatabase.Refresh();
         }
 
-        //UnityEditor.SceneManagement.EditorSceneManager.sceneOpened += CheckPalettesForOutdatedData;
+        UnityEditor.SceneManagement.EditorSceneManager.sceneOpened += CheckPalettesForOutdatedData;
     }
 
     static void CheckPalettesForOutdatedData(UnityEngine.SceneManagement.Scene scene, UnityEditor.SceneManagement.OpenSceneMode mode)
     {
+        Debug.Log("Checking for Outdated Zones...");
         outdatedZones.Clear();
 
         List<SceneZone> zones = Functions.GetAllWithComponent<SceneZone>();
+
+        Debug.Log("zone count: " + zones.Count);
+
         for (int i = 0; i < zones.Count; i++)
         {
             for (int j = 0; j < serializedClass.zoneTypes.Count; j++)
@@ -853,6 +857,7 @@ public class OBJPlacerEditorWindow : EditorWindow
 
                             obj.GetComponent<Transform>().position = pos.Item1 + (pos.Item2.normalized * outdatedZones[i].m_tempPalette.m_groups[spawnData.Item2].items[spawnData.Item3].yOffset);
                             obj.GetComponent<Transform>().SetParent(subZone.gameObject.transform);
+                            Undo.RegisterCreatedObjectUndo(obj, "New Undo");
                         }
                     }
                 }
