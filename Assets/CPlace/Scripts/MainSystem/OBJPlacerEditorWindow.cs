@@ -71,12 +71,9 @@ public class OBJPlacerEditorWindow : EditorWindow
 
     static void CheckPalettesForOutdatedData(UnityEngine.SceneManagement.Scene scene, UnityEditor.SceneManagement.OpenSceneMode mode)
     {
-        Debug.Log("Checking for Outdated Zones...");
         outdatedZones.Clear();
 
         List<SceneZone> zones = Functions.GetAllWithComponent<SceneZone>();
-
-        Debug.Log("zone count: " + zones.Count);
 
         for (int i = 0; i < zones.Count; i++)
         {
@@ -86,7 +83,6 @@ public class OBJPlacerEditorWindow : EditorWindow
                 {
                     if (zones[i].m_palette != serializedClass.zoneTypes[j].zonePalette || zones[i].m_ID != serializedClass.zoneTypes[j].zonePalette.m_id)
                     {
-                        Debug.Log($"Outdated Zone Detected: {zones[i].m_zoneName}");
                         zones[i].m_tempPalette = serializedClass.zoneTypes[j].zonePalette;
                         zones[i].m_tempID = serializedClass.zoneTypes[j].zonePalette.m_id;
                         outdatedZones.Add(zones[i]);
@@ -351,13 +347,18 @@ public class OBJPlacerEditorWindow : EditorWindow
             List<SubZone> subZones = zone.gameObject.GetComponentsInChildren<SubZone>().ToList();
             foreach (SubZone subZone in subZones)
             {
+                if (subZone.pointPositions.Count < 3)
+                {
+                    continue;
+                }
+
                 minmax = Functions.GetMinMax(subZone.pointPositions); // get the min and max position - 2D, x and z
                 (float, float) distance = Functions.GetDistance(minmax.Item1, minmax.Item2); // get the distances on the x and y for the grid
                 float yRayBase = subZone.pointPositions[0].y + 500f;
 
                 // define the grid - at each grid intersection - spawn an object using density as chance, then apply an offset
-                rows = (int)(distance.Item1 / (density / 10));
-                columns = (int)(distance.Item2 / (density / 10));
+                rows = (int)(distance.Item1 / ((100 - density) / 100));
+                columns = (int)(distance.Item2 / ((100 - density) / 100));
 
                 Undo.RecordObject(null, "Base Undo");
                 int undoID = Undo.GetCurrentGroup();
@@ -466,8 +467,8 @@ public class OBJPlacerEditorWindow : EditorWindow
                 float yRayBase = aZone.pointPositions[0].y + 500f;
 
                 // define the grid - at each grid intersection - spawn an object using density as chance, then apply an offset
-                rows = (int)(distance.Item1 / (density / 10));
-                columns = (int)(distance.Item2 / (density / 10));
+                rows = (int)(distance.Item1 / ((100 - density) / 100));
+                columns = (int)(distance.Item2 / ((100 - density) / 100));
 
                 Undo.RecordObject(null, "Base Undo");
                 int undoID = Undo.GetCurrentGroup();
@@ -578,8 +579,8 @@ public class OBJPlacerEditorWindow : EditorWindow
                     float yRayBase = subZone.pointPositions[0].y + 500f;
 
                     // define the grid - at each grid intersection - spawn an object using density as chance, then apply an offset
-                    rows = (int)(distance.Item1 / (density / 10));
-                    columns = (int)(distance.Item2 / (density / 10));
+                    rows = (int)(distance.Item1 / ((100 - density) / 100));
+                    columns = (int)(distance.Item2 / ((100 - density) / 100));
 
                     Undo.RecordObject(null, "Base Undo");
                     int undoID = Undo.GetCurrentGroup();
@@ -740,8 +741,6 @@ public class OBJPlacerEditorWindow : EditorWindow
         {
             List<SubZone> subZones = outdatedZones[i].GetComponentsInChildren<SubZone>().ToList();
 
-            Debug.Log(subZones.Count);
-
             foreach (SubZone subZone in subZones)
             {
                 List<Transform> objects = subZone.gameObject.GetComponentsInChildren<Transform>().ToList();
@@ -761,26 +760,27 @@ public class OBJPlacerEditorWindow : EditorWindow
         RaycastHit raycastHitS;
 
         #region Repaint Outdated Zones
+
+        List<SceneZone> zones = Functions.GetAllWithComponent<SceneZone>();
+        List<PolygonCollider2D> nullZones = new List<PolygonCollider2D>();
+
+        foreach (SceneZone zone in zones)
+        {
+            if (zone.m_tempPalette == null)
+            {
+                List<SubZone> sZs = zone.gameObject.GetComponentsInChildren<SubZone>().ToList();
+                foreach (SubZone subZone in sZs)
+                {
+                    nullZones.Add(subZone.GetComponent<PolygonCollider2D>());
+                }
+            }
+        }
+
         for (int i = 0; i < outdatedZones.Count; i++)
         {
             int density = 0, rows = 0, columns = 0;
             (Vector2, Vector2) minmax;
-            List<PolygonCollider2D> nullZones = new List<PolygonCollider2D>();
-
             List<SubZone> subZones = outdatedZones[i].gameObject.GetComponentsInChildren<SubZone>().ToList();
-            List<SceneZone> zones = Functions.GetAllWithComponent<SceneZone>();
-
-            foreach (SceneZone zone in zones)
-            {
-                if (zone.m_tempPalette == null)
-                {
-                    List<SubZone> sZs = zone.gameObject.GetComponentsInChildren<SubZone>().ToList();
-                    foreach (SubZone subZone in sZs)
-                    {
-                        nullZones.Add(subZone.GetComponent<PolygonCollider2D>());
-                    }
-                }
-            }
 
             if (outdatedZones[i].m_tempPalette)
             {
@@ -788,13 +788,18 @@ public class OBJPlacerEditorWindow : EditorWindow
 
                 foreach (SubZone subZone in subZones)
                 {
+                    if (subZone.pointPositions.Count < 3)
+                    {
+                        continue;
+                    }
+
                     minmax = Functions.GetMinMax(subZone.pointPositions); // get the min and max position - 2D, x and z
                     (float, float) distance = Functions.GetDistance(minmax.Item1, minmax.Item2); // get the distances on the x and y for the grid
                     float yRayBase = subZone.pointPositions[0].y + 500f;
 
                     // define the grid - at each grid intersection - spawn an object using density as chance, then apply an offset
-                    rows = (int)(distance.Item1 / (density / 10));
-                    columns = (int)(distance.Item2 / (density / 10));
+                    rows = (int)(distance.Item1 / ((100 - density) / 100));
+                    columns = (int)(distance.Item2 / ((100 - density) / 100));
 
                     for (int i2 = 0; i2 < rows; i2++)
                     {
