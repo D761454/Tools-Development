@@ -66,7 +66,7 @@ public class OBJPlacerEditorWindow : EditorWindow
             AssetDatabase.Refresh();
         }
 
-        UnityEditor.SceneManagement.EditorSceneManager.sceneOpened += CheckPalettesForOutdatedData;
+        //UnityEditor.SceneManagement.EditorSceneManager.sceneOpened += CheckPalettesForOutdatedData;
     }
 
     static void CheckPalettesForOutdatedData(UnityEngine.SceneManagement.Scene scene, UnityEditor.SceneManagement.OpenSceneMode mode)
@@ -80,12 +80,11 @@ public class OBJPlacerEditorWindow : EditorWindow
             {
                 if (zones[i].m_zoneName == serializedClass.zoneTypes[j].name)
                 {
-                    zones[i].UpdateToCurrent();
-                    zones[i].m_currentPalette = serializedClass.zoneTypes[j].zonePalette;
-                    zones[i].m_currentID = serializedClass.zoneTypes[j].zonePalette.m_id;
-
-                    if (zones[i].m_previousID != zones[i].m_currentID || zones[i].m_previousPalette != zones[i].m_currentPalette)
+                    if (zones[i].m_palette != serializedClass.zoneTypes[j].zonePalette || zones[i].m_ID != serializedClass.zoneTypes[j].zonePalette.m_id)
                     {
+                        Debug.Log($"Outdated Zone Detected: {zones[i].m_zoneName}");
+                        zones[i].m_tempPalette = serializedClass.zoneTypes[j].zonePalette;
+                        zones[i].m_tempID = serializedClass.zoneTypes[j].zonePalette.m_id;
                         outdatedZones.Add(zones[i]);
                     }
                 }
@@ -298,7 +297,7 @@ public class OBJPlacerEditorWindow : EditorWindow
         GameObject obj = GameObject.Find(serializedClass.zoneTypes[serializedClass.activeZoneIndex].name + "-Parent");
         if (obj)
         {
-            obj.GetComponent<SceneZone>().m_currentPalette = (SavedPaletteScript)evt.newValue;
+            obj.GetComponent<SceneZone>().m_palette = (SavedPaletteScript)evt.newValue;
         }
     }
 
@@ -326,7 +325,7 @@ public class OBJPlacerEditorWindow : EditorWindow
 
         foreach (SceneZone zone in zones)
         {
-            if (zone.m_currentPalette == null)
+            if (zone.m_palette == null)
             {
                 List<SubZone> subZones = zone.gameObject.GetComponentsInChildren<SubZone>().ToList();
                 foreach (SubZone subZone in subZones)
@@ -338,12 +337,12 @@ public class OBJPlacerEditorWindow : EditorWindow
 
         foreach (SceneZone zone in zones)
         {
-            if (!zone.m_currentPalette)
+            if (!zone.m_palette)
             {
                 continue;
             }
 
-            density = zone.m_currentPalette.m_density;
+            density = zone.m_palette.m_density;
 
             List<SubZone> subZones = zone.gameObject.GetComponentsInChildren<SubZone>().ToList();
             foreach (SubZone subZone in subZones)
@@ -356,6 +355,9 @@ public class OBJPlacerEditorWindow : EditorWindow
                 rows = (int)(distance.Item1 / (density / 10));
                 columns = (int)(distance.Item2 / (density / 10));
 
+                Undo.RecordObject(null, "Base Undo");
+                int undoID = Undo.GetCurrentGroup();
+
                 for (int i = 0; i < rows; i++)
                 {
                     for (int j = 0; j < columns; j++)
@@ -363,7 +365,7 @@ public class OBJPlacerEditorWindow : EditorWindow
                         bool breakout = false;
                         Vector3 origin = new Vector3(minmax.Item1.x + (i * (distance.Item1 / rows)), yRayBase, minmax.Item1.y + (j * (distance.Item2 / columns)));
                         Vector2 colliderOverlapCheck = new Vector2(raycastHit.point.x, raycastHit.point.z);
-                        Physics.Raycast(origin, Vector3.down, out raycastHit, 1000f, ~zone.m_currentPalette.m_ignoreLayers);
+                        Physics.Raycast(origin, Vector3.down, out raycastHit, 1000f, ~zone.m_palette.m_ignoreLayers);
 
                         (Vector3, Vector3) pos;
 
@@ -387,19 +389,19 @@ public class OBJPlacerEditorWindow : EditorWindow
                         }
                         #endregion
 
-                        if (Functions.CheckForMissingReferences(zone.m_currentPalette))
+                        if (Functions.CheckForMissingReferences(zone.m_palette))
                         {
                             break;
                         }
 
-                        pos = Functions.GenerateRandomSpawnPosition(raycastHit.point, Vector3.up, 2f, zone.m_currentPalette.m_ignoreLayers);
+                        pos = Functions.GenerateRandomSpawnPosition(raycastHit.point, Vector3.up, 2f, zone.m_palette.m_ignoreLayers);
 
                         if (pos.Item2 == Vector3.down)
                         {
                             continue;
                         }
 
-                        (GameObject, int, int) spawnData = Functions.GetOBJToSpawn(zone.m_currentPalette);
+                        (GameObject, int, int) spawnData = Functions.GetOBJToSpawn(zone.m_palette);
 
                         if (spawnData.Item1 == null)
                         {
@@ -407,7 +409,6 @@ public class OBJPlacerEditorWindow : EditorWindow
                         }
 
                         GameObject obj = PrefabUtility.InstantiatePrefab(spawnData.Item1) as GameObject;
-                        SceneVisibilityManager.instance.DisablePicking(obj, false);
 
                         obj.layer = LayerMask.NameToLayer("Ignore Raycast");
 
@@ -416,8 +417,11 @@ public class OBJPlacerEditorWindow : EditorWindow
 
                         pos.Item1 += pos.Item2 * (obj.GetComponent<Renderer>().bounds.size.y / 2);
 
-                        obj.GetComponent<Transform>().position = pos.Item1 + (pos.Item2.normalized * zone.m_currentPalette.m_groups[spawnData.Item2].items[spawnData.Item3].yOffset);
+                        obj.GetComponent<Transform>().position = pos.Item1 + (pos.Item2.normalized * zone.m_palette.m_groups[spawnData.Item2].items[spawnData.Item3].yOffset);
                         obj.GetComponent<Transform>().SetParent(subZone.gameObject.transform);
+
+                        Undo.RegisterCreatedObjectUndo(obj, "New Undo");
+                        Undo.CollapseUndoOperations(undoID);
                     }
                 }
             }
@@ -437,7 +441,7 @@ public class OBJPlacerEditorWindow : EditorWindow
 
             foreach (SceneZone zone in zones)
             {
-                if (zone.m_currentPalette == null)
+                if (zone.m_palette == null)
                 {
                     List<SubZone> subZones = zone.gameObject.GetComponentsInChildren<SubZone>().ToList();
                     foreach (SubZone subZone in subZones)
@@ -449,9 +453,9 @@ public class OBJPlacerEditorWindow : EditorWindow
 
             SceneZone par = aZone.GetComponentInParent<SceneZone>();
 
-            if (par.m_currentPalette)
+            if (par.m_palette)
             {
-                density = par.m_currentPalette.m_density;
+                density = par.m_palette.m_density;
 
                 minmax = Functions.GetMinMax(aZone.pointPositions); // get the min and max position - 2D, x and z
                 (float, float) distance = Functions.GetDistance(minmax.Item1, minmax.Item2); // get the distances on the x and y for the grid
@@ -461,6 +465,9 @@ public class OBJPlacerEditorWindow : EditorWindow
                 rows = (int)(distance.Item1 / (density / 10));
                 columns = (int)(distance.Item2 / (density / 10));
 
+                Undo.RecordObject(null, "Base Undo");
+                int undoID = Undo.GetCurrentGroup();
+
                 for (int i = 0; i < rows; i++)
                 {
                     for (int j = 0; j < columns; j++)
@@ -468,7 +475,7 @@ public class OBJPlacerEditorWindow : EditorWindow
                         bool breakout = false;
                         Vector3 origin = new Vector3(minmax.Item1.x + (i * (distance.Item1 / rows)), yRayBase, minmax.Item1.y + (j * (distance.Item2 / columns)));
                         Vector2 colliderOverlapCheck = new Vector2(raycastHit.point.x, raycastHit.point.z);
-                        Physics.Raycast(origin, Vector3.down, out raycastHit, 1000f, ~par.m_currentPalette.m_ignoreLayers);
+                        Physics.Raycast(origin, Vector3.down, out raycastHit, 1000f, ~par.m_palette.m_ignoreLayers);
 
                         (Vector3, Vector3) pos;
 
@@ -492,19 +499,19 @@ public class OBJPlacerEditorWindow : EditorWindow
                         }
                         #endregion
 
-                        if (Functions.CheckForMissingReferences(par.m_currentPalette))
+                        if (Functions.CheckForMissingReferences(par.m_palette))
                         {
                             break;
                         }
 
-                        pos = Functions.GenerateRandomSpawnPosition(raycastHit.point, Vector3.up, 2f, par.m_currentPalette.m_ignoreLayers);
+                        pos = Functions.GenerateRandomSpawnPosition(raycastHit.point, Vector3.up, 2f, par.m_palette.m_ignoreLayers);
 
                         if (pos.Item2 == Vector3.down)
                         {
                             continue;
                         }
 
-                        (GameObject, int, int) spawnData = Functions.GetOBJToSpawn(par.m_currentPalette);
+                        (GameObject, int, int) spawnData = Functions.GetOBJToSpawn(par.m_palette);
 
                         if (spawnData.Item1 == null)
                         {
@@ -512,7 +519,6 @@ public class OBJPlacerEditorWindow : EditorWindow
                         }
 
                         GameObject obj = PrefabUtility.InstantiatePrefab(spawnData.Item1) as GameObject;
-                        SceneVisibilityManager.instance.DisablePicking(obj, false);
 
                         obj.layer = LayerMask.NameToLayer("Ignore Raycast");
 
@@ -521,8 +527,11 @@ public class OBJPlacerEditorWindow : EditorWindow
 
                         pos.Item1 += pos.Item2 * (obj.GetComponent<Renderer>().bounds.size.y / 2);
 
-                        obj.GetComponent<Transform>().position = pos.Item1 + (pos.Item2.normalized * par.m_currentPalette.m_groups[spawnData.Item2].items[spawnData.Item3].yOffset);
+                        obj.GetComponent<Transform>().position = pos.Item1 + (pos.Item2.normalized * par.m_palette.m_groups[spawnData.Item2].items[spawnData.Item3].yOffset);
                         obj.GetComponent<Transform>().SetParent(aZone.gameObject.transform);
+
+                        Undo.RegisterCreatedObjectUndo(obj, "New Undo");
+                        Undo.CollapseUndoOperations(undoID);
                     }
                 }
             }
@@ -544,7 +553,7 @@ public class OBJPlacerEditorWindow : EditorWindow
 
             foreach (SceneZone zone in zones)
             {
-                if (zone.m_currentPalette == null)
+                if (zone.m_palette == null)
                 {
                     List<SubZone> sZs = zone.gameObject.GetComponentsInChildren<SubZone>().ToList();
                     foreach (SubZone subZone in sZs)
@@ -554,9 +563,9 @@ public class OBJPlacerEditorWindow : EditorWindow
                 }
             }
 
-            if (par.m_currentPalette)
+            if (par.m_palette)
             {
-                density = par.m_currentPalette.m_density;
+                density = par.m_palette.m_density;
 
                 foreach (SubZone subZone in subZones)
                 {
@@ -568,13 +577,16 @@ public class OBJPlacerEditorWindow : EditorWindow
                     rows = (int)(distance.Item1 / (density / 10));
                     columns = (int)(distance.Item2 / (density / 10));
 
+                    Undo.RecordObject(null, "Base Undo");
+                    int undoID = Undo.GetCurrentGroup();
+
                     for (int i = 0; i < rows; i++)
                     {
                         for (int j = 0; j < columns; j++)
                         {
                             bool breakout = false;
                             Vector3 origin = new Vector3(minmax.Item1.x + (i * (distance.Item1 / rows)), yRayBase, minmax.Item1.y + (j * (distance.Item2 / columns)));
-                            Physics.Raycast(origin, Vector3.down, out raycastHit, 1000f, ~par.m_currentPalette.m_ignoreLayers);
+                            Physics.Raycast(origin, Vector3.down, out raycastHit, 1000f, ~par.m_palette.m_ignoreLayers);
                             Vector2 colliderOverlapCheck = new Vector2(raycastHit.point.x, raycastHit.point.z); // swapped with above line
 
                             (Vector3, Vector3) pos;
@@ -599,19 +611,19 @@ public class OBJPlacerEditorWindow : EditorWindow
                             }
                             #endregion
 
-                            if (Functions.CheckForMissingReferences(par.m_currentPalette))
+                            if (Functions.CheckForMissingReferences(par.m_palette))
                             {
                                 break;
                             }
 
-                            pos = Functions.GenerateRandomSpawnPosition(raycastHit.point, Vector3.up, 2f, par.m_currentPalette.m_ignoreLayers);
+                            pos = Functions.GenerateRandomSpawnPosition(raycastHit.point, Vector3.up, 2f, par.m_palette.m_ignoreLayers);
 
                             if (pos.Item2 == Vector3.down)
                             {
                                 continue;
                             }
 
-                            (GameObject, int, int) spawnData = Functions.GetOBJToSpawn(par.m_currentPalette);
+                            (GameObject, int, int) spawnData = Functions.GetOBJToSpawn(par.m_palette);
 
                             if (spawnData.Item1 == null)
                             {
@@ -619,7 +631,6 @@ public class OBJPlacerEditorWindow : EditorWindow
                             }
 
                             GameObject obj = PrefabUtility.InstantiatePrefab(spawnData.Item1) as GameObject;
-                            SceneVisibilityManager.instance.DisablePicking(obj, false);
 
                             obj.layer = LayerMask.NameToLayer("Ignore Raycast");
 
@@ -628,8 +639,11 @@ public class OBJPlacerEditorWindow : EditorWindow
 
                             pos.Item1 += pos.Item2 * (obj.GetComponent<Renderer>().bounds.size.y / 2);
 
-                            obj.GetComponent<Transform>().position = pos.Item1 + (pos.Item2.normalized * par.m_currentPalette.m_groups[spawnData.Item2].items[spawnData.Item3].yOffset);
+                            obj.GetComponent<Transform>().position = pos.Item1 + (pos.Item2.normalized * par.m_palette.m_groups[spawnData.Item2].items[spawnData.Item3].yOffset);
                             obj.GetComponent<Transform>().SetParent(subZone.gameObject.transform);
+
+                            Undo.RegisterCreatedObjectUndo(obj, "New Undo");
+                            Undo.CollapseUndoOperations(undoID);
                         }
                     }
                 }
@@ -710,6 +724,8 @@ public class OBJPlacerEditorWindow : EditorWindow
         {
             List<SubZone> subZones = outdatedZones[i].GetComponentsInChildren<SubZone>().ToList();
 
+            Debug.Log(subZones.Count);
+
             foreach (SubZone subZone in subZones)
             {
                 List<Transform> objects = subZone.gameObject.GetComponentsInChildren<Transform>().ToList();
@@ -735,13 +751,12 @@ public class OBJPlacerEditorWindow : EditorWindow
             (Vector2, Vector2) minmax;
             List<PolygonCollider2D> nullZones = new List<PolygonCollider2D>();
 
-            SceneZone par = GameObject.Find(outdatedZones[i].m_zoneName + "-Parent").GetComponent<SceneZone>();
-            List<SubZone> subZones = par.gameObject.GetComponentsInChildren<SubZone>().ToList();
+            List<SubZone> subZones = outdatedZones[i].gameObject.GetComponentsInChildren<SubZone>().ToList();
             List<SceneZone> zones = Functions.GetAllWithComponent<SceneZone>();
 
             foreach (SceneZone zone in zones)
             {
-                if (zone.m_currentPalette == null)
+                if (zone.m_tempPalette == null)
                 {
                     List<SubZone> sZs = zone.gameObject.GetComponentsInChildren<SubZone>().ToList();
                     foreach (SubZone subZone in sZs)
@@ -751,9 +766,9 @@ public class OBJPlacerEditorWindow : EditorWindow
                 }
             }
 
-            if (par.m_currentPalette)
+            if (outdatedZones[i].m_tempPalette)
             {
-                density = par.m_currentPalette.m_density;
+                density = outdatedZones[i].m_tempPalette.m_density;
 
                 foreach (SubZone subZone in subZones)
                 {
@@ -771,7 +786,7 @@ public class OBJPlacerEditorWindow : EditorWindow
                         {
                             bool breakout = false;
                             Vector3 origin = new Vector3(minmax.Item1.x + (i2 * (distance.Item1 / rows)), yRayBase, minmax.Item1.y + (j * (distance.Item2 / columns)));
-                            Physics.Raycast(origin, Vector3.down, out raycastHitS, 1000f, ~par.m_currentPalette.m_ignoreLayers);
+                            Physics.Raycast(origin, Vector3.down, out raycastHitS, 1000f, ~outdatedZones[i].m_tempPalette.m_ignoreLayers);
                             Vector2 colliderOverlapCheck = new Vector2(raycastHitS.point.x, raycastHitS.point.z);
 
                             (Vector3, Vector3) pos;
@@ -796,19 +811,19 @@ public class OBJPlacerEditorWindow : EditorWindow
                             }
                             #endregion
 
-                            if (Functions.CheckForMissingReferences(par.m_currentPalette))
+                            if (Functions.CheckForMissingReferences(outdatedZones[i].m_tempPalette))
                             {
                                 break;
                             }
 
-                            pos = Functions.GenerateRandomSpawnPosition(raycastHitS.point, Vector3.up, 2f, par.m_currentPalette.m_ignoreLayers);
+                            pos = Functions.GenerateRandomSpawnPosition(raycastHitS.point, Vector3.up, 2f, outdatedZones[i].m_tempPalette.m_ignoreLayers);
 
                             if (pos.Item2 == Vector3.down)
                             {
                                 continue;
                             }
 
-                            (GameObject, int, int) spawnData = Functions.GetOBJToSpawn(par.m_currentPalette);
+                            (GameObject, int, int) spawnData = Functions.GetOBJToSpawn(outdatedZones[i].m_tempPalette);
 
                             if (spawnData.Item1 == null)
                             {
@@ -816,7 +831,6 @@ public class OBJPlacerEditorWindow : EditorWindow
                             }
 
                             GameObject obj = PrefabUtility.InstantiatePrefab(spawnData.Item1) as GameObject;
-                            SceneVisibilityManager.instance.DisablePicking(obj, false);
 
                             obj.layer = LayerMask.NameToLayer("Ignore Raycast");
 
@@ -825,7 +839,7 @@ public class OBJPlacerEditorWindow : EditorWindow
 
                             pos.Item1 += pos.Item2 * (obj.GetComponent<Renderer>().bounds.size.y / 2);
 
-                            obj.GetComponent<Transform>().position = pos.Item1 + (pos.Item2.normalized * par.m_currentPalette.m_groups[spawnData.Item2].items[spawnData.Item3].yOffset);
+                            obj.GetComponent<Transform>().position = pos.Item1 + (pos.Item2.normalized * outdatedZones[i].m_tempPalette.m_groups[spawnData.Item2].items[spawnData.Item3].yOffset);
                             obj.GetComponent<Transform>().SetParent(subZone.gameObject.transform);
                         }
                     }
