@@ -661,6 +661,9 @@ public class OBJPlacerEditorWindow : EditorWindow
 
             foreach (SubZone subZone in subZones)
             {
+                Undo.RecordObject(null, "Base Undo");
+                int undoID = Undo.GetCurrentGroup();
+
                 List<Transform> objects = subZone.gameObject.GetComponentsInChildren<Transform>().ToList();
 
                 for (int i = 0; i < objects.Count; i++)
@@ -669,7 +672,8 @@ public class OBJPlacerEditorWindow : EditorWindow
                     {
                         continue;
                     }
-                    DestroyImmediate(objects[i].gameObject);
+                    Undo.DestroyObjectImmediate(objects[i].gameObject);
+                    Undo.CollapseUndoOperations(undoID);
                 }
             }
         }
@@ -686,6 +690,9 @@ public class OBJPlacerEditorWindow : EditorWindow
 
             foreach (SubZone subZone in subZones)
             {
+                Undo.RecordObject(null, "Base Undo");
+                int undoID = Undo.GetCurrentGroup();
+
                 List<Transform> objects = subZone.gameObject.GetComponentsInChildren<Transform>().ToList();
 
                 for (int i = 0; i < objects.Count; i++)
@@ -694,7 +701,8 @@ public class OBJPlacerEditorWindow : EditorWindow
                     {
                         continue;
                     }
-                    DestroyImmediate(objects[i].gameObject);
+                    Undo.DestroyObjectImmediate(objects[i].gameObject);
+                    Undo.CollapseUndoOperations(undoID);
                 }
             }
         }
@@ -704,6 +712,9 @@ public class OBJPlacerEditorWindow : EditorWindow
     {
         if (serializedClass.activeSubZone)
         {
+            Undo.RecordObject(null, "Base Undo");
+            int undoID = Undo.GetCurrentGroup();
+
             List<Transform> objects = serializedClass.activeSubZone.GetComponentsInChildren<Transform>().ToList();
 
             for (int i = 0; i < objects.Count; i++)
@@ -712,7 +723,8 @@ public class OBJPlacerEditorWindow : EditorWindow
                 {
                     continue;
                 }
-                DestroyImmediate(objects[i].gameObject);
+                Undo.DestroyObjectImmediate(objects[i].gameObject);
+                Undo.CollapseUndoOperations(undoID);
             }
         }
     }
