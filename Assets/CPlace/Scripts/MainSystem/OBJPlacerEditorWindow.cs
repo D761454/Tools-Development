@@ -357,8 +357,8 @@ public class OBJPlacerEditorWindow : EditorWindow
                 float yRayBase = subZone.pointPositions[0].y + 500f;
 
                 // define the grid - at each grid intersection - spawn an object using density as chance, then apply an offset
-                rows = (int)(distance.Item1 / ((100 - density) / 100));
-                columns = (int)(distance.Item2 / ((100 - density) / 100));
+                rows = (int)(distance.Item1 * (density / 100f));
+                columns = (int)(distance.Item2 * (density / 100f));
 
                 Undo.RecordObject(null, "Base Undo");
                 int undoID = Undo.GetCurrentGroup();
@@ -467,8 +467,8 @@ public class OBJPlacerEditorWindow : EditorWindow
                 float yRayBase = aZone.pointPositions[0].y + 500f;
 
                 // define the grid - at each grid intersection - spawn an object using density as chance, then apply an offset
-                rows = (int)(distance.Item1 / ((100 - density) / 100));
-                columns = (int)(distance.Item2 / ((100 - density) / 100));
+                rows = (int)(distance.Item1 * (density / 100f));
+                columns = (int)(distance.Item2 * (density / 100f));
 
                 Undo.RecordObject(null, "Base Undo");
                 int undoID = Undo.GetCurrentGroup();
@@ -579,8 +579,8 @@ public class OBJPlacerEditorWindow : EditorWindow
                     float yRayBase = subZone.pointPositions[0].y + 500f;
 
                     // define the grid - at each grid intersection - spawn an object using density as chance, then apply an offset
-                    rows = (int)(distance.Item1 / ((100 - density) / 100));
-                    columns = (int)(distance.Item2 / ((100 - density) / 100));
+                    rows = (int)(distance.Item1 * (density / 100f));
+                    columns = (int)(distance.Item2 * (density / 100f));
 
                     Undo.RecordObject(null, "Base Undo");
                     int undoID = Undo.GetCurrentGroup();
@@ -798,8 +798,8 @@ public class OBJPlacerEditorWindow : EditorWindow
                     float yRayBase = subZone.pointPositions[0].y + 500f;
 
                     // define the grid - at each grid intersection - spawn an object using density as chance, then apply an offset
-                    rows = (int)(distance.Item1 / ((100 - density) / 100));
-                    columns = (int)(distance.Item2 / ((100 - density) / 100));
+                    rows = (int)(distance.Item1 * (density / 100f));
+                    columns = (int)(distance.Item2 * (density / 100f));
 
                     for (int i2 = 0; i2 < rows; i2++)
                     {
