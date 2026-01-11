@@ -1000,22 +1000,23 @@ public class OBJPlacerEditorWindow : EditorWindow
     {
         pUp.EditData("Zones Walkthrough!", "Now that we have defined the bounds of our sub-zone, we can paint it with objects from the associated palette.\n\nClick the 'Paint Active Sub-Zone' button to paint the zone." +
             "\n\nPaint Active Zone Type: Paints all Sub-Zones in the scene of the zone selected in 'Zone to edit'" +
-            "\n Paint All Zones: Paint all Sub-Zones within the scene using their corresponding parent objects data" +
-            "\n Paint Active Sub-Zone: Paints the currently selected Active Sub-Zone from the tool UI,using their corresponding parent objects data", "Done!", Tut13);
+            "\nPaint All Zones: Paint all Sub-Zones within the scene using their corresponding parent objects data" +
+            "\nPaint Active Sub-Zone: Paints the currently selected Active Sub-Zone from the tool UI,using their corresponding parent objects data", "Done!", Tut13);
     }
 
     private static void Tut13()
     {
         pUp.EditData("Zones Walkthrough!", "Now that we have painted our sub-zone, we can clear it if we wish to make changes or repaint it.\n\nClick the 'Clear Active Sub-Zone' button to clear all objects placed within the active sub-zone." +
             "\n\nClear All Objects From Active Zone Type: Clears all Sub-Zones in the scene of the zone selected in 'Zone to edit'" +
-            "\n Clear All Objects: Clears all Sub-Zones within the scene" +
-            "\n Clear All Objects From Active Sub-Zone: Clears the currently selected Active Sub-Zone from the tool UI" +
+            "\nClear All Objects: Clears all Sub-Zones within the scene" +
+            "\nClear All Objects From Active Sub-Zone: Clears the currently selected Active Sub-Zone from the tool UI" +
             "\n\n Clear All Zone Bounds From Active Sub-Zone: Clears All Bounds from the zone, allowing you to re-define the entire Sub-Zone", "Done!", Tut14);
     }
 
     private static void Tut14()
     {
         pUp.EditData("Zones Walkthrough!", "Congratulations! You have completed the CPlace tutorial.\n\nYou should now have an understanding of how to create and modify palettes, create and define scene zones, and both paint and delete objects using these zones.", "Finish", null);
+        serializedClass.showTutorial = false;
     }
     #endregion
 

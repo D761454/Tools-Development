@@ -31,8 +31,8 @@ public class PopUpWindow : EditorWindow
         delete = deleteWindow;
 
         PopUpWindow window = GetWindow<PopUpWindow>(title);
-        window.minSize = new Vector2(400f, 200f);
-        window.maxSize = new Vector2(401f, 201f);
+        window.minSize = new Vector2(500f, 250f);
+        window.maxSize = new Vector2(501f, 251f);
     }
 
     /// <summary>
@@ -60,6 +60,8 @@ public class PopUpWindow : EditorWindow
         #region Set Button events
         root.Q<Label>("text").text = content;
         Button y = root.Q<Button>("Y");
+        y.clicked -= Confirm;
+        y.clicked -= NoDelConfirm;
 
         if (delete)
         {
