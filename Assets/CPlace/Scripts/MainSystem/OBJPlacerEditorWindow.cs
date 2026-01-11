@@ -889,6 +889,7 @@ public class OBJPlacerEditorWindow : EditorWindow
     #endregion
 
     #region popup methods
+    #region Task Popups
     private void PaintAllConf()
     {
         PopUpWindow.Init(true, "Paint All Zones Confirmation.", "Are you sure you want to Paint ALL zones present within the Scene? \nDoing so will NOT delete any objects already placed within zones.", "Confirm", PaintAll);
@@ -933,6 +934,7 @@ public class OBJPlacerEditorWindow : EditorWindow
     {
         PopUpWindow.Init(true, "Zones Using Outdated Palette Data.", $"Some Zones present within the level have NOT been re-painted following changes to their associated Palettes.\nWould you like to automatically regenerate these Zones?", "Regenerate Zones", RegenerateZones);
     }
+    #endregion
 
     #region Tutorial Popups
     private static void Tut1()
@@ -943,7 +945,7 @@ public class OBJPlacerEditorWindow : EditorWindow
 
     private static void Tut2()
     {
-        pUp.EditData("Palette Walkthrough!", "Now that our palette has a unique identifier, lets try editing the slider.\n\nThe slider edits the Density, this is how many objects are placed within the associated zones for the palette.", "Done!", Tut3);
+        pUp.EditData("Palette Walkthrough!", "Now that our palette has a unique identifier, lets try editing the slider.\n\nThe slider edits the Density, this is how many objects are placed within the associated zones for the palette as a % of the Sub-Zones area.", "Done!", Tut3);
     }
 
     private static void Tut3()
@@ -960,12 +962,60 @@ public class OBJPlacerEditorWindow : EditorWindow
 
     private static void Tut5()
     {
-        pUp.EditData("Palette Walkthrough!", "Now that we have a full palette, lets save it to use later.\n\nClick the save palette Button to save it to the Palettes Folder.", "Done!", Tut6);
+        pUp.EditData("Palette Walkthrough!", "Now that we have a full palette, lets save it to use later.\n\nClick the 'Save Palette' Button to save it to the Palettes Folder.", "Done!", Tut6);
     }
 
     private static void Tut6()
     {
-        pUp.EditData("Zones Walkthrough!", "Now we have a saved palette that we can either reload into the palette editor or use for zones.\n\nLet's switch to the Zone tab to see the other half of the tool.", "Done!", Tut6);
+        pUp.EditData("Zones Walkthrough!", "Now we have a saved palette, we can either reload it into the palette editor for further editing or use it for zones.\n\nLet's switch to the Zone tab to see the other half of the tool.", "Done!", Tut7);
+    }
+
+    private static void Tut7()
+    {
+        pUp.EditData("Zones Walkthrough!", "This is the Zone tab, here we can create different zones within the scene that use palettes to paint objects.\n\nFirstly, try creating a new zone type by clicking the '+' button and then name the zone.", "Done!", Tut8);
+    }
+
+    private static void Tut8()
+    {
+        pUp.EditData("Zones Walkthrough!", "Now that we have a zone type, we need to assign it a palette to use.\n\nSelect the zone type from the list, ensuring the Zone to Edit show the name of the desired zone. Then drag the palette we created earlier from the dropdown to assign it to the zone type.", "Done!", Tut9);
+    }
+
+    private static void Tut9()
+    {
+        pUp.EditData("Zones Walkthrough!", "Now that we have a zone type with an associated palette, we need to create a parent object in the scene to hold our Sub-Zones and the zone data.\n\nClick the 'New Scene Parent' button to create this object.", "Done!", Tut10);
+    }
+
+    private static void Tut10()
+    {
+        pUp.EditData("Zones Walkthrough!", "Now that we have a parent object, we can start creating zones within the scene.\n\nClick the 'New Sub-Zone' button to create our first zone, on creating a new-sub zone, it will be automatically set as the active sub-zone.", "Done!", Tut11);
+    }
+
+    private static void Tut11()
+    {
+        pUp.EditData("Zones Walkthrough!", "Now that we have an active sub-zone, we can start defining its bounds.\n\nSelect the brush tool in the left toolbar of the scene view or press 'U'. This allows us to define the bounds of a sub-zone by clicking in the scene view." +
+            "\n\nLMB: Place Point\nLMB+Drag: Reposition a Point\nShift+LMB: Delete a Point", "Done!", Tut12);
+    }
+
+    private static void Tut12()
+    {
+        pUp.EditData("Zones Walkthrough!", "Now that we have defined the bounds of our sub-zone, we can paint it with objects from the associated palette.\n\nClick the 'Paint Active Sub-Zone' button to paint the zone." +
+            "\n\nPaint Active Zone Type: Paints all Sub-Zones in the scene of the zone selected in 'Zone to edit'" +
+            "\n Paint All Zones: Paint all Sub-Zones within the scene using their corresponding parent objects data" +
+            "\n Paint Active Sub-Zone: Paints the currently selected Active Sub-Zone from the tool UI,using their corresponding parent objects data", "Done!", Tut13);
+    }
+
+    private static void Tut13()
+    {
+        pUp.EditData("Zones Walkthrough!", "Now that we have painted our sub-zone, we can clear it if we wish to make changes or repaint it.\n\nClick the 'Clear Active Sub-Zone' button to clear all objects placed within the active sub-zone." +
+            "\n\nClear All Objects From Active Zone Type: Clears all Sub-Zones in the scene of the zone selected in 'Zone to edit'" +
+            "\n Clear All Objects: Clears all Sub-Zones within the scene" +
+            "\n Clear All Objects From Active Sub-Zone: Clears the currently selected Active Sub-Zone from the tool UI" +
+            "\n\n Clear All Zone Bounds From Active Sub-Zone: Clears All Bounds from the zone, allowing you to re-define the entire Sub-Zone", "Done!", Tut14);
+    }
+
+    private static void Tut14()
+    {
+        pUp.EditData("Zones Walkthrough!", "Congratulations! You have completed the CPlace tutorial.\n\nYou should now have an understanding of how to create and modify palettes, create and define scene zones, and both paint and delete objects using these zones.", "Finish", null);
     }
     #endregion
 

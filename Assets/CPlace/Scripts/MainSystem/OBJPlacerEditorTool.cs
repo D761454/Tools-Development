@@ -364,57 +364,57 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                 }
             }
 
-            if (e.type == EventType.MouseDown && e.button == 1 && !CheckForMissingReferences())
-            {
-                int total = ObjectsToSpawn();
+            //if (e.type == EventType.MouseDown && e.button == 1 && !CheckForMissingReferences())
+            //{
+            //    int total = ObjectsToSpawn();
 
-                for (int i = 0; i < total; i++)
-                {
-                    (Vector3, Vector3) pos;
+            //    for (int i = 0; i < total; i++)
+            //    {
+            //        (Vector3, Vector3) pos;
 
-                    if (serializedClass.brushType == Brushes.DEFAULT) // default brush
-                    {
-                        pos = GenerateRandomSpawnPosition(raycastHit.point, Vector3.up, 1f);
-                    }
-                    else // faded brush
-                    {
-                        if (i < total / 3)
-                        {
-                            pos = GenerateRandomSpawnPosition(raycastHit.point, Vector3.up, 0.4f);
-                        }
-                        else if ( i < ((total / 3) * 2))
-                        {
-                            pos = GenerateRandomSpawnPosition(raycastHit.point, Vector3.up, 0.7f);
-                        }
-                        else
-                        {
-                            pos = GenerateRandomSpawnPosition(raycastHit.point, Vector3.up, 1f);
-                        }
-                    }
+            //        if (serializedClass.brushType == Brushes.DEFAULT) // default brush
+            //        {
+            //            pos = GenerateRandomSpawnPosition(raycastHit.point, Vector3.up, 1f);
+            //        }
+            //        else // faded brush
+            //        {
+            //            if (i < total / 3)
+            //            {
+            //                pos = GenerateRandomSpawnPosition(raycastHit.point, Vector3.up, 0.4f);
+            //            }
+            //            else if ( i < ((total / 3) * 2))
+            //            {
+            //                pos = GenerateRandomSpawnPosition(raycastHit.point, Vector3.up, 0.7f);
+            //            }
+            //            else
+            //            {
+            //                pos = GenerateRandomSpawnPosition(raycastHit.point, Vector3.up, 1f);
+            //            }
+            //        }
 
-                    if (pos.Item2 != Vector3.down)  // if valid ray cast
-                    {
-                        (GameObject, int, int) spawnData = GetOBJToSpawn();
+            //        if (pos.Item2 != Vector3.down)  // if valid ray cast
+            //        {
+            //            (GameObject, int, int) spawnData = GetOBJToSpawn();
 
-                        if (spawnData.Item1 != null)
-                        {
-                            GameObject obj = PrefabUtility.InstantiatePrefab(spawnData.Item1) as GameObject;
-                            SceneVisibilityManager.instance.DisablePicking(obj, false);
+            //            if (spawnData.Item1 != null)
+            //            {
+            //                GameObject obj = PrefabUtility.InstantiatePrefab(spawnData.Item1) as GameObject;
+            //                SceneVisibilityManager.instance.DisablePicking(obj, false);
 
-                            obj.layer = LayerMask.NameToLayer("Ignore Raycast");
+            //                obj.layer = LayerMask.NameToLayer("Ignore Raycast");
 
-                            //obj.GetComponent<Transform>().SetParent(serializedClass.groupParents[spawnData.Item2].transform, true);
+            //                //obj.GetComponent<Transform>().SetParent(serializedClass.groupParents[spawnData.Item2].transform, true);
 
-                            obj.GetComponent<Transform>().rotation = Quaternion.FromToRotation(obj.GetComponent<Transform>().up, pos.Item2);
-                            obj.GetComponent<Transform>().Rotate(pos.Item2, Random.Range(0f, 360f), Space.World);
+            //                obj.GetComponent<Transform>().rotation = Quaternion.FromToRotation(obj.GetComponent<Transform>().up, pos.Item2);
+            //                obj.GetComponent<Transform>().Rotate(pos.Item2, Random.Range(0f, 360f), Space.World);
 
-                            pos.Item1 += pos.Item2 * (obj.GetComponent<Renderer>().bounds.size.y / 2);
+            //                pos.Item1 += pos.Item2 * (obj.GetComponent<Renderer>().bounds.size.y / 2);
 
-                            obj.GetComponent<Transform>().position = pos.Item1 + (pos.Item2.normalized * serializedClass.groups[spawnData.Item2].items[spawnData.Item3].yOffset);
-                        }
-                    }
-                }
-            }
+            //                obj.GetComponent<Transform>().position = pos.Item1 + (pos.Item2.normalized * serializedClass.groups[spawnData.Item2].items[spawnData.Item3].yOffset);
+            //            }
+            //        }
+            //    }
+            //}
         }
 
         HandleUtility.Repaint();

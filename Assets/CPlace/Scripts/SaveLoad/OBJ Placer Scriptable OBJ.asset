@@ -20,10 +20,10 @@ MonoBehaviour:
   paletteName: 
   zoneTypes:
   - name: one
-    zonePalette: {fileID: 11400000, guid: 2a48e7e8f4302864a9e26056cd3a11ce, type: 2}
+    zonePalette: {fileID: 0}
     parentObject: {fileID: 0}
   - name: two
-    zonePalette: {fileID: 11400000, guid: b16d4e34a9c9452449dc27af6fcb7444, type: 2}
+    zonePalette: {fileID: 0}
     parentObject: {fileID: 0}
   showTutorial: 1
   activeZoneIndex: -1

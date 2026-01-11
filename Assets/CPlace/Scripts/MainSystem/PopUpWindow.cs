@@ -134,7 +134,17 @@ public class PopUpWindow : EditorWindow
 
     public void EditData(string title, string text, string firstButtonText, Action method)
     {
-        methodToDo = method;
+        methodToDo = null;
+
+        if (method == null)
+        {
+            methodToDo = () => { this.Close(); };
+            delete = true;
+        }
+        else
+        {
+            methodToDo = method;
+        }
         content = text;
         firstButton = firstButtonText;
         this.titleContent = new GUIContent(title);
