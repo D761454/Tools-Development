@@ -431,6 +431,18 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
         Handles.color = Color.red;
         Handles.DrawSolidDisc(serializedClass.activeSubZone.GetComponent<SubZone>().points[i].point, serializedClass.activeSubZone.GetComponent<SubZone>().points[i].normal, raycastHit.distance * handleScale);
 
+        if (i == 0)
+        {
+            int j = serializedClass.activeSubZone.GetComponent<SubZone>().points.Count - 1;
+            serializedClass.activeSubZone.GetComponent<SubZone>().points[j] = raycastHit;
+            serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions[j] = raycastHit.point;
+        }
+        else if (i == serializedClass.activeSubZone.GetComponent<SubZone>().points.Count - 1)
+        {
+            serializedClass.activeSubZone.GetComponent<SubZone>().points[0] = raycastHit;
+            serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions[0] = raycastHit.point;
+        }
+
         serializedClass.activeSubZone.GetComponent<SubZone>().points[i] = raycastHit;
         serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions[i] = raycastHit.point;
         serializedClass.activeSubZone.GetComponent<PolygonCollider2D>().points = serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.To2DVectorArray();
