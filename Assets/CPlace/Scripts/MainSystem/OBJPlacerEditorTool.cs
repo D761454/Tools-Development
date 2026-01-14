@@ -336,7 +336,6 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                                     // delete point
                                     if (e.shift)
                                     {
-                                        Debug.Log("Removing Point");
                                         serializedClass.activeSubZone.GetComponent<SubZone>().points.RemoveAt(i);
                                         serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.RemoveAt(i);
 
@@ -346,6 +345,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                                             serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.RemoveAt(0);
                                         }
 
+                                        serializedClass.activeSubZone.GetComponent<PolygonCollider2D>().points = serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.To2DVectorArray();
                                         return;
                                     }
 
