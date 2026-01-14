@@ -33,6 +33,13 @@ public class OBJPlacerEditorWindow : EditorWindow
     [SerializeField] VisualTreeAsset groupItemTree;
     [SerializeField] VisualTreeAsset zoneTree;
 
+    Vector2[] resetPoints = new Vector2[]
+    {
+        new Vector2(0f, 0f),
+        new Vector2(0.1f, 0.1f),
+        new Vector2(0f, 0.1f)
+    };
+
     ListView zonesList;
     RaycastHit raycastHit;
     static List<SceneZone> outdatedZones = new List<SceneZone>();
@@ -928,8 +935,8 @@ public class OBJPlacerEditorWindow : EditorWindow
         if (serializedClass.activeSubZone)
         {
             serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Clear();
-            // could cause issues - may need to just assign an empty vector array
-            serializedClass.activeSubZone.GetComponent<PolygonCollider2D>().points = serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.To2DVectorArray();
+            // reset to original
+            serializedClass.activeSubZone.GetComponent<PolygonCollider2D>().points = resetPoints;
             serializedClass.activeSubZone.GetComponent<SubZone>().ClearPoints();
             Undo.RegisterCompleteObjectUndo(serializedClass.activeSubZone.GetComponent<SubZone>(), "Cleared Zone Points");
         }
