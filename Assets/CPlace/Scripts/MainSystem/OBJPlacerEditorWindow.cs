@@ -7,6 +7,7 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.XR;
 public static class IntExtensions
 {
     public static string GroupWeight(this int i) => $"groups[{i}].weight";
@@ -325,7 +326,7 @@ public class OBJPlacerEditorWindow : EditorWindow
 
         foreach (SceneZone zone in zones)
         {
-            if (zone.m_palette == null)
+            if (zone.m_palette == null || zone.m_palette.m_groups.Count() == 0)
             {
                 List<SubZone> subZones = zone.gameObject.GetComponentsInChildren<SubZone>().ToList();
                 foreach (SubZone subZone in subZones)
@@ -337,7 +338,7 @@ public class OBJPlacerEditorWindow : EditorWindow
 
         foreach (SceneZone zone in zones)
         {
-            if (!zone.m_palette)
+            if (!zone.m_palette || zone.m_palette.m_groups.Count() == 0)
             {
                 continue;
             }
@@ -446,7 +447,7 @@ public class OBJPlacerEditorWindow : EditorWindow
 
             foreach (SceneZone zone in zones)
             {
-                if (zone.m_palette == null)
+                if (zone.m_palette == null || zone.m_palette.m_groups.Count() == 0)
                 {
                     List<SubZone> subZones = zone.gameObject.GetComponentsInChildren<SubZone>().ToList();
                     foreach (SubZone subZone in subZones)
@@ -458,7 +459,7 @@ public class OBJPlacerEditorWindow : EditorWindow
 
             SceneZone par = aZone.GetComponentInParent<SceneZone>();
 
-            if (par.m_palette)
+            if (par.m_palette && par.m_palette.m_groups.Count() > 0)
             {
                 density = par.m_palette.m_density;
 
@@ -558,7 +559,7 @@ public class OBJPlacerEditorWindow : EditorWindow
 
             foreach (SceneZone zone in zones)
             {
-                if (zone.m_palette == null)
+                if (zone.m_palette == null || zone.m_palette.m_groups.Count() == 0)
                 {
                     List<SubZone> sZs = zone.gameObject.GetComponentsInChildren<SubZone>().ToList();
                     foreach (SubZone subZone in sZs)
@@ -568,7 +569,7 @@ public class OBJPlacerEditorWindow : EditorWindow
                 }
             }
 
-            if (par.m_palette)
+            if (par.m_palette && par.m_palette.m_groups.Count() > 0)
             {
                 density = par.m_palette.m_density;
 
