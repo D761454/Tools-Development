@@ -187,6 +187,7 @@ public class OBJPlacerEditorWindow : EditorWindow
                 zT.dataSource = serializedClass;
                 zT.SetBinding("text", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"zoneTypes[{i}].name"), bindingMode = BindingMode.ToTarget });
                 zT.Bind(serializedObject);
+                zT.RegisterValueChangedCallback(ChangeButtonText);
 
                 ObjectField zP = root.Q<ObjectField>("zPal");
                 zP.UnregisterValueChangedCallback(ChangePalette);
@@ -226,6 +227,12 @@ public class OBJPlacerEditorWindow : EditorWindow
             ObjectField aS = root.Q<ObjectField>("aSzone");
             aS.ClearBinding("value");
             aS.value = null;
+
+            Button b1 = root.Q<Button>("pZone");
+            b1.text = "Paint Active Zone Type";
+
+            Button b2 = root.Q<Button>("cAllOfType");
+            b2.text = "Clear All Objects From Active Zone Type";
         };
 
         zonesList.makeItem = makeZone;
@@ -299,6 +306,18 @@ public class OBJPlacerEditorWindow : EditorWindow
         if (obj)
         {
             obj.GetComponent<SceneZone>().m_palette = (SavedPaletteScript)evt.newValue;
+        }
+    }
+
+    private void ChangeButtonText(ChangeEvent<String> evt)
+    {
+        if (serializedClass.activeZoneIndex != -1)
+        {
+            Button b1 = rootVisualElement.Q<Button>("pZone");
+            b1.text = $"Paint All Sub-Zones of {serializedClass.zoneTypes[serializedClass.activeZoneIndex].name}";
+
+            Button b2 = rootVisualElement.Q<Button>("cAllOfType");
+            b2.text = $"Clear All Objects in Sub-Zones of {serializedClass.zoneTypes[serializedClass.activeZoneIndex].name}";
         }
     }
 
