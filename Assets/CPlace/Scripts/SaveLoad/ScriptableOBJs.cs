@@ -113,8 +113,14 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
                 parentObj.AddComponent<SceneZone>();
                 parentObj.GetComponent<SceneZone>().SaveData(zone.name, zone.zonePalette, zone.zonePalette.m_id);
                 zone.parentObject = parentObj;
+
+                if (zone.uiColor.a == 0)
+                {
+                    zone.uiColor.a = 1;
+                }
+                parentObj.GetComponent<SceneZone>().m_uiColor = zone.uiColor;
                 zoneTypes[activeZoneIndex] = zone;
-                Undo.RegisterCreatedObjectUndo(parentObj, "New Undo");
+                Undo.RegisterCreatedObjectUndo(parentObj, "Generated Parent");
             }
         }
     }
@@ -130,8 +136,14 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
                 parentObj.AddComponent<SceneZone>();
                 parentObj.GetComponent<SceneZone>().SaveData(zone.name, zone.zonePalette, zone.zonePalette.m_id);
                 zone.parentObject = parentObj;
+
+                if (zone.uiColor.a == 0)
+                {
+                    zone.uiColor.a = 1;
+                }
+                parentObj.GetComponent<SceneZone>().m_uiColor = zone.uiColor;
                 zoneTypes[activeZoneIndex] = zone;
-                Undo.RegisterCreatedObjectUndo(parentObj, "New Undo");
+                Undo.RegisterCreatedObjectUndo(parentObj, "Generated Parent");
             }
 
             GameObject subZoneObj = new GameObject($"{zone.name}-SubZone" + ((zone.parentObject.GetComponentsInChildren<Transform>()).Length + 1));
@@ -139,7 +151,7 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
             subZoneObj.AddComponent<PolygonCollider2D>();
             subZoneObj.transform.parent = zone.parentObject.transform;
             activeSubZone = subZoneObj;
-            Undo.RegisterCreatedObjectUndo(subZoneObj, "New Undo");
+            Undo.RegisterCreatedObjectUndo(subZoneObj, "Generated Sub-Zone");
         }
     }
 
@@ -250,4 +262,5 @@ public struct Zone
     public string name;
     public SavedPaletteScript zonePalette;
     public GameObject parentObject;
+    public Color uiColor;
 }

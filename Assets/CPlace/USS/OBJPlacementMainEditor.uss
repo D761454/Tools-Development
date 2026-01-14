@@ -106,3 +106,10 @@
 
 .unity-tab {
 }
+
+.unity-color-field {
+    margin-right: 5px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    margin-top: 2px;
+}

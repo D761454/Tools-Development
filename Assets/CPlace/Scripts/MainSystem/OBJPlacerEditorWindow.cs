@@ -33,6 +33,13 @@ public class OBJPlacerEditorWindow : EditorWindow
     [SerializeField] VisualTreeAsset groupItemTree;
     [SerializeField] VisualTreeAsset zoneTree;
 
+    Vector2[] resetPoints = new Vector2[]
+    {
+        new Vector2(0f, 0f),
+        new Vector2(0.1f, 0.1f),
+        new Vector2(0f, 0.1f)
+    };
+
     ListView zonesList;
     RaycastHit raycastHit;
     static List<SceneZone> outdatedZones = new List<SceneZone>();
@@ -183,19 +190,6 @@ public class OBJPlacerEditorWindow : EditorWindow
                 int i = serializedClass.zoneTypes.IndexOf(item);
                 serializedClass.activeZoneIndex = i;
 
-                Label zT = root.Q<Label>("zoneTitle");
-                zT.dataSource = serializedClass;
-                zT.SetBinding("text", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"zoneTypes[{i}].name"), bindingMode = BindingMode.ToTarget });
-                zT.Bind(serializedObject);
-                zT.RegisterValueChangedCallback(ChangeButtonText);
-
-                ObjectField zP = root.Q<ObjectField>("zPal");
-                zP.UnregisterValueChangedCallback(ChangePalette);
-                zP.dataSource = serializedClass;
-                zP.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"zoneTypes[{i}].zonePalette"), bindingMode = BindingMode.TwoWay });
-                zP.Bind(serializedObject);
-                zP.RegisterValueChangedCallback(ChangePalette);
-
                 GameObject par = GameObject.Find(serializedClass.zoneTypes[i].name + "-Parent");
 
                 if (par)
@@ -204,6 +198,25 @@ public class OBJPlacerEditorWindow : EditorWindow
                     t.parentObject = par;
                     serializedClass.zoneTypes[i] = t;
                 }
+
+                Label zT = root.Q<Label>("zoneTitle");
+                zT.dataSource = serializedClass;
+                zT.SetBinding("text", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"zoneTypes[{i}].name"), bindingMode = BindingMode.ToTarget });
+                zT.Bind(serializedObject);
+                zT.RegisterValueChangedCallback(ChangeButtonText);
+
+                ColorField colorField = root.Q<ColorField>("zColour");
+                colorField.dataSource = serializedClass;
+                colorField.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"zoneTypes[{i}].uiColor"), bindingMode = BindingMode.TwoWay });
+                colorField.Bind(serializedObject);
+                colorField.RegisterValueChangedCallback(ChangedColour);
+
+                ObjectField zP = root.Q<ObjectField>("zPal");
+                zP.UnregisterValueChangedCallback(ChangePalette);
+                zP.dataSource = serializedClass;
+                zP.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"zoneTypes[{i}].zonePalette"), bindingMode = BindingMode.TwoWay });
+                zP.Bind(serializedObject);
+                zP.RegisterValueChangedCallback(ChangePalette);
 
                 ObjectField sP = root.Q<ObjectField>("sPar");
                 sP.dataSource = serializedClass;
@@ -227,6 +240,9 @@ public class OBJPlacerEditorWindow : EditorWindow
             ObjectField aS = root.Q<ObjectField>("aSzone");
             aS.ClearBinding("value");
             aS.value = null;
+            ColorField colorField = root.Q<ColorField>("zColour");
+            colorField.ClearBinding("value");
+            colorField.value = Color.cyan;
 
             Button b1 = root.Q<Button>("pZone");
             b1.text = "Paint Active Zone Type";
@@ -318,6 +334,18 @@ public class OBJPlacerEditorWindow : EditorWindow
 
             Button b2 = rootVisualElement.Q<Button>("cAllOfType");
             b2.text = $"Clear All Objects in Sub-Zones of {serializedClass.zoneTypes[serializedClass.activeZoneIndex].name}";
+        }
+    }
+
+    private void ChangedColour(ChangeEvent<Color> evt)
+    {
+        if (serializedClass.activeZoneIndex != -1)
+        {
+            GameObject obj = GameObject.Find(serializedClass.zoneTypes[serializedClass.activeZoneIndex].name + "-Parent");
+            if (obj)
+            {
+                obj.GetComponent<SceneZone>().m_uiColor = evt.newValue;
+            }
         }
     }
 
@@ -447,7 +475,7 @@ public class OBJPlacerEditorWindow : EditorWindow
                         obj.GetComponent<Transform>().position = pos.Item1 + (pos.Item2.normalized * zone.m_palette.m_groups[spawnData.Item2].items[spawnData.Item3].yOffset);
                         obj.GetComponent<Transform>().SetParent(subZone.gameObject.transform);
 
-                        Undo.RegisterCreatedObjectUndo(obj, "New Undo");
+                        Undo.RegisterCreatedObjectUndo(obj, "Painted All");
                         Undo.CollapseUndoOperations(undoID);
                     }
                 }
@@ -559,7 +587,7 @@ public class OBJPlacerEditorWindow : EditorWindow
                         obj.GetComponent<Transform>().position = pos.Item1 + (pos.Item2.normalized * par.m_palette.m_groups[spawnData.Item2].items[spawnData.Item3].yOffset);
                         obj.GetComponent<Transform>().SetParent(aZone.gameObject.transform);
 
-                        Undo.RegisterCreatedObjectUndo(obj, "New Undo");
+                        Undo.RegisterCreatedObjectUndo(obj, "Painted Sub-Zone");
                         Undo.CollapseUndoOperations(undoID);
                     }
                 }
@@ -673,7 +701,7 @@ public class OBJPlacerEditorWindow : EditorWindow
                             obj.GetComponent<Transform>().position = pos.Item1 + (pos.Item2.normalized * par.m_palette.m_groups[spawnData.Item2].items[spawnData.Item3].yOffset);
                             obj.GetComponent<Transform>().SetParent(subZone.gameObject.transform);
 
-                            Undo.RegisterCreatedObjectUndo(obj, "New Undo");
+                            Undo.RegisterCreatedObjectUndo(obj, "Painted Zone of Type");
                             Undo.CollapseUndoOperations(undoID);
                         }
                     }
@@ -888,7 +916,7 @@ public class OBJPlacerEditorWindow : EditorWindow
 
                             obj.GetComponent<Transform>().position = pos.Item1 + (pos.Item2.normalized * outdatedZones[i].m_tempPalette.m_groups[spawnData.Item2].items[spawnData.Item3].yOffset);
                             obj.GetComponent<Transform>().SetParent(subZone.gameObject.transform);
-                            Undo.RegisterCreatedObjectUndo(obj, "New Undo");
+                            Undo.RegisterCreatedObjectUndo(obj, "Regenerated Zones");
                         }
                     }
                 }
@@ -907,9 +935,10 @@ public class OBJPlacerEditorWindow : EditorWindow
         if (serializedClass.activeSubZone)
         {
             serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Clear();
-            // could cause issues - may need to just assign an empty vector array
-            serializedClass.activeSubZone.GetComponent<PolygonCollider2D>().points = serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.To2DVectorArray();
+            // reset to original
+            serializedClass.activeSubZone.GetComponent<PolygonCollider2D>().points = resetPoints;
             serializedClass.activeSubZone.GetComponent<SubZone>().ClearPoints();
+            Undo.RegisterCompleteObjectUndo(serializedClass.activeSubZone.GetComponent<SubZone>(), "Cleared Zone Points");
         }
     }
     #endregion

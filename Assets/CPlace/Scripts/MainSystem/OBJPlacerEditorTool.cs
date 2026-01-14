@@ -336,7 +336,6 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                                     // delete point
                                     if (e.shift)
                                     {
-                                        Debug.Log("Removing Point");
                                         serializedClass.activeSubZone.GetComponent<SubZone>().points.RemoveAt(i);
                                         serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.RemoveAt(i);
 
@@ -346,6 +345,19 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                                             serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.RemoveAt(0);
                                         }
 
+                                        // handles deleting start / end points
+                                        if (i == 0)
+                                        {
+                                            serializedClass.activeSubZone.GetComponent<SubZone>().points[serializedClass.activeSubZone.GetComponent<SubZone>().points.Count - 1] = serializedClass.activeSubZone.GetComponent<SubZone>().points[0];
+                                            serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions[serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Count - 1] = serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions[0];
+                                        }
+                                        else if (i == serializedClass.activeSubZone.GetComponent<SubZone>().points.Count)
+                                        {
+                                            serializedClass.activeSubZone.GetComponent<SubZone>().points[0] = serializedClass.activeSubZone.GetComponent<SubZone>().points[serializedClass.activeSubZone.GetComponent<SubZone>().points.Count - 1];
+                                            serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions[0] = serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions[serializedClass.activeSubZone.GetComponent<SubZone>().points.Count - 1];
+                                        }
+
+                                        serializedClass.activeSubZone.GetComponent<PolygonCollider2D>().points = serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.To2DVectorArray();
                                         return;
                                     }
 
