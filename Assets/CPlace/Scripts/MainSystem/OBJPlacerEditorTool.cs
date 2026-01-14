@@ -265,7 +265,8 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                         Handles.DrawAAPolyLine(2f, sZ[j].pointPositions.ToArray());
                         for (int k = 0; k < sZ[j].points.Count; k++)
                         {
-                            Handles.DrawSolidDisc(sZ[j].points[k].point, sZ[j].points[k].normal, 1.0f);
+                            Vector3 dist = sZ[j].points[k].point - SceneView.lastActiveSceneView.camera.transform.position;
+                            Handles.DrawSolidDisc(sZ[j].points[k].point, sZ[j].points[k].normal, dist.magnitude * handleScale);
                         }
                     }
                 }
