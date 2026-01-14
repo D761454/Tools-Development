@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: null-Palette
   m_EditorClassIdentifier: 
   m_groups: []
-  m_density: 50
+  m_density: 0
   m_ignoreLayers: 4
   m_id: 0
   m_paletteName: null

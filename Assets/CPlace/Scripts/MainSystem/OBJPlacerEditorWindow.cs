@@ -389,8 +389,8 @@ public class OBJPlacerEditorWindow : EditorWindow
                     {
                         bool breakout = false;
                         Vector3 origin = new Vector3(minmax.Item1.x + (i * (distance.Item1 / rows)), yRayBase, minmax.Item1.y + (j * (distance.Item2 / columns)));
-                        Vector2 colliderOverlapCheck = new Vector2(raycastHit.point.x, raycastHit.point.z);
                         Physics.Raycast(origin, Vector3.down, out raycastHit, 1000f, ~zone.m_palette.m_ignoreLayers);
+                        Vector2 colliderOverlapCheck = new Vector2(raycastHit.point.x, raycastHit.point.z);
 
                         (Vector3, Vector3) pos;
 
@@ -501,8 +501,8 @@ public class OBJPlacerEditorWindow : EditorWindow
                     {
                         bool breakout = false;
                         Vector3 origin = new Vector3(minmax.Item1.x + (i * (distance.Item1 / rows)), yRayBase, minmax.Item1.y + (j * (distance.Item2 / columns)));
-                        Vector2 colliderOverlapCheck = new Vector2(raycastHit.point.x, raycastHit.point.z);
                         Physics.Raycast(origin, Vector3.down, out raycastHit, 1000f, ~par.m_palette.m_ignoreLayers);
+                        Vector2 colliderOverlapCheck = new Vector2(raycastHit.point.x, raycastHit.point.z);
 
                         (Vector3, Vector3) pos;
 
@@ -616,7 +616,7 @@ public class OBJPlacerEditorWindow : EditorWindow
                             bool breakout = false;
                             Vector3 origin = new Vector3(minmax.Item1.x + (i * (distance.Item1 / rows)), yRayBase, minmax.Item1.y + (j * (distance.Item2 / columns)));
                             Physics.Raycast(origin, Vector3.down, out raycastHit, 1000f, ~par.m_palette.m_ignoreLayers);
-                            Vector2 colliderOverlapCheck = new Vector2(raycastHit.point.x, raycastHit.point.z); // swapped with above line
+                            Vector2 colliderOverlapCheck = new Vector2(raycastHit.point.x, raycastHit.point.z);
 
                             (Vector3, Vector3) pos;
 
