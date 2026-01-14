@@ -419,7 +419,9 @@ public class OBJPlacerEditorWindow : EditorWindow
                             break;
                         }
 
-                        pos = Functions.GenerateRandomSpawnPosition(raycastHit.point, Vector3.up, 2f, zone.m_palette.m_ignoreLayers);
+                        // point, normal
+                        float scalar = ((distance.Item1 / rows) + (distance.Item2 / columns)) / 2;
+                        pos = Functions.GenerateRandomSpawnPosition(raycastHit.point, Vector3.up, scalar, zone.m_palette.m_ignoreLayers);
 
                         if (pos.Item2 == Vector3.down)
                         {
@@ -529,7 +531,9 @@ public class OBJPlacerEditorWindow : EditorWindow
                             break;
                         }
 
-                        pos = Functions.GenerateRandomSpawnPosition(raycastHit.point, Vector3.up, 2f, par.m_palette.m_ignoreLayers);
+                        // point, normal
+                        float scalar = ((distance.Item1 / rows) + (distance.Item2 / columns)) / 2;
+                        pos = Functions.GenerateRandomSpawnPosition(raycastHit.point, Vector3.up, scalar, par.m_palette.m_ignoreLayers);
 
                         if (pos.Item2 == Vector3.down)
                         {
@@ -641,7 +645,9 @@ public class OBJPlacerEditorWindow : EditorWindow
                                 break;
                             }
 
-                            pos = Functions.GenerateRandomSpawnPosition(raycastHit.point, Vector3.up, 2f, par.m_palette.m_ignoreLayers);
+                            // point, normal
+                            float scalar = ((distance.Item1 / rows) + (distance.Item2 / columns)) / 2;
+                            pos = Functions.GenerateRandomSpawnPosition(raycastHit.point, Vector3.up, scalar, par.m_palette.m_ignoreLayers);
 
                             if (pos.Item2 == Vector3.down)
                             {
