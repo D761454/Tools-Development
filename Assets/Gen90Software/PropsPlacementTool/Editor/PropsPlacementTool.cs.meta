@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: bb4985987a3c9a0419e99472c73e0532
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 208217
+  packageName: Props Placement Tool
+  packageVersion: 1.3.0
+  assetPath: Assets/Gen90Software/PropsPlacementTool/Editor/PropsPlacementTool.cs
+  uploadId: 844544
