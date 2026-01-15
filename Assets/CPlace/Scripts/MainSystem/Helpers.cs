@@ -155,5 +155,23 @@ namespace Helpers
 
             return (null, 0, 0);
         }
+
+        public static Vector3 GetClosestPoint(List<Vector3> points, Vector3 point)
+        {
+            int closestIndex = -1;
+            float closestDistance = Mathf.Infinity;
+
+            for (int i = 0; i < points.Count; i++)
+            {
+                float distance = Vector3.Distance(point, points[i]);
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestIndex = i;
+                }
+            }
+
+            return points[closestIndex];
+        }
     }
 }

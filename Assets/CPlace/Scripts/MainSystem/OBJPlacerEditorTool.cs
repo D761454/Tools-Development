@@ -462,24 +462,62 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
     private void AddNewPoint()
     {
-        if (serializedClass.activeSubZone.GetComponent<SubZone>().points.Count > 1)
-        {
-            serializedClass.activeSubZone.GetComponent<SubZone>().points.RemoveAt(serializedClass.activeSubZone.GetComponent<SubZone>().points.Count - 1);
-            serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.RemoveAt(serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Count - 1);
+        int count = serializedClass.activeSubZone.GetComponent<SubZone>().points.Count;
 
-            serializedClass.activeSubZone.GetComponent<SubZone>().points.Add(raycastHit);
-            serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Add(raycastHit.point);
+        if (count > 2)
+        {
+            Vector3 closestPt = Functions.GetClosestPoint(serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions, raycastHit.point);
+            bool added = false;
+
+            int index = serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.IndexOf(closestPt);
+            Vector3 pt1, pt2;
+
+            if (index != 0 && index != count -1)
+            {
+                pt1 = serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions[index - 1];
+                pt2 = serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions[index + 1];
+
+                if (Mathf.Abs((Vector3.Distance(closestPt, raycastHit.point) + Vector3.Distance(raycastHit.point, pt1)) - Vector3.Distance(closestPt, pt1)) < 0.1f)
+                {
+                    serializedClass.activeSubZone.GetComponent<SubZone>().points.Insert(index, raycastHit);
+                    serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Insert(index, raycastHit.point);
+                    added = true;
+                }
+                else if (Mathf.Abs((Vector3.Distance(closestPt, raycastHit.point) + Vector3.Distance(raycastHit.point, pt2)) - Vector3.Distance(closestPt, pt2)) < 0.1f)
+                {
+                    serializedClass.activeSubZone.GetComponent<SubZone>().points.Insert(index + 1, raycastHit);
+                    serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Insert(index + 1, raycastHit.point);
+                    added = true;
+                }
+            }
+
+            if (!added)
+            {
+                AddPointToEnd();
+            }
         }
         else
         {
             serializedClass.activeSubZone.GetComponent<SubZone>().points.Add(raycastHit);
             serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Add(raycastHit.point);
+
+            serializedClass.activeSubZone.GetComponent<SubZone>().points.Add(serializedClass.activeSubZone.GetComponent<SubZone>().points[0]);
+            serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Add(serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions[0]);
         }
+
+        serializedClass.activeSubZone.GetComponent<PolygonCollider2D>().points = serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.To2DVectorArray();
+    }
+
+    private void AddPointToEnd()
+    {
+        serializedClass.activeSubZone.GetComponent<SubZone>().points.RemoveAt(serializedClass.activeSubZone.GetComponent<SubZone>().points.Count - 1);
+        serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.RemoveAt(serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Count - 1);
+
+        serializedClass.activeSubZone.GetComponent<SubZone>().points.Add(raycastHit);
+        serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Add(raycastHit.point);
 
         serializedClass.activeSubZone.GetComponent<SubZone>().points.Add(serializedClass.activeSubZone.GetComponent<SubZone>().points[0]);
         serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Add(serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions[0]);
-
-        serializedClass.activeSubZone.GetComponent<PolygonCollider2D>().points = serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.To2DVectorArray();
     }
 }
 
