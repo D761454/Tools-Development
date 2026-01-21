@@ -263,10 +263,14 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
                     for (int j = 0; j < sZ.Length; j++)
                     {
                         Handles.DrawAAPolyLine(2f, sZ[j].pointPositions.ToArray());
-                        for (int k = 0; k < sZ[j].points.Count; k++)
+                        for (int k = 0; k < sZ[j].pointPositions.Count; k++)
                         {
-                            Vector3 dist = sZ[j].points[k].point - SceneView.lastActiveSceneView.camera.transform.position;
-                            Handles.DrawSolidDisc(sZ[j].points[k].point, sZ[j].points[k].normal, dist.magnitude * handleScale);
+                            float dist = (sZ[j].pointPositions[k] - SceneView.lastActiveSceneView.camera.transform.position).magnitude;
+                            if (dist < 1.0f)
+                            {
+                                dist = 1.0f;
+                            }
+                            Handles.DrawSolidDisc(sZ[j].pointPositions[k], sZ[j].pointNormals[k], dist * handleScale);
                         }
                     }
                 }
@@ -325,36 +329,36 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
             {
                 if (e.type == EventType.MouseDown || e.type == EventType.MouseDrag)
                 {
-                    if (serializedClass.activeSubZone.GetComponent<SubZone>().points.Count > 0)
+                    if (serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Count > 0)
                     {
                         if (reposPt == -1)
                         {
-                            for (int i = 0; i < serializedClass.activeSubZone.GetComponent<SubZone>().points.Count; i++)
+                            for (int i = 0; i < serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Count; i++)
                             {
-                                if (Vector3.Distance(serializedClass.activeSubZone.GetComponent<SubZone>().points[i].point, raycastHit.point) < 2.0f)
+                                if (Vector3.Distance(serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions[i], raycastHit.point) < 2.0f)
                                 {
                                     // delete point
                                     if (e.shift)
                                     {
-                                        serializedClass.activeSubZone.GetComponent<SubZone>().points.RemoveAt(i);
+                                        serializedClass.activeSubZone.GetComponent<SubZone>().pointNormals.RemoveAt(i);
                                         serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.RemoveAt(i);
 
-                                        if (serializedClass.activeSubZone.GetComponent<SubZone>().points.Count == 1) // handles the wrap around entry
+                                        if (serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Count == 1) // handles the wrap around entry
                                         {
-                                            serializedClass.activeSubZone.GetComponent<SubZone>().points.RemoveAt(0);
+                                            serializedClass.activeSubZone.GetComponent<SubZone>().pointNormals.RemoveAt(0);
                                             serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.RemoveAt(0);
                                         }
 
                                         // handles deleting start / end points
                                         if (i == 0)
                                         {
-                                            serializedClass.activeSubZone.GetComponent<SubZone>().points[serializedClass.activeSubZone.GetComponent<SubZone>().points.Count - 1] = serializedClass.activeSubZone.GetComponent<SubZone>().points[0];
+                                            serializedClass.activeSubZone.GetComponent<SubZone>().pointNormals[serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Count - 1] = serializedClass.activeSubZone.GetComponent<SubZone>().pointNormals[0];
                                             serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions[serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Count - 1] = serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions[0];
                                         }
-                                        else if (i == serializedClass.activeSubZone.GetComponent<SubZone>().points.Count)
+                                        else if (i == serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Count)
                                         {
-                                            serializedClass.activeSubZone.GetComponent<SubZone>().points[0] = serializedClass.activeSubZone.GetComponent<SubZone>().points[serializedClass.activeSubZone.GetComponent<SubZone>().points.Count - 1];
-                                            serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions[0] = serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions[serializedClass.activeSubZone.GetComponent<SubZone>().points.Count - 1];
+                                            serializedClass.activeSubZone.GetComponent<SubZone>().pointNormals[0] = serializedClass.activeSubZone.GetComponent<SubZone>().pointNormals[serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Count - 1];
+                                            serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions[0] = serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions[serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Count - 1];
                                         }
 
                                         serializedClass.activeSubZone.GetComponent<PolygonCollider2D>().points = serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.To2DVectorArray();
@@ -441,30 +445,30 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
     private void RepositionPoint(ref RaycastHit raycastHit, int i)
     {
         Handles.color = Color.red;
-        Handles.DrawSolidDisc(serializedClass.activeSubZone.GetComponent<SubZone>().points[i].point, serializedClass.activeSubZone.GetComponent<SubZone>().points[i].normal, raycastHit.distance * handleScale);
+        Handles.DrawSolidDisc(serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions[i], serializedClass.activeSubZone.GetComponent<SubZone>().pointNormals[i], raycastHit.distance * handleScale);
 
         if (i == 0)
         {
-            int j = serializedClass.activeSubZone.GetComponent<SubZone>().points.Count - 1;
-            serializedClass.activeSubZone.GetComponent<SubZone>().points[j] = raycastHit;
+            int j = serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Count - 1;
+            serializedClass.activeSubZone.GetComponent<SubZone>().pointNormals[j] = raycastHit.normal;
             serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions[j] = raycastHit.point;
         }
-        else if (i == serializedClass.activeSubZone.GetComponent<SubZone>().points.Count - 1)
+        else if (i == serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Count - 1)
         {
-            serializedClass.activeSubZone.GetComponent<SubZone>().points[0] = raycastHit;
+            serializedClass.activeSubZone.GetComponent<SubZone>().pointNormals[0] = raycastHit.normal;
             serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions[0] = raycastHit.point;
         }
 
-        serializedClass.activeSubZone.GetComponent<SubZone>().points[i] = raycastHit;
+        serializedClass.activeSubZone.GetComponent<SubZone>().pointNormals[i] = raycastHit.normal;
         serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions[i] = raycastHit.point;
         serializedClass.activeSubZone.GetComponent<PolygonCollider2D>().points = serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.To2DVectorArray();
     }
 
     private void AddNewPoint()
     {
-        int count = serializedClass.activeSubZone.GetComponent<SubZone>().points.Count;
+        int count = serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Count;
 
-        if (count > 2)
+        if (count > 1)
         {
             Vector3 closestPt = Functions.GetClosestPoint(serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions, raycastHit.point);
             bool added = false;
@@ -479,13 +483,13 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
                 if (Mathf.Abs((Vector3.Distance(closestPt, raycastHit.point) + Vector3.Distance(raycastHit.point, pt1)) - Vector3.Distance(closestPt, pt1)) < 0.1f)
                 {
-                    serializedClass.activeSubZone.GetComponent<SubZone>().points.Insert(index, raycastHit);
+                    serializedClass.activeSubZone.GetComponent<SubZone>().pointNormals.Insert(index, raycastHit.normal);
                     serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Insert(index, raycastHit.point);
                     added = true;
                 }
                 else if (Mathf.Abs((Vector3.Distance(closestPt, raycastHit.point) + Vector3.Distance(raycastHit.point, pt2)) - Vector3.Distance(closestPt, pt2)) < 0.1f)
                 {
-                    serializedClass.activeSubZone.GetComponent<SubZone>().points.Insert(index + 1, raycastHit);
+                    serializedClass.activeSubZone.GetComponent<SubZone>().pointNormals.Insert(index + 1, raycastHit.normal);
                     serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Insert(index + 1, raycastHit.point);
                     added = true;
                 }
@@ -498,10 +502,10 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
         }
         else
         {
-            serializedClass.activeSubZone.GetComponent<SubZone>().points.Add(raycastHit);
+            serializedClass.activeSubZone.GetComponent<SubZone>().pointNormals.Add(raycastHit.normal);
             serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Add(raycastHit.point);
 
-            serializedClass.activeSubZone.GetComponent<SubZone>().points.Add(serializedClass.activeSubZone.GetComponent<SubZone>().points[0]);
+            serializedClass.activeSubZone.GetComponent<SubZone>().pointNormals.Add(serializedClass.activeSubZone.GetComponent<SubZone>().pointNormals[0]);
             serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Add(serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions[0]);
         }
 
@@ -510,13 +514,13 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
 
     private void AddPointToEnd()
     {
-        serializedClass.activeSubZone.GetComponent<SubZone>().points.RemoveAt(serializedClass.activeSubZone.GetComponent<SubZone>().points.Count - 1);
+        serializedClass.activeSubZone.GetComponent<SubZone>().pointNormals.RemoveAt(serializedClass.activeSubZone.GetComponent<SubZone>().pointNormals.Count - 1);
         serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.RemoveAt(serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Count - 1);
 
-        serializedClass.activeSubZone.GetComponent<SubZone>().points.Add(raycastHit);
+        serializedClass.activeSubZone.GetComponent<SubZone>().pointNormals.Add(raycastHit.normal);
         serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Add(raycastHit.point);
 
-        serializedClass.activeSubZone.GetComponent<SubZone>().points.Add(serializedClass.activeSubZone.GetComponent<SubZone>().points[0]);
+        serializedClass.activeSubZone.GetComponent<SubZone>().pointNormals.Add(serializedClass.activeSubZone.GetComponent<SubZone>().pointNormals[0]);
         serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Add(serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions[0]);
     }
 }
