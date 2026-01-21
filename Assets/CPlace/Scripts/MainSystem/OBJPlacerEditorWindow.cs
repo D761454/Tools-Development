@@ -182,7 +182,12 @@ public class OBJPlacerEditorWindow : EditorWindow
 
         zonesList.selectionChanged += (items) =>
         {
-            ToolManager.SetActiveTool<OBJPlacerEditorTool>();
+            bool usingTool = false;
+            if (ToolManager.activeToolType == typeof(OBJPlacerEditorTool))
+            {
+                ToolManager.SetActiveTool<OBJPlacerEditorTool>();
+                usingTool = true;
+            }
 
             foreach (Zone item in items)
             {
@@ -233,7 +238,10 @@ public class OBJPlacerEditorWindow : EditorWindow
                 sP.Bind(serializedObject);
             }
 
-            ToolManager.SetActiveTool<OBJPlacerEditorTool>();
+            if (usingTool)
+            {
+                ToolManager.SetActiveTool<OBJPlacerEditorTool>();
+            }
         };
 
         zonesList.itemsRemoved += (items) =>

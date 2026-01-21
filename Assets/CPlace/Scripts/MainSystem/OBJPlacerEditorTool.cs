@@ -468,7 +468,7 @@ public class OBJPlacerEditorTool : EditorTool, IDrawSelectedHandles
     {
         int count = serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions.Count;
 
-        if (count > 2)
+        if (count > 1)
         {
             Vector3 closestPt = Functions.GetClosestPoint(serializedClass.activeSubZone.GetComponent<SubZone>().pointPositions, raycastHit.point);
             bool added = false;
