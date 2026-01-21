@@ -1992,7 +1992,7 @@ MonoBehaviour:
         brushOverlapCheckLayers:
           serializedVersion: 2
           m_Bits: 0
-        surfaceOffset: 0
+        surfaceOffset: 1
         orientationTransformMode: 0
         orientationMode: 0
         alongBrushStroke: 0
