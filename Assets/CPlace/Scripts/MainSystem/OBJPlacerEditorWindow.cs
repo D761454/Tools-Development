@@ -4,10 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+using UnityEditor.EditorTools;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-using UnityEngine.XR;
 public static class IntExtensions
 {
     public static string GroupWeight(this int i) => $"groups[{i}].weight";
@@ -182,6 +182,8 @@ public class OBJPlacerEditorWindow : EditorWindow
 
         zonesList.selectionChanged += (items) =>
         {
+            ToolManager.SetActiveTool<OBJPlacerEditorTool>();
+
             foreach (Zone item in items)
             {
                 if (!serializedClass.zoneTypes.Contains(item))
@@ -197,6 +199,13 @@ public class OBJPlacerEditorWindow : EditorWindow
                     Zone t = serializedClass.zoneTypes[i];
                     t.parentObject = par;
                     serializedClass.zoneTypes[i] = t;
+
+                    SubZone na = par.GetComponentInChildren<SubZone>();
+
+                    if (na)
+                    {
+                        serializedClass.activeSubZone = na.gameObject;
+                    }
                 }
 
                 Label zT = root.Q<Label>("zoneTitle");
@@ -223,6 +232,8 @@ public class OBJPlacerEditorWindow : EditorWindow
                 sP.SetBinding("value", new DataBinding() { dataSourcePath = new Unity.Properties.PropertyPath($"zoneTypes[{i}].parentObject"), bindingMode = BindingMode.TwoWay });
                 sP.Bind(serializedObject);
             }
+
+            ToolManager.SetActiveTool<OBJPlacerEditorTool>();
         };
 
         zonesList.itemsRemoved += (items) =>
