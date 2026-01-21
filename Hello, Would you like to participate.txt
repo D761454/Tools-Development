@@ -1,0 +1,16 @@
+Hello, Would you like to participate in my study for my dissertation project?
+I have created an object placement tool in Unity, seeking to determine if the addition of contextual awareness will speed up the development of non-procedural game scenes.
+
+To participate, you must read the information sheet and sign the consent form.
+
+Following this, you should download the Tool1, Tool2 and CAAPT branches, (these must be deleted once finished).
+
+Using each tool, you must fill the 3 scenes in the project according to the power point detailing the objects per biome.
+
+For each scene, you should time the time taken to fill it and for each tool you should record filling all 3 scenes.
+
+Finally, you would fill out the questionnaire.
+
+https://github.com/D761454/Tools-Development
+
+Thank you for your time.
