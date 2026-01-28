@@ -1,0 +1,44 @@
+1. read info sheet and sign a copy of the consent form
+- all documents - questionnaire, info sheet, consent form, palette instructions, are within the project folder
+
+2. boot up shareX (screen recording) or OBS - muted.
+
+3. download the CAAP, Tool1 or Tool2 branches on git hub
+
+4. read the palette instructions pptx,
+- this will show the general composition of biomes, and will also show any settings that need to be edited on tools and how to open the tool initially.
+
+5. for each tool, start a recording using the recording software of choice.
+
+6. use each tool to fill each scene - small, medium and large using the palette instructions,
+- each sized scene must be timed separately,
+- timing begins on editing the tool UI in the scene,
+- !!! NOTE: THIS DOES NOT INCLUDE EDITING TOOL2 SETTINGS FROM THE PALETTE INSTRUCTIONS !!!
+
+7. once you have filled the large scene with a tool, delete and refill the red biome using that tool, timing that separately as well.
+
+8. end the recording and repeat step 5 onward for the other 2 tools.
+
+9. changes to the branches caused by level editing can be discarded.
+
+10. fill out the questionnaire - uploading consent form and recordings via questionnaire.
+
+VVV area for you the jot down times so you don't have to fill out questionnaire as you go VVV
+
+TOOL1 Times:
+Small - 
+Med - 
+Large - 
+Repaint Red Large - 
+
+TOOL12 Times:
+Small - 
+Med - 
+Large - 
+Repaint Red Large - 
+
+CAAPT Times:
+Small - 
+Med - 
+Large - 
+Repaint Red Large - 
