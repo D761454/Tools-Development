@@ -3,7 +3,9 @@
 
 2. boot up shareX (screen recording) or OBS - muted.
 
-3. download the CAAP, Tool1 or Tool2 branches on git hub
+3. download the CAAP, Tool1 and Tool2 branches on git hub
+- each branch is its own unity project with everything included
+- in unity hub, add the unzipped folder from disc an open it - one at a time as they likely have the same name
 
 4. read the palette instructions pptx,
 - this will show the general composition of biomes, and will also show any settings that need to be edited on tools and how to open the tool initially.
