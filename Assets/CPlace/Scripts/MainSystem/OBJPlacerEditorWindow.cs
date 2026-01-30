@@ -55,6 +55,7 @@ public class OBJPlacerEditorWindow : EditorWindow
 
         if (serializedClass && serializedClass.showTutorial)
         {
+            Debug.Log("tutorial");
             Tut1();
         }
     }
