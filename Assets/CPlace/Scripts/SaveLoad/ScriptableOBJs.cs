@@ -62,6 +62,8 @@ public class OBJPlacerScriptableOBJ : ScriptableObject
             AssetDatabase.CreateAsset(paletteToSave, $"Assets/CPlace/Palettes/{paletteName}-Palette.asset");
         }
 
+        RegenWeights();
+
         // might need to place into both if editing values after creating asset does not work
         paletteToSave.m_density = density;
 
