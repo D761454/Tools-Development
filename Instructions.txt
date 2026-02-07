@@ -39,7 +39,7 @@ Med -
 Large - 
 Repaint Red Large - 
 
-CAAPT Times:
+CAAPT Times: if the large scene becomes too laggy feel free to pause the timer to delete the objects from any zone that isn't red to reduce lag while you paint the others (unity having poor performance)
 Small - 
 Med - 
 Large - 
